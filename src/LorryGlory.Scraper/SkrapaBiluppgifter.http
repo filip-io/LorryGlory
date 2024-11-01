@@ -1,0 +1,6 @@
+@SkrapaBiluppgifter_HostAddress = http://localhost:5215
+
+GET {{SkrapaBiluppgifter_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
