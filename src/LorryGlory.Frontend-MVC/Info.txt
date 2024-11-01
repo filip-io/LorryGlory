@@ -1,3 +1,5 @@
 ﻿För att köra tailwind clienten och uppdatera i realtid:
 
 npx tailwindcss -i ./wwwroot/css/site.css -o ./wwwroot/css/output.css --watch
+
+https://v2.tailwindcss.com/docs
