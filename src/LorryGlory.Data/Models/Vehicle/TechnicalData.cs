@@ -1,4 +1,4 @@
-﻿using LorryGloryMockApi.Data.Models.Vehicle.Enums;
+﻿using LorryGlory.Data.Models.Vehicle.Enums;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LorryGloryMockApi.Data.Models.Vehicle
+namespace LorryGlory.Data.Models.Vehicle
 {
     public class TechnicalData
     {

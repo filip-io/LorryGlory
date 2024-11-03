@@ -14,9 +14,8 @@ namespace LorryGlory.Data.Models.Staff
     {
         [Key]
         public Guid Id { get; set; }
-        // kanske inte rätt ställe att definiera Role men vi börjar här!
-        public Role Role { get; set; }
-        public Position Position { get; set; }
+        public List<Role> Roles { get; set; }
+        public JobTitle JobTitle { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string PersonalNumber { get; set; }

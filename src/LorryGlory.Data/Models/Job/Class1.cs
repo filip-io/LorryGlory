@@ -4,11 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LorryGlory.Data.Models.Staff.Enums
+namespace LorryGlory.Data.Models.Job
 {
-    public enum Position
+    internal class Class1
     {
-        Master = 1,
-        Driver = 2
     }
 }

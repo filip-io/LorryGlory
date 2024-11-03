@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LorryGloryMockApi.Data.Models.Vehicle
+namespace LorryGlory.Data.Models.Vehicle
 {
     // TODO: Add seeding for table
     public class VehicleType

@@ -1,4 +1,4 @@
-﻿namespace LorryGloryMockApi.Data.Models.Vehicle.Enums
+﻿namespace LorryGlory.Data.Models.Vehicle.Enums
 {
     public enum Status
     {

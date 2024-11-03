@@ -8,14 +8,6 @@
 
 
   <ItemGroup>
-    <Folder Include="Models\Client\" />
-    <Folder Include="Models\Job\" />
-    <Folder Include="Models\Company\" />
-    <Folder Include="Models\Vehicle\" />
-  </ItemGroup>
-
-
-  <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.10" />
   </ItemGroup>
 

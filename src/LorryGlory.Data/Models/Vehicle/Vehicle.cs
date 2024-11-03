@@ -2,7 +2,7 @@
 
 using System.ComponentModel.DataAnnotations;
 
-namespace LorryGloryMockApi.Data.Models.Vehicle
+namespace LorryGlory.Data.Models.Vehicle
 {
     public class Vehicle
     {
