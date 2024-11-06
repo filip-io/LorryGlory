@@ -7,6 +7,9 @@ namespace LorryGlory.Data.Data
     {
         public LorryGloryDbContext(DbContextOptions options) :base(options) { }
 
+        // DbSets
 
+
+        //OnModelCreating eller sånt om vi vill
     }
 }

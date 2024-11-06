@@ -13,7 +13,7 @@ public static class ServiceConfiguration
 
     public static void ConfigureScopes(this IServiceCollection serviceCollection)
     {
-
+        
     }
 }
 
