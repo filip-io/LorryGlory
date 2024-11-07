@@ -4,6 +4,28 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <UserSecretsId>df558b4f-04d5-4fb4-b9a2-6ffa9338234e</UserSecretsId>
+	  <DebugSymbols>true</DebugSymbols>
+	  <DebugType>portable</DebugType>
   </PropertyGroup>
+
+    <ItemGroup>
+	    <None Update="Properties\launchSettings.json">
+		    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+		    <CopyToPublishDirectory>Never</CopyToPublishDirectory>
+	    </None>
+    </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.10">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.9.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\LorryGlory.Core\LorryGlory.Core.csproj" />
+  </ItemGroup>
 
 </Project>
