@@ -6,7 +6,7 @@ namespace LorryGlory.Data.Models.CompanyModels
     {
         // Owner = ?
         // LogoLink or relation to File-model?
-        public Guid Id { get; set; }
+        public Guid TenantId { get; set; }
         public string CompanyName { get; set; }
         public string OrganizationNumber { get; set; }
         public string PhoneNumber { get; set; }
@@ -14,6 +14,5 @@ namespace LorryGlory.Data.Models.CompanyModels
         public Address Address { get; set; }
         public string LogoLink { get; set; }
 
-        public virtual List<StaffMember>? StaffMembers { get; set; }
     }
 }

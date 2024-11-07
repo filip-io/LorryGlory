@@ -1,10 +1,11 @@
-﻿using LorryGlory.Data.Models.StaffModels;
+﻿using LorryGlory.Data.Models.CompanyModels;
+using LorryGlory.Data.Models.StaffModels;
 using LorryGlory.Data.Models.VehicleModels;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LorryGlory.Data.Models.JobModels
 {
-    public class Task
+    public class JobTask
     {
         // type eller title? Task Done? planned time object med 2 fält?
         public Guid Id { get; set; }
@@ -41,6 +42,10 @@ namespace LorryGlory.Data.Models.JobModels
         public DateTime CreatedAt {  get; set; }
         public DateTime UpdatedAt { get; set; }
 
+
+        [ForeignKey("Company")]
+        public Guid FK_TenantId { get; set; }
+        public Company Company { get; set; }
 
     }
 }

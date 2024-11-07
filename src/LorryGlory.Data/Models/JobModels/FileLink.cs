@@ -1,8 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using LorryGlory.Data.Models.CompanyModels;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LorryGlory.Data.Models.JobModels
 {
-    public class File
+    public class FileLink
     {
         // tänkte att vi kanske ville kalla filer för nåt?
         public Guid Id { get; set; }
@@ -15,7 +16,10 @@ namespace LorryGlory.Data.Models.JobModels
 
         [ForeignKey("Task")]
         public Guid? TaskId { get; set; }
-        public Task Task { get; set; }
+        public JobTask Task { get; set; }
+        [ForeignKey("Company")]
+        public Guid FK_TenantId { get; set; }
+        public Company Company { get; set; }
 
     }
 }

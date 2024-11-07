@@ -2,6 +2,7 @@
 using LorryGlory.Data.Models.StaffModels.Enums;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LorryGlory.Data.Models.StaffModels
 {
@@ -19,6 +20,11 @@ namespace LorryGlory.Data.Models.StaffModels
         public Address Address { get; set; }
 
         public Company Company{ get; set; }
+
+
+        [ForeignKey("Company")]
+        public Guid FK_TenantId { get; set; }
+        public Company Company { get; set; }
 
     }
 }

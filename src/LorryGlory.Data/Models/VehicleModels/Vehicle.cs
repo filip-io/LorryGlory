@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using LorryGlory.Data.Models.CompanyModels;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LorryGlory.Data.Models.VehicleModels
 {
@@ -21,5 +23,10 @@ namespace LorryGlory.Data.Models.VehicleModels
         public Inspection? Inspection { get; set; }
         public TechnicalData? TechnicalData { get; set; }
         public EcoDetails? Eco { get; set; }
+
+
+        [ForeignKey("Company")]
+        public Guid FK_TenantId { get; set; }
+        public Company Company { get; set; }
     }
 }

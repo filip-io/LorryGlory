@@ -1,4 +1,7 @@
-﻿namespace LorryGlory.Data.Models.ClientModels
+﻿using LorryGlory.Data.Models.CompanyModels;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace LorryGlory.Data.Models.ClientModels
 {
     public class Client
     {
@@ -11,5 +14,8 @@
 
         public Address Address { get; set; }
 
+        [ForeignKey("Company")]
+        public Guid FK_TenantId { get; set; } 
+        public Company Company { get; set; }
     }
 }

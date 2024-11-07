@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using LorryGlory.Data.Models.CompanyModels;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LorryGlory.Data.Models.StaffModels
@@ -13,5 +14,10 @@ namespace LorryGlory.Data.Models.StaffModels
         [ForeignKey("Boss_Staff")]
         public Guid? Boss_StaffId { get; set; }
         public StaffMember? Boss_Staff { get; set; }
+
+
+        [ForeignKey("Company")]
+        public Guid FK_TenantId { get; set; }
+        public Company Company { get; set; }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using LorryGlory.Data.Models.ClientModels;
+using LorryGlory.Data.Models.CompanyModels;
 using LorryGlory.Data.Models.JobModels.Enums;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -21,6 +22,10 @@ namespace LorryGlory.Data.Models.JobModels
         [ForeignKey("Client")]
         public Guid FK_ClientId { get; set; }
         public Client Client{ get; set; }
+
+        [ForeignKey("Company")]
+        public Guid FK_TenantId { get; set; }
+        public Company Company { get; set; }
 
     }
 }

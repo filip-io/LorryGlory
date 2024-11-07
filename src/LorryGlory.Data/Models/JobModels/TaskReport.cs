@@ -1,6 +1,17 @@
-﻿namespace LorryGlory.Data.Models.JobModels
+﻿using LorryGlory.Data.Models.CompanyModels;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace LorryGlory.Data.Models.JobModels
 {
-    internal class TaskReport
+    public class TaskReport
     {
+
+
+
+
+
+        [ForeignKey("Company")]
+        public Guid FK_TenantId { get; set; }
+        public Company Company { get; set; }
     }
 }
