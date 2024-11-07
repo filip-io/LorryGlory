@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LorryGlory.Data.Models.Vehicle
+namespace LorryGlory.Data.Models.VehicleModels
 {
-    public class VehicleCategoryEu
+    // TODO: Add seeding for table
+    public class VehicleType
     {
         public int Id { get; set; }
         public string Code { get; set; }

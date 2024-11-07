@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LorryGlory.Data.Models.Vehicle.Enums
+namespace LorryGlory.Data.Models.VehicleModels.Enums
 {
     public enum TransmissionType
     {

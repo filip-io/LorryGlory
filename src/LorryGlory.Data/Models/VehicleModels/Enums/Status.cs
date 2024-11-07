@@ -1,4 +1,4 @@
-﻿namespace LorryGlory.Data.Models.Vehicle.Enums
+﻿namespace LorryGlory.Data.Models.VehicleModels.Enums
 {
     public enum Status
     {

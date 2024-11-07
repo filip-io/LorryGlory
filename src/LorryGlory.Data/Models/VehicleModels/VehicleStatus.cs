@@ -1,6 +1,6 @@
-﻿using LorryGlory.Data.Models.Vehicle.Enums;
+﻿using LorryGlory.Data.Models.VehicleModels.Enums;
 
-namespace LorryGlory.Data.Models.Vehicle
+namespace LorryGlory.Data.Models.VehicleModels
 {
     public class VehicleStatus
     {

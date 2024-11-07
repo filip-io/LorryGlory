@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LorryGlory.Data.Models.Job
+namespace LorryGlory.Data.Models.JobModels.Enums
 {
-    internal class Class1
+    public enum TaskStatus
     {
+        Success=666,
     }
 }

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace LorryGlory.Data.Models.Vehicle
+namespace LorryGlory.Data.Models.VehicleModels
 {
     public class EcoDetails
     {

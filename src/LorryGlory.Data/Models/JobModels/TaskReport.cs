@@ -4,11 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LorryGlory.Data.Models.Staff.Enums
+namespace LorryGlory.Data.Models.JobModels
 {
-    public enum Role
+    internal class TaskReport
     {
-        Admin = 1,
-        Employee = 2
     }
 }

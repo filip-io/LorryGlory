@@ -4,11 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LorryGlory.Data.Models.Staff.Enums
+namespace LorryGlory.Data.Models.JobModels.Enums
 {
-    public enum JobTitle
+    public enum JobStatus
     {
-        Boss = 1,
-        Driver = 2
+
     }
 }
