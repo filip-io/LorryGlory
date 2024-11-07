@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace LorryGlory.Data.Models.VehicleModels
+﻿namespace LorryGlory.Data.Models.VehicleModels
 {
     // TODO: Add seeding for table
     public class VehicleType

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace LorryGlory.Data.Models.VehicleModels.Enums
+﻿namespace LorryGlory.Data.Models.VehicleModels.Enums
 {
     public enum ChassiType
     {

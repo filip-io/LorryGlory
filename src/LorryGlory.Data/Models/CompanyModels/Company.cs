@@ -1,9 +1,4 @@
-﻿using LorryGlory.Data.Models.Staff;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using LorryGlory.Data.Models.StaffModels;
 
 namespace LorryGlory.Data.Models.CompanyModels
 {

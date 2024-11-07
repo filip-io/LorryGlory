@@ -1,12 +1,6 @@
-﻿using LorryGlory.Data.Models.ClientModels;
-using LorryGlory.Data.Models.Staff;
-using LorryGlory.Data.Models.VehicleFleet;
-using System;
-using System.Collections.Generic;
+﻿using LorryGlory.Data.Models.StaffModels;
+using LorryGlory.Data.Models.VehicleModels;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LorryGlory.Data.Models.JobModels
 {

@@ -1,4 +1,5 @@
-﻿using LorryGlory.Data.Models.StaffModels.Enums;
+﻿using LorryGlory.Data.Models.CompanyModels;
+using LorryGlory.Data.Models.StaffModels.Enums;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.EntityFrameworkCore;
 

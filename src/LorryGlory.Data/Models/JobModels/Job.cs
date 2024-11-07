@@ -1,11 +1,6 @@
 ﻿using LorryGlory.Data.Models.ClientModels;
 using LorryGlory.Data.Models.JobModels.Enums;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LorryGlory.Data.Models.JobModels
 {
@@ -19,13 +14,13 @@ namespace LorryGlory.Data.Models.JobModels
         public TimeSpan? EstimatedTotalTime { get; set; }
         public TimeSpan? ActualTotalTime { get; set; }
 
-        public string? CustomerName { get; set; }
-        public string? CustomerEmail { get; set; }
-        public string? CustomerPhoneNr { get; set; }
+        public string? ClientName { get; set; }
+        public string? ClientEmail { get; set; }
+        public string? ClientPhoneNr { get; set; }
 
-        [ForeignKey("Customer")]
-        public Guid FK_CustomerId { get; set; }
-        public Client.Client Customer { get; set; }
+        [ForeignKey("Client")]
+        public Guid FK_ClientId { get; set; }
+        public Client Client{ get; set; }
 
     }
 }

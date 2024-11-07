@@ -1,10 +1,4 @@
 ﻿using LorryGlory.Data.Models.VehicleModels.Enums;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LorryGlory.Data.Models.VehicleModels
 {
