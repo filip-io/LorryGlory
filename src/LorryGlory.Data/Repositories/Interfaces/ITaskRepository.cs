@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LorryGlory.Data.Models.JobModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,10 +9,10 @@ namespace LorryGlory.Data.Repositories.Interfaces
 {
     public interface ITaskRepository
     {
-        Task<IEnumerable<TaskItem?>> GetAllByDriverIdAndDayAsync(int id, DateOnly date);
-        Task<TaskItem?> GetByIdAsync(int id);
-        Task AddAsync(TaskItem taskItem);
-        Task UpdateAsync(TaskItem taskItem);
-        Task DeleteAsync(TaskItem taskItem);
+        Task<IEnumerable<JobTask?>> GetAllByDriverIdAndDayAsync(int id, DateOnly date);
+        Task<JobTask?> GetByIdAsync(int id);
+        Task<JobTask> AddAsync(JobTask jobTask);
+        Task<JobTask?> UpdateAsync(JobTask jobTask);
+        Task<JobTask?> DeleteAsync(JobTask jobTask);
     }
 }

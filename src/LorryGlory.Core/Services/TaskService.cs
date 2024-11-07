@@ -1,4 +1,5 @@
-﻿using LorryGlory.Core.Services.Interfaces;
+﻿using LorryGlory.Core.Models.DataTransferObjects;
+using LorryGlory.Core.Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,30 +10,48 @@ namespace LorryGlory.Core.Services
 {
     public class TaskService : ITaskService
     {
-        public Task<IEnumerable<TaskItemDto?>> GetAllByDriverIdAndDayAsync(int id, DateOnly date)
+        public Task<IEnumerable<JobTaskDto>> GetAllAsync()
+        {
+            throw new NotImplementedException();
+        }
+        public Task<IEnumerable<JobTaskDto>> GetAllByDriverIdAndDayAsync(int id, DateOnly date)
         {
             throw new NotImplementedException();
         }
 
-        public Task<TaskItemDto?> GetByIdAsync(int id)
+        public Task<JobTaskDto> GetByIdAsync(int id)
         {
             throw new NotImplementedException();
         }
 
-        public Task AddAsync(TaskItemDto taskItem)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task DeleteAsync(int id)
+        public Task<JobTaskDto> CreateAsync(JobTaskDto jobTaskDto)
         {
             throw new NotImplementedException();
         }
 
 
-        public Task UpdateAsync(TaskItemDto taskItem)
+        public Task<JobTaskDto> UpdateAsync(JobTaskDto jobTaskDto)
         {
             throw new NotImplementedException();
+        }
+
+        public Task<JobTaskDto> DeleteAsync(int id)
+        {
+            throw new NotImplementedException();
+
+            //public async Task<JobTaskDto> DeleteAsync(int id)
+            //{
+            //    var task = await _repository.GetByIdAsync(id);
+            //    if (task == null)
+            //    {
+            //        throw new KeyNotFoundException($"Task with ID: {id} not found.");
+            //    }
+
+            //    var taskDto = _mapper.Map<JobTaskDto>(task);
+            //    await _repository.DeleteAsync(task);
+            //    await _repository.SaveChangesAsync();
+
+            //    return taskDto;
         }
     }
 }
