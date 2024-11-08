@@ -1,4 +1,5 @@
-﻿using LorryGlory.Data.Models.ClientModels;
+﻿using LorryGlory.Data.Models;
+using LorryGlory.Data.Models.ClientModels;
 using LorryGlory.Data.Models.CompanyModels;
 using LorryGlory.Data.Models.JobModels;
 using LorryGlory.Data.Models.StaffModels;
@@ -25,18 +26,17 @@ namespace LorryGlory.Data.Data
         public DbSet<FileLink> FileLinks{ get; set; }
         public DbSet<Job> Jobs{ get; set; }
         public DbSet<JobTask> JobTasks{ get; set; }
-        public DbSet<TaskReport> TaskReports{ get; set; }
         public DbSet<StaffMember> StaffMembers { get; set; }
         public DbSet<StaffRelation> StaffRelations { get; set; }
         public DbSet<Vehicle> Vehicles{ get; set; }
-        //inte säker varför vi skulle skapa DbSets för bilens egenskaper
-
+        public DbSet<VehicleProblem> VehicleProblems { get; set; }
+        
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
-            // Adds global query filter for Tenant in all tables
+            // global query filter for Tenant
             modelBuilder.Entity<Company>()
                .HasQueryFilter(cl => cl.TenantId == _tenantService.TenantId);
             modelBuilder.Entity<Client>()
@@ -47,14 +47,14 @@ namespace LorryGlory.Data.Data
                 .HasQueryFilter(j => j.FK_TenantId == _tenantService.TenantId);
             modelBuilder.Entity<JobTask>()
                 .HasQueryFilter(jt => jt.FK_TenantId == _tenantService.TenantId);
-            modelBuilder.Entity<TaskReport>()
-                .HasQueryFilter(tr => tr.FK_TenantId == _tenantService.TenantId);
             modelBuilder.Entity<StaffMember>()
                 .HasQueryFilter(sm => sm.FK_TenantId == _tenantService.TenantId);
             modelBuilder.Entity<StaffRelation>()
                 .HasQueryFilter(sr => sr.FK_TenantId == _tenantService.TenantId);
             modelBuilder.Entity<Vehicle>()
                 .HasQueryFilter(v => v.FK_TenantId == _tenantService.TenantId);
+            modelBuilder.Entity<VehicleProblem>()
+                .HasQueryFilter(vp => vp.FK_TenantId == _tenantService.TenantId);
 
             // Define Address relation
             modelBuilder.Entity<Client>().OwnsOne(cl => cl.Address);
@@ -64,6 +64,15 @@ namespace LorryGlory.Data.Data
             {
                 entity.OwnsOne(jt => jt.PickupAddress);
                 entity.OwnsOne(jt => jt.DeliveryAddress);
+            });
+
+
+            modelBuilder.Entity<Vehicle>(entity =>
+            {
+                entity.OwnsOne(v => v.Status);
+                entity.OwnsOne(v => v.Inspection);
+                entity.OwnsOne(v => v.TechnicalData);
+                entity.OwnsOne(v => v.Eco);
             });
         }
     }

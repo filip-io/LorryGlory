@@ -19,8 +19,7 @@ namespace LorryGlory.Data.Models.StaffModels
 
         public Address Address { get; set; }
 
-        public Company Company{ get; set; }
-
+       
 
         [ForeignKey("Company")]
         public Guid FK_TenantId { get; set; }
