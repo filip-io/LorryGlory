@@ -2,9 +2,9 @@
 {
     public class Address
     {
-        public string AdressStreet { get; set; }
+        public string AddressStreet { get; set; }
         public string PostalCode { get; set; }
-        public string AdressCity { get; set; }
-        public string AdressCountry { get; set; }
+        public string AddressCity { get; set; }
+        public string AddressCountry { get; set; }
     }
 }

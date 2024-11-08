@@ -1,19 +1,14 @@
 ﻿using LorryGlory.Data.Services.IServices;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LorryGlory.Data.Services
 {
-    internal class TenantService : ITenantService
+    public class TenantService : ITenantService
     {
+
         private Guid _currentTenantId;
         public Guid TenantId => _currentTenantId;
 
         public event Action<Guid> OnTenantChanged;
-
 
 
         public Guid[] GetTenants()

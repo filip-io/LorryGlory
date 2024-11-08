@@ -1,4 +1,6 @@
 ﻿using LorryGlory.Data.Data;
+using LorryGlory.Data.Services.IServices;
+using LorryGlory.Data.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -9,6 +11,7 @@ public static class ServiceConfiguration
     public static void ConfigureDatabase(this IServiceCollection serviceCollection, string connectionString)
     {
         serviceCollection.AddDbContext<LorryGloryDbContext>(options => options.UseSqlServer(connectionString));
+        serviceCollection.AddScoped<ITenantService, TenantService>();
     }
 
     public static void ConfigureScopes(this IServiceCollection serviceCollection)
