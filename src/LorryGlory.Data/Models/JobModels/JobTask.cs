@@ -13,15 +13,8 @@ namespace LorryGlory.Data.Models.JobModels
         public string Description { get; set; }
         public TaskStatus Status { get; set; }
 
-        public string PickupAdressStreet { get; set; }
-        public string PickupPostalCode { get; set; }
-        public string PickupAdressCity { get; set; }
-        public string PickupAdressCountry { get; set; }
-
-        public string DeliveryAdressStreet { get; set; }
-        public string DeliveryPostalCode { get; set; }
-        public string DeliveryAdressCity { get; set; }
-        public string DeliveryAdressCountry { get; set; }
+        public Address PickupAddress { get; set; }
+        public Address DeliveryAddress { get; set; }
 
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
@@ -38,6 +31,8 @@ namespace LorryGlory.Data.Models.JobModels
         [ForeignKey("Vehicle")]
         public Guid FK_VehicleId { get; set; }
         public Vehicle Vehicle { get; set; }
+
+        public TaskReport TaskReport { get; set; }
 
         public DateTime CreatedAt {  get; set; }
         public DateTime UpdatedAt { get; set; }

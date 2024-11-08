@@ -36,11 +36,35 @@ namespace LorryGlory.Data.Data
         {
             base.OnModelCreating(modelBuilder);
 
-            // Lägg till global query filter för TenantId
+            // Adds global query filter for Tenant in all tables
+            modelBuilder.Entity<Company>()
+               .HasQueryFilter(cl => cl.TenantId == _tenantService.TenantId);
+            modelBuilder.Entity<Client>()
+                .HasQueryFilter(cl => cl.FK_TenantId == _tenantService.TenantId);
+            modelBuilder.Entity<FileLink>()
+                .HasQueryFilter(fl => fl.FK_TenantId == _tenantService.TenantId);
+            modelBuilder.Entity<Job>()
+                .HasQueryFilter(j => j.FK_TenantId == _tenantService.TenantId);
+            modelBuilder.Entity<JobTask>()
+                .HasQueryFilter(jt => jt.FK_TenantId == _tenantService.TenantId);
+            modelBuilder.Entity<TaskReport>()
+                .HasQueryFilter(tr => tr.FK_TenantId == _tenantService.TenantId);
             modelBuilder.Entity<StaffMember>()
-                .HasQueryFilter(s => s.FK_TenantId == _tenantService.TenantId);
-            // och för alla andra modeller som har data som är företagets egna!!s
-            
+                .HasQueryFilter(sm => sm.FK_TenantId == _tenantService.TenantId);
+            modelBuilder.Entity<StaffRelation>()
+                .HasQueryFilter(sr => sr.FK_TenantId == _tenantService.TenantId);
+            modelBuilder.Entity<Vehicle>()
+                .HasQueryFilter(v => v.FK_TenantId == _tenantService.TenantId);
+
+            // Define Address relation
+            modelBuilder.Entity<Client>().OwnsOne(cl => cl.Address);
+            modelBuilder.Entity<Company>().OwnsOne(co => co.Address);
+            modelBuilder.Entity<StaffMember>().OwnsOne(sm => sm.Address);
+            modelBuilder.Entity<JobTask>(entity =>
+            {
+                entity.OwnsOne(jt => jt.PickupAddress);
+                entity.OwnsOne(jt => jt.DeliveryAddress);
+            });
         }
     }
 }

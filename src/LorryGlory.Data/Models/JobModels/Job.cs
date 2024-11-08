@@ -15,13 +15,17 @@ namespace LorryGlory.Data.Models.JobModels
         public TimeSpan? EstimatedTotalTime { get; set; }
         public TimeSpan? ActualTotalTime { get; set; }
 
-        public string? ClientName { get; set; }
-        public string? ClientEmail { get; set; }
-        public string? ClientPhoneNr { get; set; }
+        public string? ClientContactName { get; set; }
+        public string? ClientContactPhoneNr { get; set; }
 
         [ForeignKey("Client")]
         public Guid FK_ClientId { get; set; }
         public Client Client{ get; set; }
+        public virtual ICollection<JobTask> JobTasks { get; set; }
+
+
+        public DateTime CreatedAt { get; set; }
+        public DateTime UpdatedAt { get; set; }
 
         [ForeignKey("Company")]
         public Guid FK_TenantId { get; set; }
