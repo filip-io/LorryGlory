@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LorryGlory.Core.Services.Interfaces
+namespace LorryGlory.Core.Services.IServices
 {
     public interface ITaskService
     {

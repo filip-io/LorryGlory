@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LorryGlory.Data.Repositories.Interfaces
+namespace LorryGlory.Data.Repositories.IRepositories
 {
     public interface ITaskRepository
     {

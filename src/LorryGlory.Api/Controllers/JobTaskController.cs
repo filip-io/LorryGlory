@@ -1,7 +1,7 @@
 ﻿using LorryGlory.Api.Models;
 using LorryGlory.Api.Helpers;
 using LorryGlory.Core.Models.DTOs;
-using LorryGlory.Core.Services.Interfaces;
+using LorryGlory.Core.Services.IServices;  
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;

@@ -1,5 +1,5 @@
 ﻿using LorryGlory.Core.Models.DTOs;
-using LorryGlory.Core.Services.Interfaces;
+using LorryGlory.Core.Services.IServices;
 using System;
 using System.Collections.Generic;
 using System.Linq;

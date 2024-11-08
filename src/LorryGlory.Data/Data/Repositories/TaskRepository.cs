@@ -1,5 +1,5 @@
 ﻿using LorryGlory.Data.Models.JobModels;
-using LorryGlory.Data.Repositories.Interfaces;
+using LorryGlory.Data.Repositories.IRepositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
