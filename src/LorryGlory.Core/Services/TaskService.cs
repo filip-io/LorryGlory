@@ -1,4 +1,4 @@
-﻿using LorryGlory.Core.Models.DataTransferObjects;
+﻿using LorryGlory.Core.Models.DTOs;
 using LorryGlory.Core.Services.Interfaces;
 using System;
 using System.Collections.Generic;

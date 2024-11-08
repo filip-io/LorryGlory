@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LorryGlory.Core.Models.DataTransferObjects
+namespace LorryGlory.Core.Models.DTOs
 {
     public class JobTaskDto
     {
