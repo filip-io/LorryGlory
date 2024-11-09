@@ -7,7 +7,6 @@ namespace LorryGlory.Data.Models.JobModels
 {
     public class JobTask
     {
-        // Task Done? planned time object med 2 fält?
         public Guid Id { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
@@ -23,7 +22,7 @@ namespace LorryGlory.Data.Models.JobModels
 
 
         [ForeignKey("StaffMember")]
-        public Guid FK_StaffMemberId { get; set; }
+        public string FK_StaffMemberId { get; set; }
         public StaffMember StaffMember { get; set; }
 
         [ForeignKey("Job")]
@@ -31,10 +30,13 @@ namespace LorryGlory.Data.Models.JobModels
         public Job Job { get; set; }
 
         [ForeignKey("Vehicle")]
-        public Guid FK_VehicleId { get; set; }
+        public Guid? FK_VehicleId { get; set; }
         public Vehicle Vehicle { get; set; }
 
-        public FileLink? FileLink { get; set; }
+        [ForeignKey("FileLink")]
+        public Guid? FK_FileLink { get; set; }
+        public FileLink FileLink { get; set; }
+
         public JobTaskReport JobTaskReport { get; set; }
 
         public DateTime CreatedAt {  get; set; }
@@ -54,10 +56,12 @@ namespace LorryGlory.Data.Models.JobModels
 
         public DateTime CreatedAt { get; set; }
         public StaffMember CreatedBy { get; set; }
-        public DateTime UpdatedAt { get; set; }
-        public StaffMember UpdatedBy { get; set; }
+        public DateTime? UpdatedAt { get; set; }
+        public StaffMember? UpdatedBy { get; set; }
 
-        public FileLink? FileLink { get; set; }
+        [ForeignKey("FileLink")]
+        public Guid? FK_FileLink { get; set; }
+        public FileLink FileLink { get; set; }
     }
 
 }
