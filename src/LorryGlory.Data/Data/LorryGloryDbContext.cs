@@ -66,7 +66,34 @@ namespace LorryGlory.Data.Data
                 entity.OwnsOne(jt => jt.PickupAddress);
                 entity.OwnsOne(jt => jt.DeliveryAddress);
                 entity.OwnsOne(jt => jt.ContactPerson);
-                entity.OwnsOne(jt => jt.JobTaskReport);
+
+                // Main JobTask -> StaffMember relationship (this one is bidirectional because StaffMember has JobTasks collection)
+                entity.HasOne(jt => jt.StaffMember)
+                    .WithMany(sm => sm.JobTasks)
+                    .HasForeignKey(jt => jt.FK_StaffMemberId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                // Configure JobTaskReport as owned type with one-way relationships
+                entity.OwnsOne(jt => jt.JobTaskReport, reportBuilder =>
+                {
+                    // CreatedBy relationship (one-way)
+                    reportBuilder.HasOne(r => r.CreatedBy)
+                        .WithMany()  // No need for navigation property back to reports
+                        .HasForeignKey("CreatedById")
+                        .OnDelete(DeleteBehavior.Restrict); // PREVENT the deletion of a StaffMember if they are referenced as CreatedBy in any JobTaskReport
+
+                    // UpdatedBy relationship (one-way)
+                    reportBuilder.HasOne(r => r.UpdatedBy)
+                        .WithMany()  // No need for navigation property back to reports
+                        .HasForeignKey("UpdatedById")
+                        .OnDelete(DeleteBehavior.Restrict); // PREVENT the deletion of a StaffMember if they are referenced as UpdatedBy in any JobTaskReport 
+
+                    // FileLink relationship (one-way)
+                    reportBuilder.HasOne(r => r.FileLink)
+                        .WithMany()
+                        .HasForeignKey(r => r.FK_FileLink)
+                        .OnDelete(DeleteBehavior.Restrict);
+                });
             });
             modelBuilder.Entity<Vehicle>(entity =>
             {
@@ -80,12 +107,12 @@ namespace LorryGlory.Data.Data
             });
 
 
-            // don't delete the Tenant (company) when we delete entities within it
+
             modelBuilder.Entity<Client>()
                 .HasOne(s => s.Company)
                 .WithMany(c => c.Clients)
                 .HasForeignKey(s => s.FK_TenantId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Restrict); // RESTRICT means: "Don't let me delete this Company if any Clients are still referring to it - throw an error instead"
 
             modelBuilder.Entity<Job>()
                .HasOne(j => j.Company)
