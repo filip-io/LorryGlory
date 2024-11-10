@@ -85,85 +85,89 @@ namespace LorryGlory.Data.Data
             });
 
 
-            // don't delete the Tenant (company) when we delete entities within it
-            modelBuilder.Entity<Client>()
-                .HasOne(s => s.Company)
-                .WithMany(c => c.Clients)
-                .HasForeignKey(s => s.FK_TenantId)
-                .OnDelete(DeleteBehavior.NoAction);
+            //// if Client is delete, Tenant (company) is not affected
+            //modelBuilder.Entity<Client>()
+            //    .HasOne(s => s.Company)
+            //    .WithMany(c => c.Clients)
+            //    .HasForeignKey(s => s.FK_TenantId)
+            //    .OnDelete(DeleteBehavior.NoAction);
 
-            // no action?
+            // if Company is deleted, Job is not affected
             modelBuilder.Entity<Job>()
                .HasOne(j => j.Company)
                .WithMany(c => c.Jobs)
                .HasForeignKey(j => j.FK_TenantId)
                .OnDelete(DeleteBehavior.NoAction);
 
-            //job stannar och FK sätts till null när client tas bort
+            // if Client is deleted, FK to Client in Job is set to null
             modelBuilder.Entity<Job>()
                 .HasOne(j => j.Client)
                 .WithMany(c => c.Jobs)
                 .HasForeignKey(j => j.FK_ClientId)
                 .OnDelete(DeleteBehavior.SetNull);
 
-            // ?
+            // if Company is deleted, JobTask is not affected
             modelBuilder.Entity<JobTask>()
                .HasOne(j => j.Company)
                .WithMany(c => c.JobTasks)
                .HasForeignKey(j => j.FK_TenantId)
                .OnDelete(DeleteBehavior.NoAction);
 
-            // ?
-            modelBuilder.Entity<JobTask>()
-               .HasOne(j => j.StaffMember)
-               .WithMany(c => c.JobTasks)
-               .HasForeignKey(j => j.FK_StaffMemberId)
-               .OnDelete(DeleteBehavior.NoAction);
+            // if StaffMember is deleted, JobTask is not affected
+            //modelBuilder.Entity<JobTask>()
+            //   .HasOne(j => j.StaffMember)
+            //   .WithMany(c => c.JobTasks)
+            //   .HasForeignKey(j => j.FK_StaffMemberId)
+            //   .OnDelete(DeleteBehavior.NoAction);
 
-            // ?
+            // if Company is deleted, JobTaskReport is not affected
             modelBuilder.Entity<JobTaskReport>()
                   .HasOne(j => j.Company)
                   .WithMany(c => c.JobTaskReports)
                   .HasForeignKey(j => j.FK_TenantId)
                   .OnDelete(DeleteBehavior.NoAction);
 
-            // ?
+            // if StaffMember is deleted, JobTaskReport is not affected (with CreatedBy)
             modelBuilder.Entity<JobTaskReport>()
                .HasOne(j => j.CreatedBy)
                .WithMany(c => c.JobTaskReports)
                .HasForeignKey(j => j.FK_CreatedById)
                   .OnDelete(DeleteBehavior.NoAction);
 
+            // if Company is deleted, StaffMember is not affected
+            //modelBuilder.Entity<StaffMember>()
+            //    .HasOne(s => s.Company)
+            //    .WithMany(c => c.StaffMembers)
+            //    .HasForeignKey(s => s.FK_TenantId)
+            //    .OnDelete(DeleteBehavior.NoAction);
 
-            modelBuilder.Entity<StaffMember>()
-                .HasOne(s => s.Company)
-                .WithMany(c => c.StaffMembers)
-                .HasForeignKey(s => s.FK_TenantId)
-                .OnDelete(DeleteBehavior.NoAction);
-
+            // if Company is deleted, StarrRelation is not affected
             modelBuilder.Entity<StaffRelation>()
                 .HasOne(s => s.Company)
                 .WithMany(c => c.StaffRelations)
                 .HasForeignKey(s => s.FK_TenantId)
                 .OnDelete(DeleteBehavior.NoAction);
 
-            modelBuilder.Entity<Vehicle>()
-                .HasOne(j => j.Company)
-                .WithMany(c => c.Vehicles)
-                .HasForeignKey(j => j.FK_TenantId)
-                .OnDelete(DeleteBehavior.NoAction);
+            //// if Company is deleted, Vehicle is not affected
+            //modelBuilder.Entity<Vehicle>()
+            //    .HasOne(j => j.Company)
+            //    .WithMany(c => c.Vehicles)
+            //    .HasForeignKey(j => j.FK_TenantId)
+            //    .OnDelete(DeleteBehavior.NoAction);
 
+            // if Company is deleted, VehicleProblem is not affected
             modelBuilder.Entity<VehicleProblem>()
                 .HasOne(j => j.Company)
                 .WithMany(c => c.VehicleProblems)
                 .HasForeignKey(j => j.FK_TenantId)
                 .OnDelete(DeleteBehavior.NoAction);
 
-            modelBuilder.Entity<FileLink>()
-                .HasOne(j => j.Company)
-                .WithMany(c => c.FileLinks)
-                .HasForeignKey(j => j.FK_TenantId)
-                .OnDelete(DeleteBehavior.NoAction);
+            // if Company is deleted, FileLink is not affected
+            //modelBuilder.Entity<FileLink>()
+            //    .HasOne(j => j.Company)
+            //    .WithMany(c => c.FileLinks)
+            //    .HasForeignKey(j => j.FK_TenantId)
+            //    .OnDelete(DeleteBehavior.NoAction);
 
 
             // Seeding
