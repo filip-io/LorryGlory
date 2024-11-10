@@ -2,7 +2,9 @@
 using LorryGlory.Data.Models.ClientModels;
 using LorryGlory.Data.Models.CompanyModels;
 using LorryGlory.Data.Models.JobModels;
+using LorryGlory.Data.Models.JobModels.Enums;
 using LorryGlory.Data.Models.StaffModels;
+using LorryGlory.Data.Models.StaffModels.Enums;
 using LorryGlory.Data.Models.VehicleModels;
 using LorryGlory.Data.Services.IServices;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -26,6 +28,7 @@ namespace LorryGlory.Data.Data
         public DbSet<FileLink> FileLinks { get; set; }
         public DbSet<Job> Jobs { get; set; }
         public DbSet<JobTask> JobTasks { get; set; }
+        public DbSet<JobTaskReport> JobTaskReports { get; set; }
         public DbSet<StaffMember> StaffMembers { get; set; }
         public DbSet<StaffRelation> StaffRelations { get; set; }
         public DbSet<Vehicle> Vehicles { get; set; }
@@ -47,6 +50,8 @@ namespace LorryGlory.Data.Data
                 .HasQueryFilter(j => j.FK_TenantId == _tenantService.TenantId);
             modelBuilder.Entity<JobTask>()
                 .HasQueryFilter(jt => jt.FK_TenantId == _tenantService.TenantId);
+            modelBuilder.Entity<JobTaskReport>()
+                .HasQueryFilter(jt => jt.FK_TenantId == _tenantService.TenantId);
             modelBuilder.Entity<StaffMember>()
                 .HasQueryFilter(sm => sm.FK_TenantId == _tenantService.TenantId);
             modelBuilder.Entity<StaffRelation>()
@@ -66,7 +71,7 @@ namespace LorryGlory.Data.Data
                 entity.OwnsOne(jt => jt.PickupAddress);
                 entity.OwnsOne(jt => jt.DeliveryAddress);
                 entity.OwnsOne(jt => jt.ContactPerson);
-                entity.OwnsOne(jt => jt.JobTaskReport);
+                //entity.OwnsOne(jt => jt.JobTaskReport);
             });
             modelBuilder.Entity<Vehicle>(entity =>
             {
@@ -85,55 +90,112 @@ namespace LorryGlory.Data.Data
                 .HasOne(s => s.Company)
                 .WithMany(c => c.Clients)
                 .HasForeignKey(s => s.FK_TenantId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.NoAction);
 
+            // no action?
             modelBuilder.Entity<Job>()
                .HasOne(j => j.Company)
                .WithMany(c => c.Jobs)
                .HasForeignKey(j => j.FK_TenantId)
-               .OnDelete(DeleteBehavior.Restrict);
+               .OnDelete(DeleteBehavior.NoAction);
 
+            //job stannar och FK sätts till null när client tas bort
             modelBuilder.Entity<Job>()
                 .HasOne(j => j.Client)
                 .WithMany(c => c.Jobs)
                 .HasForeignKey(j => j.FK_ClientId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.SetNull);
 
+            // ?
             modelBuilder.Entity<JobTask>()
                .HasOne(j => j.Company)
                .WithMany(c => c.JobTasks)
                .HasForeignKey(j => j.FK_TenantId)
-               .OnDelete(DeleteBehavior.Restrict);
+               .OnDelete(DeleteBehavior.NoAction);
+
+            // ?
+            modelBuilder.Entity<JobTask>()
+               .HasOne(j => j.StaffMember)
+               .WithMany(c => c.JobTasks)
+               .HasForeignKey(j => j.FK_StaffMemberId)
+               .OnDelete(DeleteBehavior.NoAction);
+
+            // ?
+            modelBuilder.Entity<JobTaskReport>()
+                  .HasOne(j => j.Company)
+                  .WithMany(c => c.JobTaskReports)
+                  .HasForeignKey(j => j.FK_TenantId)
+                  .OnDelete(DeleteBehavior.NoAction);
+
+            // ?
+            modelBuilder.Entity<JobTaskReport>()
+               .HasOne(j => j.CreatedBy)
+               .WithMany(c => c.JobTaskReports)
+               .HasForeignKey(j => j.FK_CreatedById)
+                  .OnDelete(DeleteBehavior.NoAction);
+
 
             modelBuilder.Entity<StaffMember>()
                 .HasOne(s => s.Company)
                 .WithMany(c => c.StaffMembers)
                 .HasForeignKey(s => s.FK_TenantId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<StaffRelation>()
                 .HasOne(s => s.Company)
                 .WithMany(c => c.StaffRelations)
                 .HasForeignKey(s => s.FK_TenantId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<Vehicle>()
                 .HasOne(j => j.Company)
                 .WithMany(c => c.Vehicles)
                 .HasForeignKey(j => j.FK_TenantId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<VehicleProblem>()
                 .HasOne(j => j.Company)
                 .WithMany(c => c.VehicleProblems)
                 .HasForeignKey(j => j.FK_TenantId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<FileLink>()
                 .HasOne(j => j.Company)
                 .WithMany(c => c.FileLinks)
                 .HasForeignKey(j => j.FK_TenantId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.NoAction);
+
+
+            // Seeding
+            modelBuilder.Entity<Company>().HasData(
+               new Company { TenantId = new Guid("1D2B0228-4D0D-4C23-8B49-01A698857709"), CompanyName = "Lorry Glory AB", OrganizationNumber = "11-111", PhoneNumber = "0761" },
+               new Company { TenantId = new Guid("2D2B0228-4D0D-4C23-8B49-01A698857709"), CompanyName = "Chas Academy of Stök", OrganizationNumber = "22-22", PhoneNumber = "0762" }
+               );
+            modelBuilder.Entity<StaffMember>().HasData(
+              new StaffMember { Id = "1STAFFM", JobTitle = JobTitle.Driver, FirstName = "Magda", LastName = "Kubien", PersonalNumber = "YYYYMMDD-0000", PreferredLanguage = "PL", FK_TenantId = new Guid("1D2B0228-4D0D-4C23-8B49-01A698857709"), Email = "magda@m.m" , UserName="magda@m.m"},
+              new StaffMember { Id = "2STAFFM", JobTitle = JobTitle.Boss, FirstName = "Aldor", LastName = "B", PersonalNumber = "YYYYMMDD-0000", PreferredLanguage = "PL", FK_TenantId = new Guid("1D2B0228-4D0D-4C23-8B49-01A698857709"), Email = "aldor@b.c" , UserName="aldor@b.c"}
+              );
+            modelBuilder.Entity<StaffMember>().OwnsOne(sm => sm.Address).HasData(
+              new { StaffMemberId= "1STAFFM", AddressCity = "Kato", PostalCode = "44444", AddressCountry = "PL", AddressStreet = "Vägen till ingenstans" },
+              new { StaffMemberId = "2STAFFM", AddressCity = "Timrå", PostalCode = "33333", AddressCountry = "SE", AddressStreet = "Vägen i ingenstans" }
+              );
+            modelBuilder.Entity<Job>().HasData(
+              new Job { Id = new Guid("1A2B0228-4D0D-4C23-8B49-01A698857709"), IsCompleted = false, Description = "Oh yea", FK_TenantId = new Guid("1D2B0228-4D0D-4C23-8B49-01A698857709") }
+              );
+            modelBuilder.Entity<JobTask>().HasData(
+             new JobTask{
+                 FK_JobId=new Guid("1A2B0228-4D0D-4C23-8B49-01A698857709"),
+                 Id = new Guid("9A2B0228-4D0D-4C23-8B49-01A698857709"), 
+                 IsCompleted = false, 
+                 Description = "Oh yea", 
+                 Title="Oh",
+                 StartTime=DateTime.Now,
+                 EndTime = DateTime.Now,
+                 CreatedAt=DateTime.Now,
+                 FK_StaffMemberId = "1STAFFM",
+                 FK_TenantId = new Guid("1D2B0228-4D0D-4C23-8B49-01A698857709") }
+             );
+
         }
     }
 }

@@ -21,6 +21,7 @@ namespace LorryGlory.Data.Models.StaffModels
         public Address Address { get; set; }
 
         public ICollection<JobTask>? JobTasks { get; set; }
+        public ICollection<JobTaskReport>? JobTaskReports { get; set; }
 
         [ForeignKey("Company")]
         public Guid FK_TenantId { get; set; }
