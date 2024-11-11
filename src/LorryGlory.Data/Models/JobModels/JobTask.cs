@@ -25,20 +25,23 @@ namespace LorryGlory.Data.Models.JobModels
         public string FK_StaffMemberId { get; set; }
         public StaffMember StaffMember { get; set; }
 
+
         [ForeignKey("Job")]
         public Guid FK_JobId { get; set; }
         public Job Job { get; set; }
+
 
         [ForeignKey("Vehicle")]
         public Guid? FK_VehicleId { get; set; }
         public Vehicle Vehicle { get; set; }
 
+
         [ForeignKey("FileLink")]
         public Guid? FK_FileLink { get; set; }
         public FileLink FileLink { get; set; }
 
-        public JobTaskReport JobTaskReport { get; set; }
 
+        public JobTaskReport JobTaskReport { get; set; }
         public DateTime CreatedAt {  get; set; }
         public DateTime UpdatedAt { get; set; }
 
@@ -46,8 +49,9 @@ namespace LorryGlory.Data.Models.JobModels
         [ForeignKey("Company")]
         public Guid FK_TenantId { get; set; }
         public Company Company { get; set; }
-
     }
+
+
     public class JobTaskReport
     {
         public DateTime ReportedStartTime { get; set; }
@@ -60,12 +64,11 @@ namespace LorryGlory.Data.Models.JobModels
         public string FK_CreatedById { get; set; }
         public StaffMember CreatedBy { get; set; }
 
-        public DateTime? UpdatedAt { get; set; }
-
 
         [ForeignKey("UpdatedBy")]
         public string? FK_UpdatedById { get; set; }
         public StaffMember? UpdatedBy { get; set; }
+        public DateTime? UpdatedAt { get; set; }
 
 
         [ForeignKey("FileLink")]
