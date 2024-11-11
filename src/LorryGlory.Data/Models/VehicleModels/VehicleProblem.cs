@@ -1,6 +1,7 @@
 ﻿using LorryGlory.Data.Models.CompanyModels;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
@@ -10,6 +11,7 @@ namespace LorryGlory.Data.Models.VehicleModels
 {
     public class VehicleProblem
     {
+        [Key]
         public Guid Id { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }

@@ -133,7 +133,7 @@ namespace LorryGlory.Data.Migrations
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UriLink = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     LinkedEntityId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    LinkedEntityType = table.Column<int>(type: "int", nullable: false),
+                    LinkedEntityType = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     FK_TenantId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
@@ -339,16 +339,6 @@ namespace LorryGlory.Data.Migrations
                     FK_JobId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     FK_VehicleId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     FK_FileLink = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    JobTaskReport_ReportedStartTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    JobTaskReport_ReportedEndTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    JobTaskReport_Note = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    JobTaskReport_CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    JobTaskReport_FK_CreatedById = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    JobTaskReport_CreatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    JobTaskReport_UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    JobTaskReport_FK_UpdatedById = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    JobTaskReport_UpdatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    JobTaskReport_FK_FileLink = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     FK_TenantId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
@@ -359,18 +349,6 @@ namespace LorryGlory.Data.Migrations
                     table.ForeignKey(
                         name: "FK_JobTasks_AspNetUsers_FK_StaffMemberId",
                         column: x => x.FK_StaffMemberId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_JobTasks_AspNetUsers_JobTaskReport_CreatedById",
-                        column: x => x.JobTaskReport_CreatedById,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_JobTasks_AspNetUsers_JobTaskReport_UpdatedById",
-                        column: x => x.JobTaskReport_UpdatedById,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -386,12 +364,6 @@ namespace LorryGlory.Data.Migrations
                         principalTable: "FileLinks",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_JobTasks_FileLinks_JobTaskReport_FK_FileLink",
-                        column: x => x.JobTaskReport_FK_FileLink,
-                        principalTable: "FileLinks",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
                         name: "FK_JobTasks_Jobs_FK_JobId",
                         column: x => x.FK_JobId,
                         principalTable: "Jobs",
@@ -402,6 +374,55 @@ namespace LorryGlory.Data.Migrations
                         column: x => x.FK_VehicleId,
                         principalTable: "Vehicles",
                         principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "JobTaskReports",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    FK_JobTaskId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    FK_TenantId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    FK_FileLink = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    CreatedById = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    UpdatedById = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_JobTaskReports", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_JobTaskReports_AspNetUsers_CreatedById",
+                        column: x => x.CreatedById,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_JobTaskReports_AspNetUsers_UpdatedById",
+                        column: x => x.UpdatedById,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_JobTaskReports_Companies_FK_TenantId",
+                        column: x => x.FK_TenantId,
+                        principalTable: "Companies",
+                        principalColumn: "TenantId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_JobTaskReports_FileLinks_FK_FileLink",
+                        column: x => x.FK_FileLink,
+                        principalTable: "FileLinks",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_JobTaskReports_JobTasks_FK_JobTaskId",
+                        column: x => x.FK_JobTaskId,
+                        principalTable: "JobTasks",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -442,6 +463,32 @@ namespace LorryGlory.Data.Migrations
                 column: "FK_TenantId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_JobTaskReports_CreatedById",
+                table: "JobTaskReports",
+                column: "CreatedById");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_JobTaskReports_FK_FileLink",
+                table: "JobTaskReports",
+                column: "FK_FileLink");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_JobTaskReports_FK_JobTaskId",
+                table: "JobTaskReports",
+                column: "FK_JobTaskId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_JobTaskReports_FK_TenantId",
+                table: "JobTaskReports",
+                column: "FK_TenantId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_JobTaskReports_UpdatedById",
+                table: "JobTaskReports",
+                column: "UpdatedById");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_JobTasks_FK_FileLink",
                 table: "JobTasks",
                 column: "FK_FileLink");
@@ -465,21 +512,6 @@ namespace LorryGlory.Data.Migrations
                 name: "IX_JobTasks_FK_VehicleId",
                 table: "JobTasks",
                 column: "FK_VehicleId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_JobTasks_JobTaskReport_CreatedById",
-                table: "JobTasks",
-                column: "JobTaskReport_CreatedById");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_JobTasks_JobTaskReport_FK_FileLink",
-                table: "JobTasks",
-                column: "JobTaskReport_FK_FileLink");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_JobTasks_JobTaskReport_UpdatedById",
-                table: "JobTasks",
-                column: "JobTaskReport_UpdatedById");
 
             migrationBuilder.CreateIndex(
                 name: "IX_StaffRelations_Boss_StaffId",
@@ -533,13 +565,16 @@ namespace LorryGlory.Data.Migrations
                 table: "AspNetUsers");
 
             migrationBuilder.DropTable(
-                name: "JobTasks");
+                name: "JobTaskReports");
 
             migrationBuilder.DropTable(
                 name: "StaffRelations");
 
             migrationBuilder.DropTable(
                 name: "VehicleProblems");
+
+            migrationBuilder.DropTable(
+                name: "JobTasks");
 
             migrationBuilder.DropTable(
                 name: "Jobs");

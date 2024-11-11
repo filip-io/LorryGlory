@@ -20,6 +20,7 @@ namespace LorryGlory.Data.Models.CompanyModels
         public ICollection<Client>? Clients { get; set; }
         public ICollection<Job>? Jobs { get; set; }
         public ICollection<JobTask>? JobTasks { get; set; }
+        public ICollection<JobTaskReport>? JobTaskReports { get; set; }
         public ICollection<StaffMember>? StaffMembers { get; set; }
         public ICollection<StaffRelation>? StaffRelations { get; set; }
         public ICollection<Vehicle>? Vehicles { get; set; }

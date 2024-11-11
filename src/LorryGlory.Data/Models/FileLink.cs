@@ -1,4 +1,5 @@
 ﻿using LorryGlory.Data.Models.CompanyModels;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LorryGlory.Data.Models
@@ -12,6 +13,7 @@ namespace LorryGlory.Data.Models
     }
     public class FileLink
     {
+        [Key]
         public Guid Id { get; set; }
         public string? Name { get; set; }
         public string UriLink { get; set; }

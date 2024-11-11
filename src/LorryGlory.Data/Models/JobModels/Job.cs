@@ -1,12 +1,14 @@
 ﻿using LorryGlory.Data.Models.ClientModels;
 using LorryGlory.Data.Models.CompanyModels;
 using LorryGlory.Data.Models.JobModels.Enums;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LorryGlory.Data.Models.JobModels
 {
     public class Job
     {
+        [Key]
         public Guid Id { get; set; }
         public JobStatus Status { get; set; }
         public bool IsCompleted { get; set; }

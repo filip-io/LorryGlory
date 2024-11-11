@@ -1,11 +1,13 @@
 ﻿using LorryGlory.Data.Models.CompanyModels;
 using LorryGlory.Data.Models.JobModels;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LorryGlory.Data.Models.ClientModels
 {
     public class Client
     {
+        [Key]
         public Guid Id { get; set; }
         public string ClientName { get; set; }
         public string? OrganizationNumber { get; set; }

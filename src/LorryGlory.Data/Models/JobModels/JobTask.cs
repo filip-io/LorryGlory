@@ -1,12 +1,14 @@
 ﻿using LorryGlory.Data.Models.CompanyModels;
 using LorryGlory.Data.Models.StaffModels;
 using LorryGlory.Data.Models.VehicleModels;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LorryGlory.Data.Models.JobModels
 {
     public class JobTask
     {
+        [Key]
         public Guid Id { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
@@ -49,30 +51,5 @@ namespace LorryGlory.Data.Models.JobModels
         [ForeignKey("Company")]
         public Guid FK_TenantId { get; set; }
         public Company Company { get; set; }
-    }
-
-
-    public class JobTaskReport
-    {
-        public DateTime ReportedStartTime { get; set; }
-        public DateTime ReportedEndTime { get; set; }
-        public string Note { get; set; }
-
-
-        [ForeignKey("CreatedBy")]
-        public string? FK_CreatedById { get; set; }
-        public StaffMember CreatedBy { get; set; }
-        public DateTime CreatedAt { get; set; }
-
-
-        [ForeignKey("UpdatedBy")]
-        public string? FK_UpdatedById { get; set; }
-        public StaffMember? UpdatedBy { get; set; }
-        public DateTime? UpdatedAt { get; set; }
-
-
-        [ForeignKey("FileLink")]
-        public Guid? FK_FileLink { get; set; }
-        public FileLink FileLink { get; set; }
     }
 }

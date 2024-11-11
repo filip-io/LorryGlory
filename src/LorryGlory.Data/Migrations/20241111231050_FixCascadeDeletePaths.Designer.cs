@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LorryGlory.Data.Migrations
 {
     [DbContext(typeof(LorryGloryDbContext))]
-    [Migration("20241111004756_FixCascadeDeletePaths")]
+    [Migration("20241111231050_FixCascadeDeletePaths")]
     partial class FixCascadeDeletePaths
     {
         /// <inheritdoc />
@@ -90,8 +90,9 @@ namespace LorryGlory.Data.Migrations
                     b.Property<Guid>("LinkedEntityId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("LinkedEntityType")
-                        .HasColumnType("int");
+                    b.Property<string>("LinkedEntityType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
@@ -216,6 +217,54 @@ namespace LorryGlory.Data.Migrations
                     b.HasIndex("FK_VehicleId");
 
                     b.ToTable("JobTasks");
+                });
+
+            modelBuilder.Entity("LorryGlory.Data.Models.JobModels.JobTaskReport", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedById")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("FK_FileLink")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("FK_JobTaskId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("FK_TenantId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UpdatedById")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedById");
+
+                    b.HasIndex("FK_FileLink");
+
+                    b.HasIndex("FK_JobTaskId")
+                        .IsUnique();
+
+                    b.HasIndex("FK_TenantId");
+
+                    b.HasIndex("UpdatedById");
+
+                    b.ToTable("JobTaskReports");
                 });
 
             modelBuilder.Entity("LorryGlory.Data.Models.StaffModels.StaffMember", b =>
@@ -808,78 +857,6 @@ namespace LorryGlory.Data.Migrations
                                 .HasForeignKey("JobTaskId");
                         });
 
-                    b.OwnsOne("LorryGlory.Data.Models.JobModels.JobTaskReport", "JobTaskReport", b1 =>
-                        {
-                            b1.Property<Guid>("JobTaskId")
-                                .HasColumnType("uniqueidentifier");
-
-                            b1.Property<DateTime>("CreatedAt")
-                                .HasColumnType("datetime2");
-
-                            b1.Property<string>("CreatedById")
-                                .HasColumnType("nvarchar(450)");
-
-                            b1.Property<string>("FK_CreatedById")
-                                .IsRequired()
-                                .HasColumnType("nvarchar(max)");
-
-                            b1.Property<Guid?>("FK_FileLink")
-                                .HasColumnType("uniqueidentifier");
-
-                            b1.Property<string>("FK_UpdatedById")
-                                .HasColumnType("nvarchar(max)");
-
-                            b1.Property<string>("Note")
-                                .IsRequired()
-                                .HasColumnType("nvarchar(max)");
-
-                            b1.Property<DateTime>("ReportedEndTime")
-                                .HasColumnType("datetime2");
-
-                            b1.Property<DateTime>("ReportedStartTime")
-                                .HasColumnType("datetime2");
-
-                            b1.Property<DateTime?>("UpdatedAt")
-                                .HasColumnType("datetime2");
-
-                            b1.Property<string>("UpdatedById")
-                                .HasColumnType("nvarchar(450)");
-
-                            b1.HasKey("JobTaskId");
-
-                            b1.HasIndex("CreatedById");
-
-                            b1.HasIndex("FK_FileLink");
-
-                            b1.HasIndex("UpdatedById");
-
-                            b1.ToTable("JobTasks");
-
-                            b1.HasOne("LorryGlory.Data.Models.StaffModels.StaffMember", "CreatedBy")
-                                .WithMany()
-                                .HasForeignKey("CreatedById")
-                                .OnDelete(DeleteBehavior.Restrict);
-
-                            b1.HasOne("LorryGlory.Data.Models.FileLink", "FileLink")
-                                .WithMany()
-                                .HasForeignKey("FK_FileLink")
-                                .OnDelete(DeleteBehavior.Restrict);
-
-                            b1.WithOwner()
-                                .HasForeignKey("JobTaskId");
-
-                            b1.HasOne("LorryGlory.Data.Models.StaffModels.StaffMember", "UpdatedBy")
-                                .WithMany()
-                                .HasForeignKey("UpdatedById")
-                                .OnDelete(DeleteBehavior.Restrict);
-
-                            b1.Navigation("CreatedBy");
-
-                            b1.Navigation("FileLink");
-
-                            b1.Navigation("UpdatedBy");
-                        });
-
                     b.Navigation("Company");
 
                     b.Navigation("ContactPerson");
@@ -891,15 +868,54 @@ namespace LorryGlory.Data.Migrations
 
                     b.Navigation("Job");
 
-                    b.Navigation("JobTaskReport")
-                        .IsRequired();
-
                     b.Navigation("PickupAddress")
                         .IsRequired();
 
                     b.Navigation("StaffMember");
 
                     b.Navigation("Vehicle");
+                });
+
+            modelBuilder.Entity("LorryGlory.Data.Models.JobModels.JobTaskReport", b =>
+                {
+                    b.HasOne("LorryGlory.Data.Models.StaffModels.StaffMember", "CreatedBy")
+                        .WithMany()
+                        .HasForeignKey("CreatedById")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("LorryGlory.Data.Models.FileLink", "FileLink")
+                        .WithMany()
+                        .HasForeignKey("FK_FileLink")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("LorryGlory.Data.Models.JobModels.JobTask", "JobTask")
+                        .WithOne("JobTaskReport")
+                        .HasForeignKey("LorryGlory.Data.Models.JobModels.JobTaskReport", "FK_JobTaskId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("LorryGlory.Data.Models.CompanyModels.Company", "Company")
+                        .WithMany("JobTaskReports")
+                        .HasForeignKey("FK_TenantId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("LorryGlory.Data.Models.StaffModels.StaffMember", "UpdatedBy")
+                        .WithMany()
+                        .HasForeignKey("UpdatedById")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Company");
+
+                    b.Navigation("CreatedBy");
+
+                    b.Navigation("FileLink");
+
+                    b.Navigation("JobTask");
+
+                    b.Navigation("UpdatedBy");
                 });
 
             modelBuilder.Entity("LorryGlory.Data.Models.StaffModels.StaffMember", b =>
@@ -1246,6 +1262,8 @@ namespace LorryGlory.Data.Migrations
 
                     b.Navigation("FileLinks");
 
+                    b.Navigation("JobTaskReports");
+
                     b.Navigation("JobTasks");
 
                     b.Navigation("Jobs");
@@ -1262,6 +1280,12 @@ namespace LorryGlory.Data.Migrations
             modelBuilder.Entity("LorryGlory.Data.Models.JobModels.Job", b =>
                 {
                     b.Navigation("JobTasks");
+                });
+
+            modelBuilder.Entity("LorryGlory.Data.Models.JobModels.JobTask", b =>
+                {
+                    b.Navigation("JobTaskReport")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("LorryGlory.Data.Models.StaffModels.StaffMember", b =>
