@@ -112,7 +112,7 @@ namespace LorryGlory.Data.Data
                 .HasOne(s => s.Company)
                 .WithMany(c => c.Clients)
                 .HasForeignKey(s => s.FK_TenantId)
-                .OnDelete(DeleteBehavior.Restrict); // RESTRICT means: "Don't let me delete this Company if any Clients are still referring to it - throw an error instead"
+                .OnDelete(DeleteBehavior.Restrict); // RESTRICT means: Prevent deletion of a Company if any Clients are referring to it - (throws exception on attempted Company delete)
 
             modelBuilder.Entity<Job>()
                .HasOne(j => j.Company)

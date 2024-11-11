@@ -57,12 +57,12 @@ namespace LorryGlory.Data.Models.JobModels
         public DateTime ReportedStartTime { get; set; }
         public DateTime ReportedEndTime { get; set; }
         public string Note { get; set; }
-        public DateTime CreatedAt { get; set; }
 
 
         [ForeignKey("CreatedBy")]
-        public string FK_CreatedById { get; set; }
+        public string? FK_CreatedById { get; set; }
         public StaffMember CreatedBy { get; set; }
+        public DateTime CreatedAt { get; set; }
 
 
         [ForeignKey("UpdatedBy")]
