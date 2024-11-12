@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace LorryGlory.Core.Services
 {
-    public class TaskService : ITaskService
+    public class JobTaskService : IJobTaskService
     {
         public Task<IEnumerable<JobTaskDto>> GetAllAsync()
         {

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace LorryGlory.Core.Services.IServices
 {
-    public interface ITaskService
+    public interface IJobTaskService
     {
         Task<IEnumerable<JobTaskDto>> GetAllAsync();
         Task<IEnumerable<JobTaskDto>> GetAllByDriverIdAndDayAsync(int id, DateOnly date);

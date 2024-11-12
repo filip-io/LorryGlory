@@ -12,10 +12,10 @@ namespace LorryGlory.Api.Controllers
     [Route("api/tasks")]
     public class JobTaskController : ControllerBase
     {
-        private readonly ITaskService _taskService;
+        private readonly IJobTaskService _taskService;
         private readonly ILogger<JobTaskController> _logger;
 
-        public JobTaskController(ITaskService taskService, ILogger<JobTaskController> logger)
+        public JobTaskController(IJobTaskService taskService, ILogger<JobTaskController> logger)
         {
             _taskService = taskService;
             _logger = logger;
@@ -97,11 +97,11 @@ namespace LorryGlory.Api.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<ApiResponse<JobTaskDto>>> UpdateAsync(int id, JobTaskDto jobTaskDto)
+        public async Task<ActionResult<ApiResponse<JobTaskDto>>> UpdateAsync(Guid id, [FromBody] JobTaskDto jobTaskDto)
         {
             try
             {
-                if (id != JobTaskDto.Id)
+                if (id != jobTaskDto.Id)
                     return ResponseHelper.HandleBadRequest<JobTaskDto>(_logger, "URL id does not match task item id");
 
                 var updatedTask = await _taskService.UpdateAsync(jobTaskDto);

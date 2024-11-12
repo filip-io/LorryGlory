@@ -1,10 +1,9 @@
-﻿using LorryGlory.Data.Models;
+﻿using LorryGlory.Data.Data.Seeding;
+using LorryGlory.Data.Models;
 using LorryGlory.Data.Models.ClientModels;
 using LorryGlory.Data.Models.CompanyModels;
 using LorryGlory.Data.Models.JobModels;
-using LorryGlory.Data.Models.JobModels.Enums;
 using LorryGlory.Data.Models.StaffModels;
-using LorryGlory.Data.Models.StaffModels.Enums;
 using LorryGlory.Data.Models.VehicleModels;
 using LorryGlory.Data.Services.IServices;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -34,172 +33,293 @@ namespace LorryGlory.Data.Data
         public DbSet<Vehicle> Vehicles { get; set; }
         public DbSet<VehicleProblem> VehicleProblems { get; set; }
 
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
-            // global query filter for Tenant
-            modelBuilder.Entity<Company>()
-               .HasQueryFilter(cl => cl.TenantId == _tenantService.TenantId);
-            modelBuilder.Entity<Client>()
-                .HasQueryFilter(cl => cl.FK_TenantId == _tenantService.TenantId);
-            modelBuilder.Entity<FileLink>()
-                .HasQueryFilter(fl => fl.FK_TenantId == _tenantService.TenantId);
-            modelBuilder.Entity<Job>()
-                .HasQueryFilter(j => j.FK_TenantId == _tenantService.TenantId);
-            modelBuilder.Entity<JobTask>()
-                .HasQueryFilter(jt => jt.FK_TenantId == _tenantService.TenantId);
-            modelBuilder.Entity<JobTaskReport>()
-                .HasQueryFilter(jt => jt.FK_TenantId == _tenantService.TenantId);
-            modelBuilder.Entity<StaffMember>()
-                .HasQueryFilter(sm => sm.FK_TenantId == _tenantService.TenantId);
-            modelBuilder.Entity<StaffRelation>()
-                .HasQueryFilter(sr => sr.FK_TenantId == _tenantService.TenantId);
-            modelBuilder.Entity<Vehicle>()
-                .HasQueryFilter(v => v.FK_TenantId == _tenantService.TenantId);
-            modelBuilder.Entity<VehicleProblem>()
-                .HasQueryFilter(vp => vp.FK_TenantId == _tenantService.TenantId);
+            // Load entity configs
+            ConfigureCompany(modelBuilder);
+            ConfigureClient(modelBuilder);
+            ConfigureFileLink(modelBuilder);
+            ConfigureJob(modelBuilder);
+            ConfigureJobTask(modelBuilder);
+            ConfigureJobTaskReport(modelBuilder);
+            ConfigureStaffMember(modelBuilder);
+            ConfigureStaffRelation(modelBuilder);
+            ConfigureVehicle(modelBuilder);
+            ConfigureVehicleProblem(modelBuilder);
 
-            // Define value object relations
-            modelBuilder.Entity<Client>().OwnsOne(cl => cl.Address);
-            modelBuilder.Entity<Company>().OwnsOne(co => co.Address);
-            modelBuilder.Entity<StaffMember>().OwnsOne(sm => sm.Address);
-            modelBuilder.Entity<Job>().OwnsOne(j => j.ContactPerson);
+            // Populate seed data
+            modelBuilder.SeedData();
+        }
+
+        private void ConfigureCompany(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Company>(entity =>
+            {
+                // Key and filter
+                entity.HasKey(e => e.TenantId);
+                entity.HasQueryFilter(e => e.TenantId == _tenantService.TenantId);
+
+                // Value objects
+                entity.OwnsOne(e => e.Address);
+
+                // Relationships
+                entity.HasMany(e => e.Clients)
+                    .WithOne(e => e.Company)
+                    .HasForeignKey(e => e.FK_TenantId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasMany(e => e.Jobs)
+                    .WithOne(e => e.Company)
+                    .HasForeignKey(e => e.FK_TenantId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasMany(e => e.JobTasks)
+                    .WithOne(e => e.Company)
+                    .HasForeignKey(e => e.FK_TenantId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasMany(e => e.JobTaskReports)
+                    .WithOne(e => e.Company)
+                    .HasForeignKey(e => e.FK_TenantId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasMany(e => e.StaffMembers)
+                    .WithOne(e => e.Company)
+                    .HasForeignKey(e => e.FK_TenantId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasMany(e => e.StaffRelations)
+                    .WithOne(e => e.Company)
+                    .HasForeignKey(e => e.FK_TenantId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasMany(e => e.Vehicles)
+                    .WithOne(e => e.Company)
+                    .HasForeignKey(e => e.FK_TenantId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasMany(e => e.VehicleProblems)
+                    .WithOne(e => e.Company)
+                    .HasForeignKey(e => e.FK_TenantId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasMany(e => e.FileLinks)
+                    .WithOne(e => e.Company)
+                    .HasForeignKey(e => e.FK_TenantId)
+                    .OnDelete(DeleteBehavior.Restrict);
+            });
+        }
+
+        private void ConfigureClient(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Client>(entity =>
+            {
+                entity.HasQueryFilter(e => e.FK_TenantId == _tenantService.TenantId);
+                entity.OwnsOne(e => e.Address);
+
+                entity.HasOne(e => e.Company)
+                    .WithMany(c => c.Clients)
+                    .HasForeignKey(e => e.FK_TenantId)
+                    .OnDelete(DeleteBehavior.Restrict);
+            });
+        }
+
+        private void ConfigureFileLink(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<FileLink>(entity =>
+            {
+                // Primary key
+                entity.HasKey(e => e.Id);
+
+                // Query filter for multi-tenancy
+                entity.HasQueryFilter(e => e.FK_TenantId == _tenantService.TenantId);
+
+                // Required fields
+                entity.Property(e => e.UriLink).IsRequired();
+                entity.Property(e => e.LinkedEntityId).IsRequired();
+                entity.Property(e => e.LinkedEntityType).IsRequired();
+                entity.Property(e => e.FK_TenantId).IsRequired();
+
+                // Company relationship
+                entity.HasOne(e => e.Company)
+                    .WithMany(c => c.FileLinks)
+                    .HasForeignKey(e => e.FK_TenantId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                // Configure enum as string (optional)
+                entity.Property(e => e.LinkedEntityType)
+                    .HasConversion<string>();
+
+                // Add index for faster lookups, compound index unique per tenant to prevent duplicates
+                entity.HasIndex(e => new { e.FK_TenantId, e.LinkedEntityType, e.LinkedEntityId })
+                    .IsUnique();
+            });
+        }
+
+        private void ConfigureJob(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Job>(entity =>
+            {
+                entity.HasQueryFilter(e => e.FK_TenantId == _tenantService.TenantId);
+                entity.OwnsOne(e => e.ContactPerson);
+
+                entity.HasOne(e => e.Company)
+                    .WithMany(c => c.Jobs)
+                    .HasForeignKey(e => e.FK_TenantId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasOne(e => e.Client)
+                    .WithMany(c => c.Jobs)
+                    .HasForeignKey(e => e.FK_ClientId)
+                    .OnDelete(DeleteBehavior.Restrict);
+            });
+        }
+
+        private void ConfigureJobTask(ModelBuilder modelBuilder)
+        {
             modelBuilder.Entity<JobTask>(entity =>
             {
-                entity.OwnsOne(jt => jt.PickupAddress);
-                entity.OwnsOne(jt => jt.DeliveryAddress);
-                entity.OwnsOne(jt => jt.ContactPerson);
-                //entity.OwnsOne(jt => jt.JobTaskReport);
+                // Query filter
+                entity.HasQueryFilter(e => e.FK_TenantId == _tenantService.TenantId);
+
+                // Value objects (owned entities)
+                entity.OwnsOne(e => e.PickupAddress);
+                entity.OwnsOne(e => e.DeliveryAddress);
+                entity.OwnsOne(e => e.ContactPerson);
+
+                // Company relationship
+                entity.HasOne(e => e.Company)
+                    .WithMany(c => c.JobTasks)
+                    .HasForeignKey(e => e.FK_TenantId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                // StaffMember relationship (bidirectional because StaffMember has JobTasks collection)
+                entity.HasOne(e => e.StaffMember)
+                    .WithMany(sm => sm.JobTasks)
+                    .HasForeignKey(e => e.FK_StaffMemberId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                // One-to-one relationship with JobTaskReport
+                entity.HasOne(e => e.JobTaskReport)
+                    .WithOne(r => r.JobTask)
+                    .HasForeignKey<JobTaskReport>(r => r.FK_JobTaskId)
+                    .OnDelete(DeleteBehavior.Cascade);
             });
+        }
+
+        private void ConfigureJobTaskReport(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<JobTaskReport>(entity =>
+            {
+                // Primary key and query filter
+                entity.HasKey(e => e.Id);
+                entity.HasQueryFilter(e => e.FK_TenantId == _tenantService.TenantId);
+
+                // Required fields
+                entity.Property(e => e.FK_JobTaskId).IsRequired();
+                entity.Property(e => e.FK_TenantId).IsRequired();
+                entity.Property(e => e.CreatedById).IsRequired();
+                entity.Property(e => e.UpdatedById).IsRequired();
+                entity.Property(e => e.CreatedAt).IsRequired();
+                entity.Property(e => e.UpdatedAt).IsRequired();
+
+                // Company relationship (multi-tenancy)
+                entity.HasOne(e => e.Company)
+                    .WithMany(c => c.JobTaskReports)
+                    .HasForeignKey(e => e.FK_TenantId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                // Audit relationships
+                entity.HasOne(e => e.CreatedBy)
+                    .WithMany()  // No navigation property back to reports
+                    .HasForeignKey(e => e.CreatedById)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasOne(e => e.UpdatedBy)
+                    .WithMany()  // No navigation property back to reports
+                    .HasForeignKey(e => e.UpdatedById)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                // FileLink relationship
+                entity.HasOne(e => e.FileLink)
+                    .WithMany()
+                    .HasForeignKey(e => e.FK_FileLink)
+                    .OnDelete(DeleteBehavior.Restrict);
+            });
+        }
+
+        private void ConfigureStaffMember(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<StaffMember>(entity =>
+            {
+                // Query filter
+                entity.HasQueryFilter(e => e.FK_TenantId == _tenantService.TenantId);
+
+                // Value objects
+                entity.OwnsOne(e => e.Address);
+
+                // Company relationship
+                entity.HasOne(e => e.Company)
+                    .WithMany(c => c.StaffMembers)
+                    .HasForeignKey(e => e.FK_TenantId)
+                    .OnDelete(DeleteBehavior.Restrict);
+            });
+        }
+
+        private void ConfigureStaffRelation(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<StaffRelation>(entity =>
+            {
+                // Query filter
+                entity.HasQueryFilter(e => e.FK_TenantId == _tenantService.TenantId);
+
+                // Company relationship
+                entity.HasOne(e => e.Company)
+                    .WithMany(c => c.StaffRelations)
+                    .HasForeignKey(e => e.FK_TenantId)
+                    .OnDelete(DeleteBehavior.Restrict);
+            });
+        }
+
+        private void ConfigureVehicle(ModelBuilder modelBuilder)
+        {
             modelBuilder.Entity<Vehicle>(entity =>
             {
-                entity.OwnsOne(v => v.Status);
-                entity.OwnsOne(v => v.Inspection);
-                entity.OwnsOne(v => v.TechnicalData, td =>
+                // Query filter
+                entity.HasQueryFilter(e => e.FK_TenantId == _tenantService.TenantId);
+
+                // Value objects (nested owned entities)
+                entity.OwnsOne(e => e.Status);
+                entity.OwnsOne(e => e.Inspection);
+                entity.OwnsOne(e => e.TechnicalData, td =>
                 {
                     td.OwnsOne(t => t.Category);
                 });
-                entity.OwnsOne(v => v.Eco);
+                entity.OwnsOne(e => e.Eco);
+
+                // Company relationship
+                entity.HasOne(e => e.Company)
+                    .WithMany(c => c.Vehicles)
+                    .HasForeignKey(e => e.FK_TenantId)
+                    .OnDelete(DeleteBehavior.Restrict);
             });
+        }
 
+        private void ConfigureVehicleProblem(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<VehicleProblem>(entity =>
+            {
+                // Query filter
+                entity.HasQueryFilter(e => e.FK_TenantId == _tenantService.TenantId);
 
-            //// if Client is delete, Tenant (company) is not affected
-            //modelBuilder.Entity<Client>()
-            //    .HasOne(s => s.Company)
-            //    .WithMany(c => c.Clients)
-            //    .HasForeignKey(s => s.FK_TenantId)
-            //    .OnDelete(DeleteBehavior.NoAction);
-
-            // if Company is deleted, Job is not affected
-            modelBuilder.Entity<Job>()
-               .HasOne(j => j.Company)
-               .WithMany(c => c.Jobs)
-               .HasForeignKey(j => j.FK_TenantId)
-               .OnDelete(DeleteBehavior.NoAction);
-
-            // if Client is deleted, FK to Client in Job is set to null
-            modelBuilder.Entity<Job>()
-                .HasOne(j => j.Client)
-                .WithMany(c => c.Jobs)
-                .HasForeignKey(j => j.FK_ClientId)
-                .OnDelete(DeleteBehavior.SetNull);
-
-            // if Company is deleted, JobTask is not affected
-            modelBuilder.Entity<JobTask>()
-               .HasOne(j => j.Company)
-               .WithMany(c => c.JobTasks)
-               .HasForeignKey(j => j.FK_TenantId)
-               .OnDelete(DeleteBehavior.NoAction);
-
-            // if StaffMember is deleted, JobTask is not affected
-            //modelBuilder.Entity<JobTask>()
-            //   .HasOne(j => j.StaffMember)
-            //   .WithMany(c => c.JobTasks)
-            //   .HasForeignKey(j => j.FK_StaffMemberId)
-            //   .OnDelete(DeleteBehavior.NoAction);
-
-            // if Company is deleted, JobTaskReport is not affected
-            modelBuilder.Entity<JobTaskReport>()
-                  .HasOne(j => j.Company)
-                  .WithMany(c => c.JobTaskReports)
-                  .HasForeignKey(j => j.FK_TenantId)
-                  .OnDelete(DeleteBehavior.NoAction);
-
-            // if StaffMember is deleted, JobTaskReport is not affected (with CreatedBy)
-            modelBuilder.Entity<JobTaskReport>()
-               .HasOne(j => j.CreatedBy)
-               .WithMany(c => c.JobTaskReports)
-               .HasForeignKey(j => j.FK_CreatedById)
-                  .OnDelete(DeleteBehavior.NoAction);
-
-            // if Company is deleted, StaffMember is not affected
-            //modelBuilder.Entity<StaffMember>()
-            //    .HasOne(s => s.Company)
-            //    .WithMany(c => c.StaffMembers)
-            //    .HasForeignKey(s => s.FK_TenantId)
-            //    .OnDelete(DeleteBehavior.NoAction);
-
-            // if Company is deleted, StarrRelation is not affected
-            modelBuilder.Entity<StaffRelation>()
-                .HasOne(s => s.Company)
-                .WithMany(c => c.StaffRelations)
-                .HasForeignKey(s => s.FK_TenantId)
-                .OnDelete(DeleteBehavior.NoAction);
-
-            //// if Company is deleted, Vehicle is not affected
-            //modelBuilder.Entity<Vehicle>()
-            //    .HasOne(j => j.Company)
-            //    .WithMany(c => c.Vehicles)
-            //    .HasForeignKey(j => j.FK_TenantId)
-            //    .OnDelete(DeleteBehavior.NoAction);
-
-            // if Company is deleted, VehicleProblem is not affected
-            modelBuilder.Entity<VehicleProblem>()
-                .HasOne(j => j.Company)
-                .WithMany(c => c.VehicleProblems)
-                .HasForeignKey(j => j.FK_TenantId)
-                .OnDelete(DeleteBehavior.NoAction);
-
-            // if Company is deleted, FileLink is not affected
-            //modelBuilder.Entity<FileLink>()
-            //    .HasOne(j => j.Company)
-            //    .WithMany(c => c.FileLinks)
-            //    .HasForeignKey(j => j.FK_TenantId)
-            //    .OnDelete(DeleteBehavior.NoAction);
-
-
-            // Seeding
-            modelBuilder.Entity<Company>().HasData(
-               new Company { TenantId = new Guid("1D2B0228-4D0D-4C23-8B49-01A698857709"), CompanyName = "Lorry Glory AB", OrganizationNumber = "11-111", PhoneNumber = "0761" },
-               new Company { TenantId = new Guid("2D2B0228-4D0D-4C23-8B49-01A698857709"), CompanyName = "Chas Academy of Stök", OrganizationNumber = "22-22", PhoneNumber = "0762" }
-               );
-            modelBuilder.Entity<StaffMember>().HasData(
-              new StaffMember { Id = "1STAFFM", JobTitle = JobTitle.Driver, FirstName = "Magda", LastName = "Kubien", PersonalNumber = "YYYYMMDD-0000", PreferredLanguage = "PL", FK_TenantId = new Guid("1D2B0228-4D0D-4C23-8B49-01A698857709"), Email = "magda@m.m" , UserName="magda@m.m"},
-              new StaffMember { Id = "2STAFFM", JobTitle = JobTitle.Boss, FirstName = "Aldor", LastName = "B", PersonalNumber = "YYYYMMDD-0000", PreferredLanguage = "PL", FK_TenantId = new Guid("1D2B0228-4D0D-4C23-8B49-01A698857709"), Email = "aldor@b.c" , UserName="aldor@b.c"}
-              );
-            modelBuilder.Entity<StaffMember>().OwnsOne(sm => sm.Address).HasData(
-              new { StaffMemberId= "1STAFFM", AddressCity = "Kato", PostalCode = "44444", AddressCountry = "PL", AddressStreet = "Vägen till ingenstans" },
-              new { StaffMemberId = "2STAFFM", AddressCity = "Timrå", PostalCode = "33333", AddressCountry = "SE", AddressStreet = "Vägen i ingenstans" }
-              );
-            modelBuilder.Entity<Job>().HasData(
-              new Job { Id = new Guid("1A2B0228-4D0D-4C23-8B49-01A698857709"), IsCompleted = false, Description = "Oh yea", FK_TenantId = new Guid("1D2B0228-4D0D-4C23-8B49-01A698857709") }
-              );
-            modelBuilder.Entity<JobTask>().HasData(
-             new JobTask{
-                 FK_JobId=new Guid("1A2B0228-4D0D-4C23-8B49-01A698857709"),
-                 Id = new Guid("9A2B0228-4D0D-4C23-8B49-01A698857709"), 
-                 IsCompleted = false, 
-                 Description = "Oh yea", 
-                 Title="Oh",
-                 StartTime=DateTime.Now,
-                 EndTime = DateTime.Now,
-                 CreatedAt=DateTime.Now,
-                 FK_StaffMemberId = "1STAFFM",
-                 FK_TenantId = new Guid("1D2B0228-4D0D-4C23-8B49-01A698857709") }
-             );
-
+                // Company relationship
+                entity.HasOne(e => e.Company)
+                    .WithMany(c => c.VehicleProblems)
+                    .HasForeignKey(e => e.FK_TenantId)
+                    .OnDelete(DeleteBehavior.Restrict);
+            });
         }
     }
 }
