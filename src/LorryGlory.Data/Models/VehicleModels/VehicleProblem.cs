@@ -14,7 +14,11 @@ namespace LorryGlory.Data.Models.VehicleModels
         public string Title { get; set; }
         public string Description { get; set; }
         public int SeverityLevel { get; set; }
-        public FileLink? FileLink { get; set; }
+
+        [ForeignKey("FileLink")]
+        public Guid? FK_FileLink { get; set; }
+        public FileLink FileLink { get; set; }
+        
 
         [ForeignKey("Vehicle")]
         public Guid FK_VehicleId { get; set; }

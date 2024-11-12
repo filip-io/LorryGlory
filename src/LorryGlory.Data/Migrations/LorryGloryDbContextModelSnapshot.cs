@@ -22,6 +22,544 @@ namespace LorryGlory.Data.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("LorryGlory.Data.Models.ClientModels.Client", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ClientName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("FK_TenantId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("OrganizationNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PersonalNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FK_TenantId");
+
+                    b.ToTable("Clients");
+                });
+
+            modelBuilder.Entity("LorryGlory.Data.Models.CompanyModels.Company", b =>
+                {
+                    b.Property<Guid>("TenantId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CompanyName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OrganizationNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("TenantId");
+
+                    b.ToTable("Companies");
+
+                    b.HasData(
+                        new
+                        {
+                            TenantId = new Guid("1d2b0228-4d0d-4c23-8b49-01a698857709"),
+                            CompanyName = "Lorry Glory AB",
+                            OrganizationNumber = "11-111",
+                            PhoneNumber = "0761"
+                        },
+                        new
+                        {
+                            TenantId = new Guid("2d2b0228-4d0d-4c23-8b49-01a698857709"),
+                            CompanyName = "Chas Academy of Stök",
+                            OrganizationNumber = "22-22",
+                            PhoneNumber = "0762"
+                        });
+                });
+
+            modelBuilder.Entity("LorryGlory.Data.Models.FileLink", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("FK_TenantId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("LinkedEntityId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("LinkedEntityType")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UriLink")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FK_TenantId");
+
+                    b.ToTable("FileLinks");
+                });
+
+            modelBuilder.Entity("LorryGlory.Data.Models.JobModels.Job", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<TimeSpan?>("ActualTotalTime")
+                        .HasColumnType("time");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<TimeSpan?>("EstimatedTotalTime")
+                        .HasColumnType("time");
+
+                    b.Property<Guid?>("FK_ClientId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("FK_FileLink")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("FK_TenantId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsCompleted")
+                        .HasColumnType("bit");
+
+                    b.Property<int?>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FK_ClientId");
+
+                    b.HasIndex("FK_FileLink");
+
+                    b.HasIndex("FK_TenantId");
+
+                    b.ToTable("Jobs");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("1a2b0228-4d0d-4c23-8b49-01a698857709"),
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "Oh yea",
+                            FK_TenantId = new Guid("1d2b0228-4d0d-4c23-8b49-01a698857709"),
+                            IsCompleted = false
+                        });
+                });
+
+            modelBuilder.Entity("LorryGlory.Data.Models.JobModels.JobTask", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("EndTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("FK_FileLink")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("FK_JobId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("FK_StaffMemberId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<Guid>("FK_TenantId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("FK_VehicleId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsCompleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("StartTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FK_FileLink");
+
+                    b.HasIndex("FK_JobId");
+
+                    b.HasIndex("FK_StaffMemberId");
+
+                    b.HasIndex("FK_TenantId");
+
+                    b.HasIndex("FK_VehicleId");
+
+                    b.ToTable("JobTasks");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("9a2b0228-4d0d-4c23-8b49-01a698857709"),
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "Oh yea",
+                            EndTime = new DateTime(2024, 11, 10, 1, 41, 38, 558, DateTimeKind.Local).AddTicks(2787),
+                            FK_JobId = new Guid("1a2b0228-4d0d-4c23-8b49-01a698857709"),
+                            FK_StaffMemberId = "1STAFFM",
+                            FK_TenantId = new Guid("1d2b0228-4d0d-4c23-8b49-01a698857709"),
+                            IsCompleted = false,
+                            StartTime = new DateTime(2024, 11, 10, 1, 41, 38, 558, DateTimeKind.Local).AddTicks(2713),
+                            Title = "Oh",
+                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        });
+                });
+
+            modelBuilder.Entity("LorryGlory.Data.Models.JobModels.JobTaskReport", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("FK_CreatedById")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<Guid?>("FK_FileLink")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("FK_JobTaskId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("FK_TenantId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("FK_UpdatedById")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Note")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("ReportedEndTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("ReportedStartTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FK_CreatedById");
+
+                    b.HasIndex("FK_FileLink");
+
+                    b.HasIndex("FK_JobTaskId")
+                        .IsUnique();
+
+                    b.HasIndex("FK_TenantId");
+
+                    b.HasIndex("FK_UpdatedById");
+
+                    b.ToTable("JobTaskReports");
+                });
+
+            modelBuilder.Entity("LorryGlory.Data.Models.StaffModels.StaffMember", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("AccessFailedCount")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid>("FK_TenantId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("JobTitle")
+                        .HasColumnType("int");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("LockoutEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTimeOffset?>("LockoutEnd")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("NormalizedEmail")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("NormalizedUserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("PasswordHash")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PersonalNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("PhoneNumberConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("PreferredLanguage")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SecurityStamp")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("TwoFactorEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("UserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Email")
+                        .IsUnique()
+                        .HasFilter("[Email] IS NOT NULL");
+
+                    b.HasIndex("FK_TenantId");
+
+                    b.HasIndex("NormalizedEmail")
+                        .HasDatabaseName("EmailIndex");
+
+                    b.HasIndex("NormalizedUserName")
+                        .IsUnique()
+                        .HasDatabaseName("UserNameIndex")
+                        .HasFilter("[NormalizedUserName] IS NOT NULL");
+
+                    b.ToTable("AspNetUsers", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "1STAFFM",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "e9b7d3e9-7cc9-4943-8edf-8ce16128fab3",
+                            Email = "magda@m.m",
+                            EmailConfirmed = false,
+                            FK_TenantId = new Guid("1d2b0228-4d0d-4c23-8b49-01a698857709"),
+                            FirstName = "Magda",
+                            JobTitle = 2,
+                            LastName = "Kubien",
+                            LockoutEnabled = false,
+                            PersonalNumber = "YYYYMMDD-0000",
+                            PhoneNumberConfirmed = false,
+                            PreferredLanguage = "PL",
+                            SecurityStamp = "04c502de-8946-4426-ac59-10fa6a643324",
+                            TwoFactorEnabled = false,
+                            UserName = "magda@m.m"
+                        },
+                        new
+                        {
+                            Id = "2STAFFM",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "03d989d2-425a-46ab-bc55-f3a9bcb43e25",
+                            Email = "aldor@b.c",
+                            EmailConfirmed = false,
+                            FK_TenantId = new Guid("1d2b0228-4d0d-4c23-8b49-01a698857709"),
+                            FirstName = "Aldor",
+                            JobTitle = 1,
+                            LastName = "B",
+                            LockoutEnabled = false,
+                            PersonalNumber = "YYYYMMDD-0000",
+                            PhoneNumberConfirmed = false,
+                            PreferredLanguage = "PL",
+                            SecurityStamp = "b0717231-4633-4a36-809f-6b9a9bc12c95",
+                            TwoFactorEnabled = false,
+                            UserName = "aldor@b.c"
+                        });
+                });
+
+            modelBuilder.Entity("LorryGlory.Data.Models.StaffModels.StaffRelation", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Boss_StaffId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<Guid>("FK_TenantId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("StaffId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Boss_StaffId");
+
+                    b.HasIndex("FK_TenantId");
+
+                    b.HasIndex("StaffId");
+
+                    b.ToTable("StaffRelations");
+                });
+
+            modelBuilder.Entity("LorryGlory.Data.Models.VehicleModels.Vehicle", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Color")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("FK_TenantId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Make")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Model")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ModelYear")
+                        .HasColumnType("int");
+
+                    b.Property<string>("RegNo")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("StolenStatus")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TypeClass")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("VehicleYear")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Vin")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FK_TenantId");
+
+                    b.ToTable("Vehicles");
+                });
+
+            modelBuilder.Entity("LorryGlory.Data.Models.VehicleModels.VehicleProblem", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("FK_FileLink")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("FK_TenantId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("FK_VehicleId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("SeverityLevel")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FK_FileLink");
+
+                    b.HasIndex("FK_TenantId");
+
+                    b.HasIndex("FK_VehicleId");
+
+                    b.ToTable("VehicleProblems");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
@@ -72,71 +610,6 @@ namespace LorryGlory.Data.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetRoleClaims", (string)null);
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUser", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("AccessFailedCount")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Email")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<bool>("EmailConfirmed")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("LockoutEnabled")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTimeOffset?>("LockoutEnd")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("NormalizedEmail")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<string>("NormalizedUserName")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<string>("PasswordHash")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("PhoneNumberConfirmed")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("SecurityStamp")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("TwoFactorEnabled")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("UserName")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("NormalizedEmail")
-                        .HasDatabaseName("EmailIndex");
-
-                    b.HasIndex("NormalizedUserName")
-                        .IsUnique()
-                        .HasDatabaseName("UserNameIndex")
-                        .HasFilter("[NormalizedUserName] IS NOT NULL");
-
-                    b.ToTable("AspNetUsers", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -220,6 +693,607 @@ namespace LorryGlory.Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("LorryGlory.Data.Models.ClientModels.Client", b =>
+                {
+                    b.HasOne("LorryGlory.Data.Models.CompanyModels.Company", "Company")
+                        .WithMany("Clients")
+                        .HasForeignKey("FK_TenantId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.OwnsOne("LorryGlory.Data.Models.Address", "Address", b1 =>
+                        {
+                            b1.Property<Guid>("ClientId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<string>("AddressCity")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("AddressCountry")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("AddressStreet")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("PostalCode")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.HasKey("ClientId");
+
+                            b1.ToTable("Clients");
+
+                            b1.WithOwner()
+                                .HasForeignKey("ClientId");
+                        });
+
+                    b.Navigation("Address")
+                        .IsRequired();
+
+                    b.Navigation("Company");
+                });
+
+            modelBuilder.Entity("LorryGlory.Data.Models.CompanyModels.Company", b =>
+                {
+                    b.OwnsOne("LorryGlory.Data.Models.Address", "Address", b1 =>
+                        {
+                            b1.Property<Guid>("CompanyTenantId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<string>("AddressCity")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("AddressCountry")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("AddressStreet")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("PostalCode")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.HasKey("CompanyTenantId");
+
+                            b1.ToTable("Companies");
+
+                            b1.WithOwner()
+                                .HasForeignKey("CompanyTenantId");
+                        });
+
+                    b.Navigation("Address");
+                });
+
+            modelBuilder.Entity("LorryGlory.Data.Models.FileLink", b =>
+                {
+                    b.HasOne("LorryGlory.Data.Models.CompanyModels.Company", "Company")
+                        .WithMany("FileLinks")
+                        .HasForeignKey("FK_TenantId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Company");
+                });
+
+            modelBuilder.Entity("LorryGlory.Data.Models.JobModels.Job", b =>
+                {
+                    b.HasOne("LorryGlory.Data.Models.ClientModels.Client", "Client")
+                        .WithMany("Jobs")
+                        .HasForeignKey("FK_ClientId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("LorryGlory.Data.Models.FileLink", "FileLink")
+                        .WithMany()
+                        .HasForeignKey("FK_FileLink");
+
+                    b.HasOne("LorryGlory.Data.Models.CompanyModels.Company", "Company")
+                        .WithMany("Jobs")
+                        .HasForeignKey("FK_TenantId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.OwnsOne("LorryGlory.Data.Models.ContactPerson", "ContactPerson", b1 =>
+                        {
+                            b1.Property<Guid>("JobId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<string>("Email")
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("Name")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("PhoneNumber")
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.HasKey("JobId");
+
+                            b1.ToTable("Jobs");
+
+                            b1.WithOwner()
+                                .HasForeignKey("JobId");
+                        });
+
+                    b.Navigation("Client");
+
+                    b.Navigation("Company");
+
+                    b.Navigation("ContactPerson");
+
+                    b.Navigation("FileLink");
+                });
+
+            modelBuilder.Entity("LorryGlory.Data.Models.JobModels.JobTask", b =>
+                {
+                    b.HasOne("LorryGlory.Data.Models.FileLink", "FileLink")
+                        .WithMany()
+                        .HasForeignKey("FK_FileLink");
+
+                    b.HasOne("LorryGlory.Data.Models.JobModels.Job", "Job")
+                        .WithMany("JobTasks")
+                        .HasForeignKey("FK_JobId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("LorryGlory.Data.Models.StaffModels.StaffMember", "StaffMember")
+                        .WithMany("JobTasks")
+                        .HasForeignKey("FK_StaffMemberId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("LorryGlory.Data.Models.CompanyModels.Company", "Company")
+                        .WithMany("JobTasks")
+                        .HasForeignKey("FK_TenantId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("LorryGlory.Data.Models.VehicleModels.Vehicle", "Vehicle")
+                        .WithMany()
+                        .HasForeignKey("FK_VehicleId");
+
+                    b.OwnsOne("LorryGlory.Data.Models.ContactPerson", "ContactPerson", b1 =>
+                        {
+                            b1.Property<Guid>("JobTaskId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<string>("Email")
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("Name")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("PhoneNumber")
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.HasKey("JobTaskId");
+
+                            b1.ToTable("JobTasks");
+
+                            b1.WithOwner()
+                                .HasForeignKey("JobTaskId");
+                        });
+
+                    b.OwnsOne("LorryGlory.Data.Models.Address", "DeliveryAddress", b1 =>
+                        {
+                            b1.Property<Guid>("JobTaskId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<string>("AddressCity")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("AddressCountry")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("AddressStreet")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("PostalCode")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.HasKey("JobTaskId");
+
+                            b1.ToTable("JobTasks");
+
+                            b1.WithOwner()
+                                .HasForeignKey("JobTaskId");
+                        });
+
+                    b.OwnsOne("LorryGlory.Data.Models.Address", "PickupAddress", b1 =>
+                        {
+                            b1.Property<Guid>("JobTaskId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<string>("AddressCity")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("AddressCountry")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("AddressStreet")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("PostalCode")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.HasKey("JobTaskId");
+
+                            b1.ToTable("JobTasks");
+
+                            b1.WithOwner()
+                                .HasForeignKey("JobTaskId");
+                        });
+
+                    b.Navigation("Company");
+
+                    b.Navigation("ContactPerson");
+
+                    b.Navigation("DeliveryAddress");
+
+                    b.Navigation("FileLink");
+
+                    b.Navigation("Job");
+
+                    b.Navigation("PickupAddress");
+
+                    b.Navigation("StaffMember");
+
+                    b.Navigation("Vehicle");
+                });
+
+            modelBuilder.Entity("LorryGlory.Data.Models.JobModels.JobTaskReport", b =>
+                {
+                    b.HasOne("LorryGlory.Data.Models.StaffModels.StaffMember", "CreatedBy")
+                        .WithMany("JobTaskReports")
+                        .HasForeignKey("FK_CreatedById")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.HasOne("LorryGlory.Data.Models.FileLink", "FileLink")
+                        .WithMany()
+                        .HasForeignKey("FK_FileLink");
+
+                    b.HasOne("LorryGlory.Data.Models.JobModels.JobTask", "JobTask")
+                        .WithOne("JobTaskReport")
+                        .HasForeignKey("LorryGlory.Data.Models.JobModels.JobTaskReport", "FK_JobTaskId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("LorryGlory.Data.Models.CompanyModels.Company", "Company")
+                        .WithMany("JobTaskReports")
+                        .HasForeignKey("FK_TenantId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("LorryGlory.Data.Models.StaffModels.StaffMember", "UpdatedBy")
+                        .WithMany()
+                        .HasForeignKey("FK_UpdatedById");
+
+                    b.Navigation("Company");
+
+                    b.Navigation("CreatedBy");
+
+                    b.Navigation("FileLink");
+
+                    b.Navigation("JobTask");
+
+                    b.Navigation("UpdatedBy");
+                });
+
+            modelBuilder.Entity("LorryGlory.Data.Models.StaffModels.StaffMember", b =>
+                {
+                    b.HasOne("LorryGlory.Data.Models.CompanyModels.Company", "Company")
+                        .WithMany("StaffMembers")
+                        .HasForeignKey("FK_TenantId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.OwnsOne("LorryGlory.Data.Models.Address", "Address", b1 =>
+                        {
+                            b1.Property<string>("StaffMemberId")
+                                .HasColumnType("nvarchar(450)");
+
+                            b1.Property<string>("AddressCity")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("AddressCountry")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("AddressStreet")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("PostalCode")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.HasKey("StaffMemberId");
+
+                            b1.ToTable("AspNetUsers");
+
+                            b1.WithOwner()
+                                .HasForeignKey("StaffMemberId");
+
+                            b1.HasData(
+                                new
+                                {
+                                    StaffMemberId = "1STAFFM",
+                                    AddressCity = "Kato",
+                                    AddressCountry = "PL",
+                                    AddressStreet = "Vägen till ingenstans",
+                                    PostalCode = "44444"
+                                },
+                                new
+                                {
+                                    StaffMemberId = "2STAFFM",
+                                    AddressCity = "Timrå",
+                                    AddressCountry = "SE",
+                                    AddressStreet = "Vägen i ingenstans",
+                                    PostalCode = "33333"
+                                });
+                        });
+
+                    b.Navigation("Address")
+                        .IsRequired();
+
+                    b.Navigation("Company");
+                });
+
+            modelBuilder.Entity("LorryGlory.Data.Models.StaffModels.StaffRelation", b =>
+                {
+                    b.HasOne("LorryGlory.Data.Models.StaffModels.StaffMember", "Boss_Staff")
+                        .WithMany()
+                        .HasForeignKey("Boss_StaffId");
+
+                    b.HasOne("LorryGlory.Data.Models.CompanyModels.Company", "Company")
+                        .WithMany("StaffRelations")
+                        .HasForeignKey("FK_TenantId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("LorryGlory.Data.Models.StaffModels.StaffMember", "Staff")
+                        .WithMany()
+                        .HasForeignKey("StaffId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Boss_Staff");
+
+                    b.Navigation("Company");
+
+                    b.Navigation("Staff");
+                });
+
+            modelBuilder.Entity("LorryGlory.Data.Models.VehicleModels.Vehicle", b =>
+                {
+                    b.HasOne("LorryGlory.Data.Models.CompanyModels.Company", "Company")
+                        .WithMany("Vehicles")
+                        .HasForeignKey("FK_TenantId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.OwnsOne("LorryGlory.Data.Models.VehicleModels.EcoDetails", "Eco", b1 =>
+                        {
+                            b1.Property<Guid>("VehicleId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<string>("EuroClass")
+                                .IsRequired()
+                                .HasMaxLength(3)
+                                .HasColumnType("nvarchar(3)");
+
+                            b1.HasKey("VehicleId");
+
+                            b1.ToTable("Vehicles");
+
+                            b1.WithOwner()
+                                .HasForeignKey("VehicleId");
+                        });
+
+                    b.OwnsOne("LorryGlory.Data.Models.VehicleModels.Inspection", "Inspection", b1 =>
+                        {
+                            b1.Property<Guid>("VehicleId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<DateOnly>("InspectionValidUntil")
+                                .HasColumnType("date");
+
+                            b1.Property<DateOnly>("LatestInspection")
+                                .HasColumnType("date");
+
+                            b1.Property<int>("Meter")
+                                .HasColumnType("int");
+
+                            b1.HasKey("VehicleId");
+
+                            b1.ToTable("Vehicles");
+
+                            b1.WithOwner()
+                                .HasForeignKey("VehicleId");
+                        });
+
+                    b.OwnsOne("LorryGlory.Data.Models.VehicleModels.TechnicalData", "TechnicalData", b1 =>
+                        {
+                            b1.Property<Guid>("VehicleId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<int>("AxleWidth1")
+                                .HasColumnType("int");
+
+                            b1.Property<int>("AxleWidth2")
+                                .HasColumnType("int");
+
+                            b1.Property<int>("AxleWidth3")
+                                .HasColumnType("int");
+
+                            b1.Property<int>("CarriageWeight")
+                                .HasColumnType("int");
+
+                            b1.Property<int>("Chassi")
+                                .HasColumnType("int");
+
+                            b1.Property<int>("CylinderVolume")
+                                .HasColumnType("int");
+
+                            b1.Property<int>("FK_Category_Id")
+                                .HasColumnType("int");
+
+                            b1.Property<bool>("FourWheelDrive")
+                                .HasColumnType("bit");
+
+                            b1.Property<int>("Fuel")
+                                .HasColumnType("int");
+
+                            b1.Property<int>("Height")
+                                .HasColumnType("int");
+
+                            b1.Property<int>("KerbWeight")
+                                .HasColumnType("int");
+
+                            b1.Property<int>("Length")
+                                .HasColumnType("int");
+
+                            b1.Property<int>("LoadWeight")
+                                .HasColumnType("int");
+
+                            b1.Property<int>("PowerHp")
+                                .HasColumnType("int");
+
+                            b1.Property<int>("PowerKw")
+                                .HasColumnType("int");
+
+                            b1.Property<string>("TireBack")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("TireFront")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<int>("TotalWeight")
+                                .HasColumnType("int");
+
+                            b1.Property<int>("TrailerWeight")
+                                .HasColumnType("int");
+
+                            b1.Property<int>("TrailerWeightB")
+                                .HasColumnType("int");
+
+                            b1.Property<int>("TrailerWeightBe")
+                                .HasColumnType("int");
+
+                            b1.Property<int>("Transmission")
+                                .HasColumnType("int");
+
+                            b1.Property<int>("UnbrakedTrailerWeight")
+                                .HasColumnType("int");
+
+                            b1.Property<int>("Width")
+                                .HasColumnType("int");
+
+                            b1.HasKey("VehicleId");
+
+                            b1.ToTable("Vehicles");
+
+                            b1.WithOwner()
+                                .HasForeignKey("VehicleId");
+
+                            b1.OwnsOne("LorryGlory.Data.Models.VehicleModels.VehicleCategoryEu", "Category", b2 =>
+                                {
+                                    b2.Property<Guid>("TechnicalDataVehicleId")
+                                        .HasColumnType("uniqueidentifier");
+
+                                    b2.Property<string>("Code")
+                                        .IsRequired()
+                                        .HasColumnType("nvarchar(max)");
+
+                                    b2.Property<string>("Type")
+                                        .IsRequired()
+                                        .HasColumnType("nvarchar(max)");
+
+                                    b2.HasKey("TechnicalDataVehicleId");
+
+                                    b2.ToTable("Vehicles");
+
+                                    b2.WithOwner()
+                                        .HasForeignKey("TechnicalDataVehicleId");
+                                });
+
+                            b1.Navigation("Category")
+                                .IsRequired();
+                        });
+
+                    b.OwnsOne("LorryGlory.Data.Models.VehicleModels.VehicleStatus", "Status", b1 =>
+                        {
+                            b1.Property<Guid>("VehicleId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<DateOnly>("FirstRegistered")
+                                .HasColumnType("date");
+
+                            b1.Property<int>("Status")
+                                .HasColumnType("int");
+
+                            b1.HasKey("VehicleId");
+
+                            b1.ToTable("Vehicles");
+
+                            b1.WithOwner()
+                                .HasForeignKey("VehicleId");
+                        });
+
+                    b.Navigation("Company");
+
+                    b.Navigation("Eco");
+
+                    b.Navigation("Inspection");
+
+                    b.Navigation("Status");
+
+                    b.Navigation("TechnicalData");
+                });
+
+            modelBuilder.Entity("LorryGlory.Data.Models.VehicleModels.VehicleProblem", b =>
+                {
+                    b.HasOne("LorryGlory.Data.Models.FileLink", "FileLink")
+                        .WithMany()
+                        .HasForeignKey("FK_FileLink");
+
+                    b.HasOne("LorryGlory.Data.Models.CompanyModels.Company", "Company")
+                        .WithMany("VehicleProblems")
+                        .HasForeignKey("FK_TenantId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("LorryGlory.Data.Models.VehicleModels.Vehicle", "Vehicle")
+                        .WithMany("VehicleProblems")
+                        .HasForeignKey("FK_VehicleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Company");
+
+                    b.Navigation("FileLink");
+
+                    b.Navigation("Vehicle");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -231,7 +1305,7 @@ namespace LorryGlory.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                    b.HasOne("LorryGlory.Data.Models.StaffModels.StaffMember", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -240,7 +1314,7 @@ namespace LorryGlory.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                    b.HasOne("LorryGlory.Data.Models.StaffModels.StaffMember", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -255,7 +1329,7 @@ namespace LorryGlory.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                    b.HasOne("LorryGlory.Data.Models.StaffModels.StaffMember", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -264,11 +1338,59 @@ namespace LorryGlory.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                    b.HasOne("LorryGlory.Data.Models.StaffModels.StaffMember", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("LorryGlory.Data.Models.ClientModels.Client", b =>
+                {
+                    b.Navigation("Jobs");
+                });
+
+            modelBuilder.Entity("LorryGlory.Data.Models.CompanyModels.Company", b =>
+                {
+                    b.Navigation("Clients");
+
+                    b.Navigation("FileLinks");
+
+                    b.Navigation("JobTaskReports");
+
+                    b.Navigation("JobTasks");
+
+                    b.Navigation("Jobs");
+
+                    b.Navigation("StaffMembers");
+
+                    b.Navigation("StaffRelations");
+
+                    b.Navigation("VehicleProblems");
+
+                    b.Navigation("Vehicles");
+                });
+
+            modelBuilder.Entity("LorryGlory.Data.Models.JobModels.Job", b =>
+                {
+                    b.Navigation("JobTasks");
+                });
+
+            modelBuilder.Entity("LorryGlory.Data.Models.JobModels.JobTask", b =>
+                {
+                    b.Navigation("JobTaskReport");
+                });
+
+            modelBuilder.Entity("LorryGlory.Data.Models.StaffModels.StaffMember", b =>
+                {
+                    b.Navigation("JobTaskReports");
+
+                    b.Navigation("JobTasks");
+                });
+
+            modelBuilder.Entity("LorryGlory.Data.Models.VehicleModels.Vehicle", b =>
+                {
+                    b.Navigation("VehicleProblems");
                 });
 #pragma warning restore 612, 618
         }

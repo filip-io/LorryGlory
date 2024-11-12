@@ -1,6 +1,7 @@
 ﻿using LorryGlory.Data.Models.CompanyModels;
+using LorryGlory.Data.Models.JobModels;
 using LorryGlory.Data.Models.StaffModels.Enums;
-using Microsoft.AspNet.Identity.EntityFramework;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -19,7 +20,8 @@ namespace LorryGlory.Data.Models.StaffModels
 
         public Address Address { get; set; }
 
-       
+        public ICollection<JobTask>? JobTasks { get; set; }
+        public ICollection<JobTaskReport>? JobTaskReports { get; set; }
 
         [ForeignKey("Company")]
         public Guid FK_TenantId { get; set; }

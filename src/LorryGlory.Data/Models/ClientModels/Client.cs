@@ -1,11 +1,11 @@
 ﻿using LorryGlory.Data.Models.CompanyModels;
+using LorryGlory.Data.Models.JobModels;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LorryGlory.Data.Models.ClientModels
 {
     public class Client
     {
-        // det kan va privat person men annars kan flyttas till Company?
         public Guid Id { get; set; }
         public string ClientName { get; set; }
         public string? OrganizationNumber { get; set; }
@@ -13,9 +13,11 @@ namespace LorryGlory.Data.Models.ClientModels
         public string PhoneNumber { get; set; }
 
         public Address Address { get; set; }
+        public ICollection<Job>? Jobs { get; set; }
+
 
         [ForeignKey("Company")]
-        public Guid FK_TenantId { get; set; } 
+        public Guid FK_TenantId { get; set; }
         public Company Company { get; set; }
     }
 }

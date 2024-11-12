@@ -25,7 +25,7 @@ namespace LorryGlory.Data.Models.VehicleModels
         public TechnicalData? TechnicalData { get; set; }
         public EcoDetails? Eco { get; set; }
 
-        public ICollection<VehicleProblem> VehicleProblems { get; set; }
+        public ICollection<VehicleProblem>? VehicleProblems { get; set; }
 
         [ForeignKey("Company")]
         public Guid FK_TenantId { get; set; }

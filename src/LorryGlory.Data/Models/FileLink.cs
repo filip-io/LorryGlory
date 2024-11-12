@@ -5,9 +5,9 @@ namespace LorryGlory.Data.Models
 {
     public enum FileLinkType
     {
-        Company,
         Job,
         JobTask,
+        JobTaskReport,
         VehicleProblem
     }
     public class FileLink
