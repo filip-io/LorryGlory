@@ -1,12 +1,6 @@
 ﻿using LorryGlory.Data.Models.CompanyModels;
 using LorryGlory.Data.Models.StaffModels;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LorryGlory.Data.Models.JobModels
 {

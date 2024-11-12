@@ -1,7 +1,7 @@
 ﻿namespace LorryGlory.Data.Models.JobModels.Enums
 {
-    public enum TaskStatus
+    public enum JobTaskStatus
     {
-        Success=666,
+        Success = 666,
     }
 }

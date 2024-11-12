@@ -1,85 +1,28 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
 namespace LorryGlory.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class FixCascadeDeletePaths : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<string>(
-                name: "Address_AddressCity",
-                table: "AspNetUsers",
-                type: "nvarchar(max)",
-                nullable: false,
-                defaultValue: "");
-
-            migrationBuilder.AddColumn<string>(
-                name: "Address_AddressCountry",
-                table: "AspNetUsers",
-                type: "nvarchar(max)",
-                nullable: false,
-                defaultValue: "");
-
-            migrationBuilder.AddColumn<string>(
-                name: "Address_AddressStreet",
-                table: "AspNetUsers",
-                type: "nvarchar(max)",
-                nullable: false,
-                defaultValue: "");
-
-            migrationBuilder.AddColumn<string>(
-                name: "Address_PostalCode",
-                table: "AspNetUsers",
-                type: "nvarchar(max)",
-                nullable: false,
-                defaultValue: "");
-
-            migrationBuilder.AddColumn<Guid>(
-                name: "FK_TenantId",
-                table: "AspNetUsers",
-                type: "uniqueidentifier",
-                nullable: false,
-                defaultValue: new Guid("00000000-0000-0000-0000-000000000000"));
-
-            migrationBuilder.AddColumn<string>(
-                name: "FirstName",
-                table: "AspNetUsers",
-                type: "nvarchar(max)",
-                nullable: false,
-                defaultValue: "");
-
-            migrationBuilder.AddColumn<int>(
-                name: "JobTitle",
-                table: "AspNetUsers",
-                type: "int",
-                nullable: false,
-                defaultValue: 0);
-
-            migrationBuilder.AddColumn<string>(
-                name: "LastName",
-                table: "AspNetUsers",
-                type: "nvarchar(max)",
-                nullable: false,
-                defaultValue: "");
-
-            migrationBuilder.AddColumn<string>(
-                name: "PersonalNumber",
-                table: "AspNetUsers",
-                type: "nvarchar(max)",
-                nullable: false,
-                defaultValue: "");
-
-            migrationBuilder.AddColumn<string>(
-                name: "PreferredLanguage",
-                table: "AspNetUsers",
-                type: "nvarchar(max)",
-                nullable: false,
-                defaultValue: "");
+            migrationBuilder.CreateTable(
+                name: "AspNetRoles",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    NormalizedName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetRoles", x => x.Id);
+                });
 
             migrationBuilder.CreateTable(
                 name: "Companies",
@@ -97,6 +40,68 @@ namespace LorryGlory.Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Companies", x => x.TenantId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AspNetRoleClaims",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    RoleId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ClaimType = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ClaimValue = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetRoleClaims", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AspNetRoleClaims_AspNetRoles_RoleId",
+                        column: x => x.RoleId,
+                        principalTable: "AspNetRoles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AspNetUsers",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    JobTitle = table.Column<int>(type: "int", nullable: false),
+                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PersonalNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PreferredLanguage = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Address_AddressStreet = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Address_PostalCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Address_AddressCity = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Address_AddressCountry = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    FK_TenantId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    NormalizedEmail = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    EmailConfirmed = table.Column<bool>(type: "bit", nullable: false),
+                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SecurityStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhoneNumberConfirmed = table.Column<bool>(type: "bit", nullable: false),
+                    TwoFactorEnabled = table.Column<bool>(type: "bit", nullable: false),
+                    LockoutEnd = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    LockoutEnabled = table.Column<bool>(type: "bit", nullable: false),
+                    AccessFailedCount = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AspNetUsers_Companies_FK_TenantId",
+                        column: x => x.FK_TenantId,
+                        principalTable: "Companies",
+                        principalColumn: "TenantId",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -130,10 +135,10 @@ namespace LorryGlory.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    UriLink = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
+                    UriLink = table.Column<string>(type: "nvarchar(2048)", maxLength: 2048, nullable: false),
                     LinkedEntityId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    LinkedEntityType = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LinkedEntityType = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     FK_TenantId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
@@ -141,37 +146,6 @@ namespace LorryGlory.Data.Migrations
                     table.PrimaryKey("PK_FileLinks", x => x.Id);
                     table.ForeignKey(
                         name: "FK_FileLinks_Companies_FK_TenantId",
-                        column: x => x.FK_TenantId,
-                        principalTable: "Companies",
-                        principalColumn: "TenantId",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "StaffRelations",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    StaffId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Boss_StaffId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    FK_TenantId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_StaffRelations", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_StaffRelations_AspNetUsers_Boss_StaffId",
-                        column: x => x.Boss_StaffId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_StaffRelations_AspNetUsers_StaffId",
-                        column: x => x.StaffId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_StaffRelations_Companies_FK_TenantId",
                         column: x => x.FK_TenantId,
                         principalTable: "Companies",
                         principalColumn: "TenantId",
@@ -232,6 +206,122 @@ namespace LorryGlory.Data.Migrations
                     table.PrimaryKey("PK_Vehicles", x => x.Id);
                     table.ForeignKey(
                         name: "FK_Vehicles_Companies_FK_TenantId",
+                        column: x => x.FK_TenantId,
+                        principalTable: "Companies",
+                        principalColumn: "TenantId",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AspNetUserClaims",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ClaimType = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ClaimValue = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetUserClaims", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AspNetUserClaims_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AspNetUserLogins",
+                columns: table => new
+                {
+                    LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ProviderKey = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ProviderDisplayName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetUserLogins", x => new { x.LoginProvider, x.ProviderKey });
+                    table.ForeignKey(
+                        name: "FK_AspNetUserLogins_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AspNetUserRoles",
+                columns: table => new
+                {
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    RoleId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetUserRoles", x => new { x.UserId, x.RoleId });
+                    table.ForeignKey(
+                        name: "FK_AspNetUserRoles_AspNetRoles_RoleId",
+                        column: x => x.RoleId,
+                        principalTable: "AspNetRoles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_AspNetUserRoles_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AspNetUserTokens",
+                columns: table => new
+                {
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Value = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetUserTokens", x => new { x.UserId, x.LoginProvider, x.Name });
+                    table.ForeignKey(
+                        name: "FK_AspNetUserTokens_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "StaffRelations",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    StaffId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Boss_StaffId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    FK_TenantId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_StaffRelations", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_StaffRelations_AspNetUsers_Boss_StaffId",
+                        column: x => x.Boss_StaffId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_StaffRelations_AspNetUsers_StaffId",
+                        column: x => x.StaffId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_StaffRelations_Companies_FK_TenantId",
                         column: x => x.FK_TenantId,
                         principalTable: "Companies",
                         principalColumn: "TenantId",
@@ -425,6 +515,73 @@ namespace LorryGlory.Data.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.InsertData(
+                table: "Companies",
+                columns: new[] { "TenantId", "CompanyName", "OrganizationNumber", "PhoneNumber" },
+                values: new object[] { new Guid("1d2b0228-4d0d-4c23-8b49-01a698857709"), "Lorry Glory AB", "11-111", "0761" });
+
+            migrationBuilder.InsertData(
+                table: "AspNetUsers",
+                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "FK_TenantId", "FirstName", "JobTitle", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PersonalNumber", "PhoneNumber", "PhoneNumberConfirmed", "PreferredLanguage", "SecurityStamp", "TwoFactorEnabled", "UserName", "Address_AddressCity", "Address_AddressCountry", "Address_AddressStreet", "Address_PostalCode" },
+                values: new object[] { "1STAFFM", 0, "2d5d823c-05c1-4f60-a6e8-abea43b6599a", "magda@m.m", false, new Guid("1d2b0228-4d0d-4c23-8b49-01a698857709"), "Magda", 2, "Kubien", false, null, null, null, null, "YYYYMMDD-0000", null, false, "PL", "e6a49b39-edf4-49ea-926e-91a35fc94e56", false, "magda@m.m", "Kato", "PL", "Vägen till ingenstans", "44444" });
+
+            migrationBuilder.InsertData(
+                table: "FileLinks",
+                columns: new[] { "Id", "FK_TenantId", "LinkedEntityId", "LinkedEntityType", "Name", "UriLink" },
+                values: new object[] { new Guid("5d2b0228-4d0d-4c23-8b49-01a698857709"), new Guid("1d2b0228-4d0d-4c23-8b49-01a698857709"), new Guid("9a2b0228-4d0d-4c23-8b49-01a698857709"), "JobTask", "test-file.pdf", "https://example.com/test-file.pdf" });
+
+            migrationBuilder.InsertData(
+                table: "Jobs",
+                columns: new[] { "Id", "ActualTotalTime", "CreatedAt", "Description", "EstimatedTotalTime", "FK_ClientId", "FK_FileLink", "FK_TenantId", "IsCompleted", "Status", "UpdatedAt" },
+                values: new object[] { new Guid("1a2b0228-4d0d-4c23-8b49-01a698857709"), null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Test Job", null, null, null, new Guid("1d2b0228-4d0d-4c23-8b49-01a698857709"), false, 0, null });
+
+            migrationBuilder.InsertData(
+                table: "Vehicles",
+                columns: new[] { "Id", "Eco_EuroClass", "Inspection_InspectionValidUntil", "Inspection_LatestInspection", "Inspection_Meter", "TechnicalData_AxleWidth1", "TechnicalData_AxleWidth2", "TechnicalData_AxleWidth3", "TechnicalData_CarriageWeight", "TechnicalData_Chassi", "TechnicalData_CylinderVolume", "TechnicalData_FK_Category_Id", "TechnicalData_FourWheelDrive", "TechnicalData_Fuel", "TechnicalData_Height", "TechnicalData_KerbWeight", "TechnicalData_Length", "TechnicalData_LoadWeight", "TechnicalData_PowerHp", "TechnicalData_PowerKw", "TechnicalData_TireBack", "TechnicalData_TireFront", "TechnicalData_TotalWeight", "TechnicalData_TrailerWeight", "TechnicalData_TrailerWeightB", "TechnicalData_TrailerWeightBe", "TechnicalData_Transmission", "TechnicalData_UnbrakedTrailerWeight", "TechnicalData_Width", "Color", "FK_TenantId", "Make", "Model", "ModelYear", "RegNo", "StolenStatus", "Type", "TypeClass", "VehicleYear", "Vin", "Status_FirstRegistered", "Status_Status" },
+                values: new object[] { new Guid("3d2b0228-4d0d-4c23-8b49-01a698857709"), "6", new DateOnly(2024, 1, 1), new DateOnly(2023, 1, 1), 150000, 3600, 1350, 0, 40000, 12, 13000, 1, true, 2, 4000, 7500, 16500, 32500, 450, 335, "315/80R22.5", "315/80R22.5", 40000, 36000, 3500, 3500, 1, 750, 2550, "RED", new Guid("1d2b0228-4d0d-4c23-8b49-01a698857709"), "Scania", "R450", 2020, "ABC123", "NOT_STOLEN", "DRAGBIL", "LASTBIL", 2020, "YS2R4X20009176429", new DateOnly(2020, 1, 1), 2 });
+
+            migrationBuilder.InsertData(
+                table: "JobTasks",
+                columns: new[] { "Id", "CreatedAt", "Description", "EndTime", "FK_FileLink", "FK_JobId", "FK_StaffMemberId", "FK_TenantId", "FK_VehicleId", "IsCompleted", "StartTime", "Status", "Title", "UpdatedAt", "ContactPerson_Email", "ContactPerson_Name", "ContactPerson_PhoneNumber", "DeliveryAddress_AddressCity", "DeliveryAddress_AddressCountry", "DeliveryAddress_AddressStreet", "DeliveryAddress_PostalCode", "PickupAddress_AddressCity", "PickupAddress_AddressCountry", "PickupAddress_AddressStreet", "PickupAddress_PostalCode" },
+                values: new object[] { new Guid("9a2b0228-4d0d-4c23-8b49-01a698857709"), new DateTime(2024, 11, 12, 17, 40, 13, 52, DateTimeKind.Local).AddTicks(7315), "Test delivery task", new DateTime(2024, 11, 12, 19, 40, 13, 52, DateTimeKind.Local).AddTicks(7315), new Guid("5d2b0228-4d0d-4c23-8b49-01a698857709"), new Guid("1a2b0228-4d0d-4c23-8b49-01a698857709"), "1STAFFM", new Guid("1d2b0228-4d0d-4c23-8b49-01a698857709"), new Guid("3d2b0228-4d0d-4c23-8b49-01a698857709"), false, new DateTime(2024, 11, 12, 17, 40, 13, 52, DateTimeKind.Local).AddTicks(7315), 666, "Delivery Task", new DateTime(2024, 11, 12, 17, 40, 13, 52, DateTimeKind.Local).AddTicks(7315), "john@example.com", "John Doe", null, "Delivery City", "Sweden", "Delivery Street 2", "67890", "Pickup City", "Sweden", "Pickup Street 1", "12345" });
+
+            migrationBuilder.InsertData(
+                table: "VehicleProblems",
+                columns: new[] { "Id", "Description", "FK_FileLink", "FK_TenantId", "FK_VehicleId", "SeverityLevel", "Title" },
+                values: new object[] { new Guid("6d2b0228-4d0d-4c23-8b49-01a698857709"), "Front brake pads showing significant wear", new Guid("5d2b0228-4d0d-4c23-8b49-01a698857709"), new Guid("1d2b0228-4d0d-4c23-8b49-01a698857709"), new Guid("3d2b0228-4d0d-4c23-8b49-01a698857709"), 2, "Brake System Warning" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AspNetRoleClaims_RoleId",
+                table: "AspNetRoleClaims",
+                column: "RoleId");
+
+            migrationBuilder.CreateIndex(
+                name: "RoleNameIndex",
+                table: "AspNetRoles",
+                column: "NormalizedName",
+                unique: true,
+                filter: "[NormalizedName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AspNetUserClaims_UserId",
+                table: "AspNetUserClaims",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AspNetUserLogins_UserId",
+                table: "AspNetUserLogins",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AspNetUserRoles_RoleId",
+                table: "AspNetUserRoles",
+                column: "RoleId");
+
+            migrationBuilder.CreateIndex(
+                name: "EmailIndex",
+                table: "AspNetUsers",
+                column: "NormalizedEmail");
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetUsers_Email",
                 table: "AspNetUsers",
@@ -438,14 +595,22 @@ namespace LorryGlory.Data.Migrations
                 column: "FK_TenantId");
 
             migrationBuilder.CreateIndex(
+                name: "UserNameIndex",
+                table: "AspNetUsers",
+                column: "NormalizedUserName",
+                unique: true,
+                filter: "[NormalizedUserName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Clients_FK_TenantId",
                 table: "Clients",
                 column: "FK_TenantId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_FileLinks_FK_TenantId",
+                name: "IX_FileLinks_FK_TenantId_LinkedEntityType_LinkedEntityId",
                 table: "FileLinks",
-                column: "FK_TenantId");
+                columns: new[] { "FK_TenantId", "LinkedEntityType", "LinkedEntityId" },
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Jobs_FK_ClientId",
@@ -547,22 +712,25 @@ namespace LorryGlory.Data.Migrations
                 name: "IX_Vehicles_FK_TenantId",
                 table: "Vehicles",
                 column: "FK_TenantId");
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_AspNetUsers_Companies_FK_TenantId",
-                table: "AspNetUsers",
-                column: "FK_TenantId",
-                principalTable: "Companies",
-                principalColumn: "TenantId",
-                onDelete: ReferentialAction.Restrict);
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropForeignKey(
-                name: "FK_AspNetUsers_Companies_FK_TenantId",
-                table: "AspNetUsers");
+            migrationBuilder.DropTable(
+                name: "AspNetRoleClaims");
+
+            migrationBuilder.DropTable(
+                name: "AspNetUserClaims");
+
+            migrationBuilder.DropTable(
+                name: "AspNetUserLogins");
+
+            migrationBuilder.DropTable(
+                name: "AspNetUserRoles");
+
+            migrationBuilder.DropTable(
+                name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
                 name: "JobTaskReports");
@@ -574,7 +742,13 @@ namespace LorryGlory.Data.Migrations
                 name: "VehicleProblems");
 
             migrationBuilder.DropTable(
+                name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
                 name: "JobTasks");
+
+            migrationBuilder.DropTable(
+                name: "AspNetUsers");
 
             migrationBuilder.DropTable(
                 name: "Jobs");
@@ -590,54 +764,6 @@ namespace LorryGlory.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "Companies");
-
-            migrationBuilder.DropIndex(
-                name: "IX_AspNetUsers_Email",
-                table: "AspNetUsers");
-
-            migrationBuilder.DropIndex(
-                name: "IX_AspNetUsers_FK_TenantId",
-                table: "AspNetUsers");
-
-            migrationBuilder.DropColumn(
-                name: "Address_AddressCity",
-                table: "AspNetUsers");
-
-            migrationBuilder.DropColumn(
-                name: "Address_AddressCountry",
-                table: "AspNetUsers");
-
-            migrationBuilder.DropColumn(
-                name: "Address_AddressStreet",
-                table: "AspNetUsers");
-
-            migrationBuilder.DropColumn(
-                name: "Address_PostalCode",
-                table: "AspNetUsers");
-
-            migrationBuilder.DropColumn(
-                name: "FK_TenantId",
-                table: "AspNetUsers");
-
-            migrationBuilder.DropColumn(
-                name: "FirstName",
-                table: "AspNetUsers");
-
-            migrationBuilder.DropColumn(
-                name: "JobTitle",
-                table: "AspNetUsers");
-
-            migrationBuilder.DropColumn(
-                name: "LastName",
-                table: "AspNetUsers");
-
-            migrationBuilder.DropColumn(
-                name: "PersonalNumber",
-                table: "AspNetUsers");
-
-            migrationBuilder.DropColumn(
-                name: "PreferredLanguage",
-                table: "AspNetUsers");
         }
     }
 }

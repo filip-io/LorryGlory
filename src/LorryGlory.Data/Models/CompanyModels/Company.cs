@@ -15,7 +15,7 @@ namespace LorryGlory.Data.Models.CompanyModels
         public string PhoneNumber { get; set; }
 
         public Address? Address { get; set; }
-       // public FileLink? FileLink { get; set; }
+        // public FileLink? FileLink { get; set; }
 
         public ICollection<Client>? Clients { get; set; }
         public ICollection<Job>? Jobs { get; set; }

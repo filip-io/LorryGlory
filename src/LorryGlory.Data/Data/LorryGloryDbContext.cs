@@ -1,4 +1,5 @@
-﻿using LorryGlory.Data.Models;
+﻿using LorryGlory.Data.Data.Seeding;
+using LorryGlory.Data.Models;
 using LorryGlory.Data.Models.ClientModels;
 using LorryGlory.Data.Models.CompanyModels;
 using LorryGlory.Data.Models.JobModels;
@@ -36,6 +37,7 @@ namespace LorryGlory.Data.Data
         {
             base.OnModelCreating(modelBuilder);
 
+            // Load entity configs
             ConfigureCompany(modelBuilder);
             ConfigureClient(modelBuilder);
             ConfigureFileLink(modelBuilder);
@@ -46,6 +48,9 @@ namespace LorryGlory.Data.Data
             ConfigureStaffRelation(modelBuilder);
             ConfigureVehicle(modelBuilder);
             ConfigureVehicleProblem(modelBuilder);
+
+            // Populate seed data
+            modelBuilder.SeedData();
         }
 
         private void ConfigureCompany(ModelBuilder modelBuilder)
@@ -146,6 +151,10 @@ namespace LorryGlory.Data.Data
                 // Configure enum as string (optional)
                 entity.Property(e => e.LinkedEntityType)
                     .HasConversion<string>();
+
+                // Add index for faster lookups, compound index unique per tenant to prevent duplicates
+                entity.HasIndex(e => new { e.FK_TenantId, e.LinkedEntityType, e.LinkedEntityId })
+                    .IsUnique();
             });
         }
 

@@ -17,7 +17,7 @@ namespace LorryGlory.Data.Models.JobModels
         public TimeSpan? EstimatedTotalTime { get; set; }
         public TimeSpan? ActualTotalTime { get; set; }
 
-       
+
         [ForeignKey("Client")]
         public Guid? FK_ClientId { get; set; }
         public Client? Client { get; set; }

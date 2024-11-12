@@ -1,4 +1,5 @@
 ﻿using LorryGlory.Data.Models.CompanyModels;
+using LorryGlory.Data.Models.JobModels.Enums;
 using LorryGlory.Data.Models.StaffModels;
 using LorryGlory.Data.Models.VehicleModels;
 using System.ComponentModel.DataAnnotations;
@@ -12,7 +13,7 @@ namespace LorryGlory.Data.Models.JobModels
         public Guid Id { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
-        public TaskStatus Status { get; set; }
+        public JobTaskStatus Status { get; set; }
         public bool IsCompleted { get; set; }
 
         public ContactPerson? ContactPerson { get; set; }
@@ -44,7 +45,7 @@ namespace LorryGlory.Data.Models.JobModels
 
 
         public JobTaskReport JobTaskReport { get; set; }
-        public DateTime CreatedAt {  get; set; }
+        public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
 
 

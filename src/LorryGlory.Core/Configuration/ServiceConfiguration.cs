@@ -1,6 +1,6 @@
 ﻿using LorryGlory.Data.Data;
-using LorryGlory.Data.Services.IServices;
 using LorryGlory.Data.Services;
+using LorryGlory.Data.Services.IServices;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -16,7 +16,7 @@ public static class ServiceConfiguration
 
     public static void ConfigureScopes(this IServiceCollection serviceCollection)
     {
-        
+
     }
 }
 
