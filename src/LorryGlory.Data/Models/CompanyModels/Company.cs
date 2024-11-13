@@ -12,7 +12,7 @@ namespace LorryGlory.Data.Models.CompanyModels
         public Guid TenantId { get; set; }
         public string CompanyName { get; set; }
         public string OrganizationNumber { get; set; }
-        public string PhoneNumber { get; set; }
+        public string? PhoneNumber { get; set; }
 
         public Address? Address { get; set; }
         // public FileLink? FileLink { get; set; }

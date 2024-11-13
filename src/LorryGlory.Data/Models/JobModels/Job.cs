@@ -10,7 +10,7 @@ namespace LorryGlory.Data.Models.JobModels
     {
         [Key]
         public Guid Id { get; set; }
-        public JobStatus Status { get; set; }
+        public JobStatus? Status { get; set; }
         public bool IsCompleted { get; set; }
         public string Description { get; set; }
 
