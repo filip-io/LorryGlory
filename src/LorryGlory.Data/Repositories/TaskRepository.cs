@@ -10,12 +10,12 @@ namespace LorryGlory.Data.Repositories
 {
     internal class TaskRepository : ITaskRepository
     {
-        public Task<IEnumerable<JobTask?>> GetAllByDriverIdAndDayAsync(int id, DateOnly date)
+        public Task<IEnumerable<JobTask?>> GetAllByDriverIdAndDayAsync(Guid id, DateOnly date)
         {
             throw new NotImplementedException();
         }
 
-        public Task<JobTask?> GetByIdAsync(int id)
+        public Task<JobTask?> GetByIdAsync(Guid id)
         {
             throw new NotImplementedException();
         }
