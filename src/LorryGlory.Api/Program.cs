@@ -35,6 +35,8 @@ namespace LorryGlory.Api
 
             app.UseHttpsRedirection();
 
+            app.UseRouting();
+
             app.UseAuthorization();
 
             app.MapControllers();
