@@ -2,4 +2,10 @@
 
 npx tailwindcss -i ./wwwroot/css/site.css -o ./wwwroot/css/output.css --watch
 
-https://v2.tailwindcss.com/docs
+https://tailwindcss.com/docs/installation
+
+OBS!:
+ - Navigera till ...erat projektmap lokalt...\src\LorryGlory.Frontend-MVC>
+ 
+ - Kör kommandot: npx tailwindcss -i ./wwwroot/css/site.css -o ./wwwroot/css/output.css --watch
+ - det är för att uppdaterna css filen som används i projektet

@@ -1,4 +1,4 @@
-namespace LorryGlory_Frontend_MVC.Models
+namespace LorryGlory_Frontend_MVC.ViewModels
 {
     public class ErrorViewModel
     {
