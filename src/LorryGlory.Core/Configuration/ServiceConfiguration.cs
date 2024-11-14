@@ -15,6 +15,7 @@ public static class ServiceConfiguration
         serviceCollection.AddDbContext<LorryGloryDbContext>(options => options.UseSqlServer(connectionString));
         serviceCollection.AddScoped<ITenantService, TenantService>();
         serviceCollection.AddScoped<IJobTaskService, JobTaskService>();
+        serviceCollection.AddScoped<IVehicleService, VehicleService>();
     }
 
     public static void ConfigureScopes(this IServiceCollection serviceCollection)

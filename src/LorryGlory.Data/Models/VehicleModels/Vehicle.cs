@@ -1,10 +1,12 @@
 ﻿using LorryGlory.Data.Models.CompanyModels;
 using LorryGlory.Data.Models.VehicleModels.Enums;
+using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LorryGlory.Data.Models.VehicleModels
 {
+    [Index(nameof(RegNo), IsUnique = true)]
     public class Vehicle
     {
         [Key]
