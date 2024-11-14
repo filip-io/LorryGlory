@@ -42,7 +42,7 @@ namespace LorryGlory.Api.Controllers
 
         // GET /api/tasks/driver/123/day/2024-11-07
         [HttpGet("driver/{id}/day/{date}")]
-        public async Task<ActionResult<ApiResponse<IEnumerable<JobTaskDto>>>> GetAllByDriverIdAndDayAsync(int id, DateOnly date)
+        public async Task<ActionResult<ApiResponse<IEnumerable<JobTaskDto>>>> GetAllByDriverIdAndDayAsync(Guid id, DateOnly date)
         {
             try
             {
@@ -61,7 +61,7 @@ namespace LorryGlory.Api.Controllers
 
         // GET /api/tasks/123
         [HttpGet("{id}")]
-        public async Task<ActionResult<ApiResponse<JobTaskDto>>> GetByIdAsync(int id)
+        public async Task<ActionResult<ApiResponse<JobTaskDto>>> GetByIdAsync(Guid id)
         {
             try
             {
@@ -127,7 +127,7 @@ namespace LorryGlory.Api.Controllers
 
         // DELETE /api/tasks/123
         [HttpDelete("{id}")]
-        public async Task<ActionResult<ApiResponse<JobTaskDto>>> DeleteAsync(int id)
+        public async Task<ActionResult<ApiResponse<JobTaskDto>>> DeleteAsync(Guid id)
         {
             try
             {

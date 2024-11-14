@@ -10,10 +10,10 @@ namespace LorryGlory.Core.Services.IServices
     public interface IJobTaskService
     {
         Task<IEnumerable<JobTaskDto>> GetAllAsync();
-        Task<IEnumerable<JobTaskDto>> GetAllByDriverIdAndDayAsync(int id, DateOnly date);
-        Task<JobTaskDto> GetByIdAsync(int id);
+        Task<IEnumerable<JobTaskDto>> GetAllByDriverIdAndDayAsync(Guid id, DateOnly date);
+        Task<JobTaskDto> GetByIdAsync(Guid id);
         Task<JobTaskDto> CreateAsync(JobTaskDto jobTaskDto);
         Task<JobTaskDto> UpdateAsync(JobTaskDto jobTaskDto);
-        Task<JobTaskDto> DeleteAsync(int id);
+        Task<JobTaskDto> DeleteAsync(Guid id);
     }
 }

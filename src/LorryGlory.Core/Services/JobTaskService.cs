@@ -14,12 +14,12 @@ namespace LorryGlory.Core.Services
         {
             throw new NotImplementedException();
         }
-        public Task<IEnumerable<JobTaskDto>> GetAllByDriverIdAndDayAsync(int id, DateOnly date)
+        public Task<IEnumerable<JobTaskDto>> GetAllByDriverIdAndDayAsync(Guid id, DateOnly date)
         {
             throw new NotImplementedException();
         }
 
-        public Task<JobTaskDto> GetByIdAsync(int id)
+        public Task<JobTaskDto> GetByIdAsync(Guid id)
         {
             throw new NotImplementedException();
         }
@@ -35,11 +35,11 @@ namespace LorryGlory.Core.Services
             throw new NotImplementedException();
         }
 
-        public Task<JobTaskDto> DeleteAsync(int id)
+        public Task<JobTaskDto> DeleteAsync(Guid id)
         {
             throw new NotImplementedException();
 
-            //public async Task<JobTaskDto> DeleteAsync(int id)
+            //public async Task<JobTaskDto> DeleteAsync(Guid id)
             //{
             //    var task = await _repository.GetByIdAsync(id);
             //    if (task == null)
