@@ -7,8 +7,9 @@ using System.Threading.Tasks;
 
 namespace LorryGlory.Data.Repositories.IRepositories
 {
-    public interface ITaskRepository
+    public interface IJobTaskRepository
     {
+        Task<IEnumerable<JobTask?>> GetAllAsync();
         Task<IEnumerable<JobTask?>> GetAllByDriverIdAndDayAsync(Guid id, DateOnly date);
         Task<JobTask?> GetByIdAsync(Guid id);
         Task<JobTask> AddAsync(JobTask jobTask);

@@ -1,5 +1,7 @@
-﻿using LorryGlory.Core.Models.DTOs;
+﻿using AutoMapper;
+using LorryGlory.Core.Models.DTOs;
 using LorryGlory.Core.Services.IServices;
+using LorryGlory.Data.Repositories.IRepositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,9 +12,22 @@ namespace LorryGlory.Core.Services
 {
     public class JobTaskService : IJobTaskService
     {
-        public Task<IEnumerable<JobTaskDto>> GetAllAsync()
+        private readonly IJobTaskRepository _jobTaskRepository;
+        private readonly IMapper _mapper;
+
+        public JobTaskService(IJobTaskRepository jobTaskRepository, IMapper mapper)
         {
-            throw new NotImplementedException();
+            _jobTaskRepository = jobTaskRepository;
+            _mapper = mapper;
+        }
+
+        public async Task<IEnumerable<JobTaskDto>> GetAllAsync()
+        {
+            var jobTasks = await _jobTaskRepository.GetAllAsync();
+
+            var jobTasksList = _mapper.Map<IEnumerable<JobTaskDto>>(jobTasks);
+
+            return jobTasksList;
         }
         public Task<IEnumerable<JobTaskDto>> GetAllByDriverIdAndDayAsync(Guid id, DateOnly date)
         {
