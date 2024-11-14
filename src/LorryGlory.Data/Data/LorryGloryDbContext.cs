@@ -9,7 +9,6 @@ namespace LorryGlory.Data.Data
 
         // DbSets
 
-
         //OnModelCreating eller sånt om vi vill
     }
 }
