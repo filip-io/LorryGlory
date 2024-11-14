@@ -40,7 +40,7 @@ namespace LorryGlory.Api.Controllers
             }
         }
 
-        // GET /api/tasks/driver/123/day/2024-11-07
+        // GET /api/tasks/driver/123e4567-e89b-12d3-a456-426614174000/day/2024-11-07
         [HttpGet("driver/{id}/day/{date}")]
         public async Task<ActionResult<ApiResponse<IEnumerable<JobTaskDto>>>> GetAllByDriverIdAndDayAsync(Guid id, DateOnly date)
         {
