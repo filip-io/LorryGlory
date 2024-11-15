@@ -12,7 +12,7 @@ namespace LorryGlory.Core.Services.IServices
         Task<IEnumerable<VehicleDto>> GetAllAsync();
         Task<IEnumerable<VehicleDto>> GetAllByDriverIdAndDayAsync(int id, DateOnly date);
         Task<VehicleDto> GetByIdAsync(Guid id);
-        Task<VehicleDto> GetByRegNoAsync(string regNo);
+        Task<VehicleSearchDto> GetByRegNoAsync(string regNo);
         Task<VehicleDto> CreateAsync(VehicleDto vehicleDto);
         Task<VehicleDto> UpdateAsync(VehicleDto vehicleDto);
         Task<VehicleDto> DeleteAsync(Guid id);
