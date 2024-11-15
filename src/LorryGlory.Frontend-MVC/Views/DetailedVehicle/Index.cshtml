@@ -1,0 +1,835 @@
+﻿@*
+    Detailed vehicle for the driver that wants to know more and repporting problems on the vehicle.
+*@
+
+@using LorryGlory_Frontend_MVC.Models.Vehicle
+
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Detailed Vehicle";
+}
+
+<div x-data="{ activeTab: 'vehicle' }" class="p-4 bg-gray-100">
+
+    <div class="flex justify-center mb-4">
+        <h1 class="text-lg font-bold">Actual vehicle</h1>
+    </div>
+
+    <div class="flex items-center justify-between border-b border-gray-300 pb-2">
+        <button class="text-gray-600" aria-label="Back to menu">
+            <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 18a1 1 0 01-.707-.293l-7-7a1 1 0 010-1.414l7-7a1 1 0 011.414 1.414L4.414 10l6.293 6.293a1 1 0 01-.707 1.707z" clip-rule="evenodd" />
+            </svg>
+        </button>
+
+        <div class="flex space-x-4">
+            <button @@click="activeTab = 'vehicle'" :class="{'border-b-2 border-blue-500 text-gray-900': activeTab === 'vehicle', 'text-gray-500': activeTab !== 'vehicle'}" class="font-semibold px-4">
+                Vehicle
+            </button>
+            <button @@click="activeTab = 'failure'" :class="{'border-b-2 border-blue-500 text-gray-900': activeTab === 'failure', 'text-gray-500': activeTab !== 'failure'}" class="font-semibold px-4">
+                Failure
+            </button>
+        </div>
+
+        <div class="w-6"></div>
+    </div>
+
+    <div x-show="activeTab === 'vehicle'" class="space-y-4 mt-4">
+
+            <div x-data="{ openSections: {}, showAll: false }">
+                <h2 class="font-semibold text-gray-800 mb-2">
+                    Vehicle information for REG123
+                </h2>
+
+
+
+                <!-- Driving ban  -->
+                <div class="bg-white p-4 rounded shadow-md mb-4">
+                    <div class="flex items-center justify-between">
+                        <label class="block font-semibold text-gray-700">⚠ Driving ban</label>
+
+                    </div>
+                    <div x-transition class="mt-2 p-3 bg-gray-100 rounded border">
+                        <p class="text-sm text-gray-700">
+                            This vehicle has a driving ban due to specific safety or regulatory issues.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- General Information -->
+                <div class="bg-white p-4 rounded-top" x-bind:class="{'mb-4 border': !openSections.general, 'border-end border-start border-top': openSections.general}">
+                        <div class="flex items-center justify-between">
+                        <label class="block font-semibold text-gray-700">General Information</label>
+                            <div class="cursor-pointer w-6 h-6" x-on:click="openSections.general = !openSections.general">
+                                <svg x-show="!openSections.general" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                                </svg>
+                                <svg x-show="openSections.general" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 15.75l7.5-7.5 7.5 7.5" />
+                                </svg>
+                            </div>
+                        </div>
+                </div>
+
+                <div x-show="openSections.general" class="p-3 bg-gray-100 rounded-b-lg border shadow-md mb-4">
+                    <p class="text-sm text-gray-700 pb-2">
+                        <strong>Registration Number</strong><br>
+                        @if (Model != null && !string.IsNullOrEmpty(Model.RegNo))
+                        {
+                            <span class="text-muted" style="font-size: 0.9em;">@Model.RegNo</span>
+                        }
+                        else
+                        {
+                            <span class="text-muted" style="font-size: 0.9em;">Not found</span>
+                        }
+                    </p>
+
+                    <p class="text-sm text-gray-700 pb-2">
+                        <strong>Vin Number</strong><br>
+                        @if (Model != null && !string.IsNullOrEmpty(Model.Vin))
+                        {
+                            <span class="text-muted" style="font-size: 0.9em;">@Model.Vin</span>
+                        }
+                        else
+                        {
+                            <span class="text-muted" style="font-size: 0.9em;">Not found</span>
+                        }
+                    </p>
+
+                    <p class="text-sm text-gray-700 pb-2">
+                        <strong>Make</strong><br>
+                        @if (Model != null && !string.IsNullOrEmpty(Model.Make))
+                        {
+                            <span class="text-muted" style="font-size: 0.9em;">@Model.Make</span>
+                        }
+                        else
+                        {
+                            <span class="text-muted" style="font-size: 0.9em;">Not Found</span>
+                        }
+                    </p>
+
+                    <p class="text-sm text-gray-700 pb-2">
+                        <strong>Model</strong><br>
+                        @if (Model != null && !string.IsNullOrEmpty(Model.Model))
+                        {
+                            <span class="text-muted" style="font-size: 0.9em;">@Model.Model</span>
+                        }
+                        else
+                        {
+                            <span class="text-muted" style="font-size: 0.9em;">Not Found</span>
+                        }
+                    </p>
+
+                    <p class="text-sm text-gray-700 pb-2">
+                        <strong>Vehicle Year</strong><br>
+                        @if (Model != null && Model.VehicleYear > 0)
+                        {
+                            <span class="text-muted" style="font-size: 0.9em;">@Model.VehicleYear</span>
+                        }
+                        else
+                        {
+                            <span class="text-muted" style="font-size: 0.9em;">Not found</span>
+                        }
+                    </p>
+
+                    <p class="text-sm text-gray-700 pb-2">
+                        <strong>Model Year</strong><br>
+                        @if (Model != null && Model.ModelYear > 0)
+                        {
+                            <span class="text-muted" style="font-size: 0.9em;">@Model.ModelYear</span>
+                        }
+                        else
+                        {
+                            <span class="text-muted" style="font-size: 0.9em;">Not found</span>
+                        }
+                    </p>
+
+                    <p class="text-sm text-gray-700 pb-2">
+                        <strong>Color</strong><br>
+                        @if (Model != null && !string.IsNullOrEmpty(Model.Color))
+                        {
+                            <span class="text-muted" style="font-size: 0.9em;">@Model.Color</span>
+                        }
+                        else
+                        {
+                            <span class="text-muted" style="font-size: 0.9em;">Not found</span>
+                        }
+                    </p>
+
+                    <p class="text-sm text-gray-700">
+                        <strong>Stolen Status</strong><br>
+                        @if (Model != null && !string.IsNullOrEmpty(Model.StolenStatus))
+                        {
+                            <span class="text-muted" style="font-size: 0.9em;">@Model.StolenStatus</span>
+                        }
+                        else
+                        {
+                            <span class="text-muted" style="font-size: 0.9em;">Not found</span>
+                        }
+                    </p>
+                </div>
+
+                <!-- Vehicle Type -->
+                <div class="bg-white p-4 rounded-top" x-bind:class="{'mb-4 border': !openSections.classification, 'border-end border-start border-top': openSections.classification}">
+                    <div class="flex items-center justify-between">
+                        <label class="block font-semibold text-gray-700">Vehicle Type</label>
+                        <div class="cursor-pointer w-6 h-6" x-on:click="openSections.classification = !openSections.classification">
+                            <svg x-show="!openSections.classification" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                            </svg>
+                            <svg x-show="openSections.classification" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 15.75l7.5-7.5 7.5 7.5" />
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                <div x-show="openSections.classification" class="p-3 bg-gray-100 rounded-b-lg border shadow-md mb-4">
+                    <p class="text-sm text-gray-700 pb-2">
+                        <strong>Vehicle Type</strong><br>
+                        @if (Model != null && !string.IsNullOrEmpty(Model.Type))
+                        {
+                            <span class="text-muted" style="font-size: 0.9em;">@Model.Type </span>
+                        }
+                        else
+                        {
+                            <span class="text-muted" style="font-size: 0.9em;">Not found</span>
+                        }
+                    </p>
+
+                    <p class="text-sm text-gray-700 pb-2">
+                        <strong>Type Class</strong><br>
+                        @if (Model != null && !string.IsNullOrEmpty(Model.TypeClass))
+                        {
+                            <span class="text-muted" style="font-size: 0.9em;">@Model.TypeClass  </span>
+                        }
+                        else
+                        {
+                            <span class="text-muted" style="font-size: 0.9em;">Not found</span>
+                        }
+                    </p>
+
+                <!-- Vehicle Category (EU) -->
+                <div class="bg-white p-4 rounded-top" x-bind:class="{'border': !openSections.eu, 'border-end border-start border-top': openSections.classification}">
+                        <div class="flex items-center justify-between">
+                            <label class="block font-semibold text-gray-700">Vehicle Category (EU)</label>
+                            <div class="cursor-pointer w-6 h-6" x-on:click="openSections.eu = !openSections.eu">
+                                <svg x-show="!openSections.eu" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                                </svg>
+                                <svg x-show="openSections.eu" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 15.75l7.5-7.5 7.5 7.5" />
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+
+                <div x-show="openSections.eu" class="p-3 bg-gray-100 rounded-b-lg border shadow-md">
+@*                         <p class="text-sm text-gray-700 pb-2">
+                            <strong>Code</strong><br>
+                            @if (Model != null && !string.IsNullOrEmpty(Model.Code))
+                            {
+                            <span class="text-muted" style="font-size: 0.9em;">@Model.Code </span>
+                            }
+                            else
+                            {
+                                <span class="text-muted" style="font-size: 0.9em;">Not found</span>
+                            }
+                        </p> *@
+
+                        <p class="text-sm text-gray-700">
+                            <strong>Type</strong><br>
+                            @if (Model != null && !string.IsNullOrEmpty(Model.TypeClass))
+                            {
+                                <span class="text-muted" style="font-size: 0.9em;">@Model.TypeClass  </span>
+                            }
+                            else
+                            {
+                                <span class="text-muted" style="font-size: 0.9em;">Not found</span>
+                            }
+                        </p>
+                    </div>
+
+                </div>
+
+                <!-- Status -->
+                <div class="bg-white p-4 rounded-top" x-bind:class="{'mb-4 border': !openSections.status, 'border-end border-start border-top': openSections.status}">
+                    <div class="flex items-center justify-between">
+                        <label class="block font-semibold text-gray-700">Vehicle Status</label>
+                        <div class="cursor-pointer w-6 h-6" x-on:click="openSections.status = !openSections.status">
+                            <svg x-show="!openSections.status" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                            </svg>
+                            <svg x-show="openSections.status" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 15.75l7.5-7.5 7.5 7.5" />
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                <div x-show="openSections.status" class="p-3 bg-gray-100 rounded-b-lg border shadow-md mb-4">
+                    <p class="text-sm text-gray-700 pb-2">
+                        <strong>Status</strong><br>
+                        @if (Model != null && Model.Status != null && !string.IsNullOrEmpty(Model.Status.Status))
+                        {
+                            <span class="text-muted" style="font-size: 0.9em;">@Model.Status.Status</span>
+                        }
+                        else
+                        {
+                            <span class="text-muted" style="font-size: 0.9em;">Not found</span>
+                        }
+                    </p>
+
+                    <p class="text-sm text-gray-700">
+                        <strong>First Registered</strong><br>
+                        @if (Model != null && Model.Status != null && Model.Status.FirstRegistered != null)
+                        {
+                            <span class="text-muted" style="font-size: 0.9em;">
+                                @Model.Status.FirstRegistered.ToString("yyyy-MM-dd")
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="text-muted" style="font-size: 0.9em;">Not found</span>
+                        }
+                    </p>
+
+                </div>
+
+                <!-- Inspection -->
+                <div class="bg-white p-4 rounded-top" x-bind:class="{'mb-4 border': !openSections.inspection, 'border-end border-start border-top': openSections.inspection}">
+                    <div class="flex items-center justify-between">
+                        <label class="block font-semibold text-gray-700">Inspection</label>
+                        <div class="cursor-pointer w-6 h-6" x-on:click="openSections.inspection = !openSections.inspection">
+                            <svg x-show="!openSections.inspection" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                            </svg>
+                            <svg x-show="openSections.inspection" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 15.75l7.5-7.5 7.5 7.5" />
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                <div x-show="openSections.inspection" class="p-3 bg-gray-100 rounded-b-lg border shadow-md mb-4">
+                    <p class="text-sm text-gray-700 pb-2">
+                        <strong>Latest Inspection</strong><br>
+                        @if (Model != null && Model.Inspection != null && Model.Inspection.LatestInspection != null)
+                        {
+                            <span class="text-muted" style="font-size: 0.9em;">
+                                @Model.Inspection.LatestInspection.ToString("yyyy-MM-dd")
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="text-muted" style="font-size: 0.9em;">Not found</span>
+                        }
+                    </p>
+
+                    <p class="text-sm text-gray-700 pb-2">
+                        <strong>Inspection Valid Until</strong><br>
+                        @if (Model != null && Model.Inspection != null && Model.Inspection.InspectionValidUntil != null)
+                        {
+                            <span class="text-muted" style="font-size: 0.9em;">
+                                @Model.Inspection.InspectionValidUntil.ToString("yyyy-MM-dd")
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="text-muted" style="font-size: 0.9em;">Not found</span>
+                        }
+                    </p>
+
+                    <p class="text-sm text-gray-700">
+                        <strong>Mileage (km)</strong><br>
+                        @if (Model != null && Model.Inspection != null && Model.Inspection.Meter != null)
+                        {
+                            <span class="text-muted" style="font-size: 0.9em;">
+                                @((Model.Inspection.Meter / 1000.0).ToString("#,0.##")) km
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="text-muted" style="font-size: 0.9em;">Not found</span>
+                        }
+                    </p>
+
+                </div>
+
+                <!-- Technical data -->
+                <div class="bg-white p-4 rounded-top" x-bind:class="{'mb-4 border': !openSections.technical, 'border-end border-start border-top': openSections.technical}">
+                    <div class="flex items-center justify-between">
+                        <label class="block font-semibold text-gray-700">Technical data</label>
+                        <div class="cursor-pointer w-6 h-6" x-on:click="openSections.technical = !openSections.technical">
+                            <svg x-show="!openSections.technical" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                            </svg>
+                            <svg x-show="openSections.technical" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 15.75l7.5-7.5 7.5 7.5" />
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                <div x-show="openSections.technical" class="p-3 bg-gray-100 rounded-b-lg border shadow-md mb-4">
+                    <p class="text-sm text-gray-700 pb-2">
+                        <strong>Power (HP)</strong><br>
+                        @if (Model != null && Model.TechnicalData.PowerHp != null)
+                        {
+                        <span class="text-muted" style="font-size: 0.9em;">@Model.TechnicalData.PowerHp HP</span>
+                        }
+                        else
+                        {
+                            <span class="text-muted" style="font-size: 0.9em;">Not found</span>
+                        }
+                    </p>
+
+                    <p class="text-sm text-gray-700 pb-2">
+                        <strong>Power (kW)</strong><br>
+                        @if (Model != null && Model.TechnicalData.PowerKw != null)
+                        {
+                            <span class="text-muted" style="font-size: 0.9em;">@Model.TechnicalData.PowerKw kW</span>
+                        }
+                        else
+                        {
+                            <span class="text-muted" style="font-size: 0.9em;">Not found</span>
+                        }
+                    </p>
+
+                    <p class="text-sm text-gray-700 pb-2">
+                        <strong>Cylinder Volume</strong><br>
+                        @if (Model != null && Model.TechnicalData.CylinderVolume != null)
+                        {
+                            <span class="text-muted" style="font-size: 0.9em;">@Model.TechnicalData.CylinderVolume cm³</span>
+                        }
+                        else
+                        {
+                            <span class="text-muted" style="font-size: 0.9em;">Not found</span>
+                        }
+                    </p>
+
+                    <p class="text-sm text-gray-700 pb-2">
+                        <strong>Fuel Type</strong><br>
+                        @if (Model != null && !string.IsNullOrEmpty(Model.TechnicalData.Fuel))
+                        {
+                            <span class="text-muted" style="font-size: 0.9em;">@Model.TechnicalData.Fuel</span>
+                        }
+                        else
+                        {
+                            <span class="text-muted" style="font-size: 0.9em;">Not found</span>
+                        }
+                    </p>
+
+                    <p class="text-sm text-gray-700 pb-2">
+                        <strong>Transmission</strong><br>
+                        @if (Model != null && !string.IsNullOrEmpty(Model.TechnicalData.Transmission))
+                        {
+                            <span class="text-muted" style="font-size: 0.9em;">@Model.TechnicalData.Transmission</span>
+                        }
+                        else
+                        {
+                            <span class="text-muted" style="font-size: 0.9em;">Not found</span>
+                        }
+                    </p>
+
+                    <p class="text-sm text-gray-700 pb-2">
+                        <strong>Four-Wheel Drive</strong><br>
+                        @if (Model != null && Model.TechnicalData.FourWheelDrive != null)
+                        {
+                            <span class="text-muted" style="font-size: 0.9em;">@Model.TechnicalData.FourWheelDrive</span>
+                        }
+                        else
+                        {
+                            <span class="text-muted" style="font-size: 0.9em;">Not found</span>
+                        }
+                    </p>
+
+                    <p class="text-sm text-gray-700 pb-2">
+                        <strong>Chassis Type</strong><br>
+                        @if (Model != null && !string.IsNullOrEmpty(Model.TechnicalData.Chassi))
+                        {
+                            <span class="text-muted" style="font-size: 0.9em;">@Model.TechnicalData.Chassi</span>
+                        }
+                        else
+                        {
+                            <span class="text-muted" style="font-size: 0.9em;">Not found</span>
+                        }
+                    </p>
+
+                    <!-- Dimensions -->
+                    <div class="bg-white p-4 rounded-top" x-bind:class="{'mb-4 border': !openSections.dimensions, 'border-end border-start border-top': openSections.dimensions}">
+                        <div class="flex items-center justify-between">
+                            <label class="block font-semibold text-gray-700">Dimensions</label>
+                            <div class="cursor-pointer w-6 h-6" x-on:click="openSections.dimensions = !openSections.dimensions">
+                                <svg x-show="!openSections.dimensions" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                                </svg>
+                                <svg x-show="openSections.dimensions" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 15.75l7.5-7.5 7.5 7.5" />
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div x-show="openSections.dimensions" class="p-3 bg-gray-100 rounded-b-lg border shadow-md mb-4">
+                        <p class="text-sm text-gray-700 pb-2">
+                            <strong>Length (mm)</strong><br>
+                            @if (Model != null && Model.TechnicalData != null && Model.TechnicalData.Length != null)
+                            {
+                                <span class="text-muted" style="font-size: 0.9em;">@Model.TechnicalData.Length mm</span>
+                            }
+                            else
+                            {
+                                <span class="text-muted" style="font-size: 0.9em;">Not found</span>
+                            }
+                        </p>
+
+                        <p class="text-sm text-gray-700 pb-2">
+                            <strong>Width (mm)</strong><br>
+                            @if (Model != null && Model.TechnicalData != null && Model.TechnicalData.Width != null)
+                            {
+                            <span class="text-muted" style="font-size: 0.9em;">@Model.TechnicalData.Width mm</span>
+                            }
+                            else
+                            {
+                                <span class="text-muted" style="font-size: 0.9em;">Not found</span>
+                            }
+                        </p>
+
+                        <p class="text-sm text-gray-700">
+                            <strong>Height (mm)</strong><br>
+                            @if (Model != null && Model.TechnicalData != null && Model.TechnicalData.Height != null)
+                            {
+                                <span class="text-muted" style="font-size: 0.9em;">@Model.TechnicalData.Height mm</span>
+                            }
+                            else
+                            {
+                                <span class="text-muted" style="font-size: 0.9em;">Not found</span>
+                            }
+                        </p>
+                    </div>
+
+                    <!-- Weights -->
+                    <div class="bg-white p-4 rounded-top" x-bind:class="{'mb-4 border': !openSections.weights, 'border-end border-start border-top': openSections.weights}">
+                        <div class="flex items-center justify-between">
+                            <label class="block font-semibold text-gray-700">Weights</label>
+                            <div class="cursor-pointer w-6 h-6" x-on:click="openSections.weights = !openSections.weights">
+                                <svg x-show="!openSections.weights" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                                </svg>
+                                <svg x-show="openSections.weights" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 15.75l7.5-7.5 7.5 7.5" />
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div x-show="openSections.weights" class="p-3 bg-gray-100 rounded-b-lg border shadow-md mb-4">
+                        <p class="text-sm text-gray-700 pb-2">
+                            <strong>Kerb Weight</strong><br>
+                            @if (Model != null && Model.TechnicalData != null && Model.TechnicalData.KerbWeight != null)
+                            {
+                                <span class="text-muted" style="font-size: 0.9em;">@Model.TechnicalData.KerbWeight kg</span>
+                            }
+                            else
+                            {
+                                <span class="text-muted" style="font-size: 0.9em;">Not found</span>
+                            }
+                        </p>
+
+                        <p class="text-sm text-gray-700 pb-2">
+                            <strong>Total Weight</strong><br>
+                            @if (Model != null && Model.TechnicalData != null && Model.TechnicalData.TotalWeight != null)
+                            {
+                                <span class="text-muted" style="font-size: 0.9em;">@Model.TechnicalData.TotalWeight kg</span>
+                            }
+                            else
+                            {
+                                <span class="text-muted" style="font-size: 0.9em;">Not found</span>
+                            }
+                        </p>
+
+                        <p class="text-sm text-gray-700 pb-2">
+                            <strong>Load Capacity</strong><br>
+                            @if (Model != null && Model.TechnicalData != null && Model.TechnicalData.LoadWeight != null)
+                            {
+                                <span class="text-muted" style="font-size: 0.9em;">@Model.TechnicalData.LoadWeight kg</span>
+                            }
+                            else
+                            {
+                                <span class="text-muted" style="font-size: 0.9em;">Not found</span>
+                            }
+                        </p>
+
+                        <p class="text-sm text-gray-700 pb-2">
+                            <strong>Maximum Trailer Weight (with brakes)</strong><br>
+                            @if (Model != null && Model.TechnicalData != null && Model.TechnicalData.TrailerWeight != null)
+                            {
+                                <span class="text-muted" style="font-size: 0.9em;">@Model.TechnicalData.TrailerWeight kg</span>
+                            }
+                            else
+                            {
+                                <span class="text-muted" style="font-size: 0.9em;">Not found</span>
+                            }
+                        </p>
+
+                        <p class="text-sm text-gray-700 pb-2">
+                            <strong>Maximum Trailer Weight (without brakes)</strong><br>
+                            @if (Model != null && Model.TechnicalData != null && Model.TechnicalData.UnbrakedTrailerWeight != null)
+                            {
+                                <span class="text-muted" style="font-size: 0.9em;">@Model.TechnicalData.UnbrakedTrailerWeight kg</span>
+                            }
+                            else
+                            {
+                                <span class="text-muted" style="font-size: 0.9em;">Not found</span>
+                            }
+                        </p>
+
+                        <p class="text-sm text-gray-700 pb-2">
+                            <strong>Trailer Weight (B-license)</strong><br>
+                            @if (Model != null && Model.TechnicalData != null && Model.TechnicalData.TrailerWeightB != null)
+                            {
+                                <span class="text-muted" style="font-size: 0.9em;">@Model.TechnicalData.TrailerWeightB kg</span>
+                            }
+                            else
+                            {
+                                <span class="text-muted" style="font-size: 0.9em;">Not found</span>
+                            }
+                        </p>
+
+                        <p class="text-sm text-gray-700 pb-2">
+                            <strong>Trailer Weight (BE-license)</strong><br>
+                            @if (Model != null && Model.TechnicalData != null && Model.TechnicalData.TrailerWeightBe != null)
+                            {
+                            <span class="text-muted" style="font-size: 0.9em;">@Model.TechnicalData.TrailerWeightBe kg</span>
+                            }
+                            else
+                            {
+                                <span class="text-muted" style="font-size: 0.9em;">Not found</span>
+                            }
+                        </p>
+
+                        <p class="text-sm text-gray-700">
+                            <strong>Total Trailer Weight</strong><br>
+                            @if (Model != null && Model.TechnicalData != null && Model.TechnicalData.CarriageWeight != null)
+                            {
+                                <span class="text-muted" style="font-size: 0.9em;">@Model.TechnicalData.CarriageWeight kg</span>
+                            }
+                            else
+                            {
+                                <span class="text-muted" style="font-size: 0.9em;">Not found</span>
+                            }
+                        </p>
+                    </div>
+
+                    <!-- Tires -->
+                    <div class="bg-white p-4 rounded-top" x-bind:class="{'mb-4 border': !openSections.tires, 'border-end border-start border-top': openSections.tires}">
+                        <div class="flex items-center justify-between">
+                            <label class="block font-semibold text-gray-700">Tires</label>
+                            <div class="cursor-pointer w-6 h-6" x-on:click="openSections.tires = !openSections.tires">
+                                <svg x-show="!openSections.tires" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                                </svg>
+                                <svg x-show="openSections.tires" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 15.75l7.5-7.5 7.5 7.5" />
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div x-show="openSections.tires" class="p-3 bg-gray-100 rounded-b-lg border shadow-md mb-4">
+                        <p class="text-sm text-gray-700 pb-2">
+                            <strong>Front Tires</strong><br>
+                            @if (Model != null && Model.TechnicalData != null && !string.IsNullOrEmpty(Model.TechnicalData.TireFront))
+                            {
+                                <span class="text-muted" style="font-size: 0.9em;">@Model.TechnicalData.TireFront</span>
+                            }
+                            else
+                            {
+                                <span class="text-muted" style="font-size: 0.9em;">Not found</span>
+                            }
+                        </p>
+
+                        <p class="text-sm text-gray-700">
+                            <strong>Rear Tires</strong><br>
+                            @if (Model != null && Model.TechnicalData != null && !string.IsNullOrEmpty(Model.TechnicalData.TireBack))
+                            {
+                                <span class="text-muted" style="font-size: 0.9em;">@Model.TechnicalData.TireBack</span>
+                            }
+                            else
+                            {
+                                <span class="text-muted" style="font-size: 0.9em;">Not found</span>
+                            }
+                        </p>
+                    </div>
+
+                    <!-- Axle Widths -->
+                    <div class="bg-white p-4 rounded-top" x-bind:class="{'border': !openSections.axleWidths, 'border-end border-start border-top': openSections.axleWidths}">
+                        <div class="flex items-center justify-between">
+                            <label class="block font-semibold text-gray-700">Axle Widths</label>
+                            <div class="cursor-pointer w-6 h-6" x-on:click="openSections.axleWidths = !openSections.axleWidths">
+                                <svg x-show="!openSections.axleWidths" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                                </svg>
+                                <svg x-show="openSections.axleWidths" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 15.75l7.5-7.5 7.5 7.5" />
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div x-show="openSections.axleWidths" class="p-3 bg-gray-100 rounded-b-lg border shadow-md">
+                        <p class="text-sm text-gray-700 pb-2">
+                            <strong>Axle Width (1 to 2)</strong><br>
+                            @if (Model != null && Model.TechnicalData != null && Model.TechnicalData.AxleWidth1 != null)
+                            {
+                            <span class="text-muted" style="font-size: 0.9em;">@Model.TechnicalData.AxleWidth1 mm</span>
+                            }
+                            else
+                            {
+                                <span class="text-muted" style="font-size: 0.9em;">Not found</span>
+                            }
+                        </p>
+
+                        <p class="text-sm text-gray-700 pb-2">
+                            <strong>Axle Width (2 to 3)</strong><br>
+                            @if (Model != null && Model.TechnicalData != null && Model.TechnicalData.AxleWidth2 != null)
+                            {
+                            <span class="text-muted" style="font-size: 0.9em;">@Model.TechnicalData.AxleWidth2 mm</span>
+                            }
+                            else
+                            {
+                                <span class="text-muted" style="font-size: 0.9em;">Not found</span>
+                            }
+                        </p>
+
+                        <p class="text-sm text-gray-700">
+                            <strong>Axle Width (3 to 4)</strong><br>
+                            @if (Model != null && Model.TechnicalData != null && Model.TechnicalData.AxleWidth3 != null)
+                            {
+                                <span class="text-muted" style="font-size: 0.9em;">@Model.TechnicalData.AxleWidth3 mm</span>
+                            }
+                            else
+                            {
+                                <span class="text-muted" style="font-size: 0.9em;">Not found</span>
+                            }
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Environmental Details -->
+                <div class="bg-white p-4 rounded-top" x-bind:class="{'border': !openSections.environmental, 'border-end border-start border-top': openSections.environmental}">
+                    <div class="flex items-center justify-between">
+                        <label class="block font-semibold text-gray-700">Environmental Details</label>
+                        <div class="cursor-pointer w-6 h-6" x-on:click="openSections.environmental = !openSections.environmental">
+                            <svg x-show="!openSections.environmental" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                            </svg>
+                            <svg x-show="openSections.environmental" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 15.75l7.5-7.5 7.5 7.5" />
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                <div x-show="openSections.environmental" class="p-3 bg-gray-100 rounded-b-lg border shadow-md">
+                    <p class="text-sm text-gray-700">
+                        <strong>Euro Class</strong><br>
+                        @if (Model != null && Model.Eco != null && !string.IsNullOrEmpty(Model.Eco.EuroClass))
+                        {
+                            <span class="text-muted" style="font-size: 0.9em;">@Model.Eco.EuroClass</span>
+                        }
+                        else
+                        {
+                            <span class="text-muted" style="font-size: 0.9em;">Not found</span>
+                        }
+                    </p>
+                </div>
+
+                <!-- Show all button -->
+                <button x-on:click="openSections = { general: true, classification: true, status: true, inspection: true, taxes: true, technical: true, eu: true, dimensions: true, weights: true, tires: true, axleWidths: true, environmental: true }; showAll = true"
+                        class="bg-green-500 text-white px-4 py-2 rounded mb-2 mt-2">
+                    Show all
+                </button>
+
+                <!-- Close all button -->
+                <button x-on:click="openSections = {}; showAll = false"
+                        class="bg-red-500 text-white px-4 py-2 rounded mb-2 mt-2">
+                    Close all
+                </button>
+            </div>
+        </div>
+
+    <div x-show="activeTab === 'failure'" class="space-y-4 mt-4">
+        <div>
+            <h2 class="font-semibold text-gray-800 mb-2">
+                Known Issuse for REG123
+           </h2>
+
+            <!-- Driving ban  -->
+            <div class="bg-white p-4 rounded shadow-md mb-4">
+                <div class="flex items-center justify-between">
+                    <label class="block font-semibold text-gray-700">⚠ Driving ban</label>
+
+                </div>
+                <div x-transition class="mt-2 p-3 bg-gray-100 rounded border">
+                    <p class="text-sm text-gray-700">
+                        This vehicle has a driving ban due to specific safety or regulatory issues.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Known issues  -->
+            <div class="bg-white p-4 rounded-lg shadow-md mb-4">
+                <h2 class="font-semibold text-gray-800 mb-2">Known Issues (if any)</h2>
+                <div class="space-y-2 text-sm">
+                    <div class="flex justify-between">
+                        <span class="text-red-600 font-medium">⚠ Critical</span>
+                        <span>Cracked Axle</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-orange-600 font-medium">⬆️ High</span>
+                        <span>Brake Wear</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-yellow-600 font-medium">⬆️ Medium</span>
+                        <span>Rearview Mirror</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-green-600 font-medium">⬆️ Low</span>
+                        <span>Rust Damage</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Report a Problem  -->
+            <div class="bg-white p-4 rounded-lg shadow-md">
+                <h2 class="font-semibold text-gray-800 mb-2">Report Problems Here</h2>
+                <div class="mt-2">
+                    <label class="text-sm">Title</label>
+                    <input class="w-full p-2 border rounded" placeholder="Add a title"></input>
+                </div>
+                <div class="mt-2">
+                    <label class="text-sm">Description</label>
+                    <textarea class="w-full p-2 border rounded" placeholder="Add a description"></textarea>
+                </div>
+                <div class="mt-2">
+                    <label class="text-sm">Attach Image</label>
+                    <div class="flex items-center justify-center">
+                        <input type="file" accept="image/*" id="image-upload" class="hidden" />
+                        <label for="image-upload" class="w-full p-2 border rounded flex items-center justify-center cursor-pointer">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-5 h-5 mr-1">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16s1.5-2 4-2 4 2 4 2M2 12a10 10 0 0020 0M2 8a10 10 0 0120 0M9 2a4 4 0 108 0m-1 18l2-2-2 2zM7 20l2-2-2 2z" />
+                            </svg>
+                            Attach Image
+                        </label>
+                    </div>
+                </div>
+
+                <button class="mt-4 w-full bg-red-600 text-white py-2 px-4 rounded-lg shadow-md hover:bg-red-700">
+                    Report a Problem
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
