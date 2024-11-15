@@ -1,4 +1,4 @@
-using LorryGlory_Frontend_MVC.Models;
+using LorryGlory_Frontend_MVC.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 

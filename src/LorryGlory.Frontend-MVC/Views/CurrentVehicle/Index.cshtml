@@ -1,10 +1,19 @@
 ﻿@*
     Current vehicle for fast overview for driver to complete the job safe and secure.
+
+    Number in TODO = placement in code, scroll down to see the corresponding.
+    TODO list:
+    1a = Needs to fetch from 'felanmälan?'
+    2a = Need to implement check if truck is older then 30 years then: display Totalweight instead of Taxweight.
+    + Need to implement tax weight in model, there is only total weight and dont give justice to what the driver can carry.
+    3a = Need to implement actual weight based on calculation, this is a calculation based on the weight of the truck and the load.
+    4a = Need to implement proper check for BK class calculated from distance of axels and show proper data.
 *@
 @{
     Layout = "_Layout";
     ViewData["Title"] = "Current Vehicle";
 }
+@model LorryGlory_Frontend_MVC.ViewModels.VehicleViewModel
 
 <div x-data="{ activeTab: 'vehicle' }" class="p-4 bg-gray-100">
 
@@ -35,8 +44,8 @@
 
         <div class="bg-white p-4 rounded-lg shadow-md">
             <div class="flex items-center justify-between">
-                <input class="border p-2 rounded w-1/2" placeholder="REG123" disabled />
-                <span class="text-red-600 text-sm">⚠ Not Allowed to Operate</span>
+                <h2 class="border p-2 rounded w-1/2 text-center">@Model.RegNo</h2>
+                <span class="text-red-600 text-sm">⚠ Need to implement check, from where?</span> <!-- 1a -->
             </div>
         </div>
         <div class="p-4 bg-gray-100">
@@ -54,17 +63,45 @@
 
             <div class="bg-white p-4 rounded-lg shadow-md mb-4">
                 <h2 class="font-semibold text-gray-800 mb-2">Basic Information</h2>
-                <div class="grid grid-cols-2 gap-2 text-sm">
-                    <div>Empty Weight: <span class="font-medium">15.3 tons</span></div>
-                    <div>Max Load Weight: <span class="font-medium">14.7 tons</span></div>
-                    <div>Total Weight: <span class="font-medium">30 tons</span></div>
-                    <div>Height: <span class="font-medium">6.5 m</span></div>
-                    <div>Length: <span class="font-medium">22 m</span></div>
-                    <div>Axle Pressure: <span class="font-medium">5 tons</span></div>
-                    <div>Emission Class: <span class="font-medium">EURO 6</span></div>
+                <div class="divide-y divide-gray-200 text-sm">
+                    <div class="py-2 flex justify-between">
+                        <span>Curb Weight</span>
+                        <span class="font-medium">@Model.TechnicalData.KerbWeight KG</span>
+                    </div>
+                    <div class="py-2 flex justify-between">
+                        <span>Max Load Weight</span>
+                        <span class="font-medium">@Model.TechnicalData.LoadWeight KG</span>
+                    </div>
+                    <!-- 2a -->
+                    <div class="py-2 flex justify-between">
+                        <span class="text-red-600">Total Weight</span>
+                        <span class="font-medium">@Model.TechnicalData.TotalWeight KG</span>
+                    </div>
+                    <!-- 3a -->
+                    <div class="py-2 flex justify-between">
+                        <span>Actual Weight based on calc</span>
+                        <span class="font-medium">---</span>
+                    </div>
+                    <div class="py-2 flex justify-between">
+                        <span>Height</span>
+                        <span class="font-medium">@Model.TechnicalData.Height MM</span>
+                    </div>
+                    <div class="py-2 flex justify-between">
+                        <span>Length</span>
+                        <span class="font-medium">@Model.TechnicalData.Length MM</span>
+                    </div>
+                    <div class="py-2 flex justify-between">
+                        <span class="text-red-600">Axle Pressure(IMP)</span>
+                        <span class="font-medium text-red-600">not found</span>
+                    </div>
+                    <div class="py-2 flex justify-between">
+                        <span>Emission Class</span>
+                        <span class="font-medium">@Model.Eco.EuroClass</span>
+                    </div>
                 </div>
             </div>
 
+            <!-- 4a -->
             <div class="bg-white p-4 rounded-lg shadow-md mb-4">
                 <h2 class="font-semibold text-gray-800 mb-2">BK Class</h2>
                 <div class="space-y-2 text-sm">
