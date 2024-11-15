@@ -20,5 +20,7 @@ namespace LorryGlory_Frontend_MVC.Controllers
 
             return View(vehicleViewModel);
         }
+
+        // 
     }
 }
