@@ -20,6 +20,8 @@ namespace LorryGlory.Api
             builder.Services.ConfigureDatabase(connectionString);
             builder.Services.ConfigureScopes();
 
+            builder.Services.AddHttpClient();
+
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
