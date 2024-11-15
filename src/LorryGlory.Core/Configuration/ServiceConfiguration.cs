@@ -32,6 +32,10 @@ public static class ServiceConfiguration
         // JobTask
         serviceCollection.AddScoped<IJobTaskService, JobTaskService>();
         serviceCollection.AddScoped<IJobTaskRepository, JobTaskRepository>();
+
+        // Vehicle
+        serviceCollection.AddScoped<IVehicleService, VehicleService>();
+        serviceCollection.AddScoped<IVehicleRepository, VehicleRepository>();
     }
 
     public static void ConfigureScopes(this IServiceCollection serviceCollection)
