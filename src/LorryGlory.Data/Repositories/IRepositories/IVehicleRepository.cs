@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace LorryGlory.Data.Repositories.IRepositories
 {
-    internal interface IVehicleRepository
+    public interface IVehicleRepository
     {
         Task<IEnumerable<Vehicle?>> GetAllVehiclesAsync();
         Task<Vehicle?> GetByIdAsync(Guid id);

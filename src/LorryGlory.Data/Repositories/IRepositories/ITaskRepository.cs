@@ -9,7 +9,7 @@ namespace LorryGlory.Data.Repositories.IRepositories
 {
     public interface ITaskRepository
     {
-        Task<IEnumerable<JobTask?>> GetAllByDriverIdAndDayAsync(Guid id, DateOnly date);
+        Task<IEnumerable<JobTask?>> GetAllByDriverIdAndDayAsync(string id, DateOnly date);
         Task<JobTask?> GetByIdAsync(Guid id);
         Task<JobTask> AddAsync(JobTask jobTask);
         Task<JobTask?> UpdateAsync(JobTask jobTask);

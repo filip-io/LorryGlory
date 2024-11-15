@@ -1,4 +1,4 @@
-﻿using LorryGlory.Core.Models.DTOs;
+﻿using LorryGlory.Core.Models.DTOs.VehicleDtos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +10,7 @@ namespace LorryGlory.Core.Services.IServices
     public interface IVehicleService
     {
         Task<IEnumerable<VehicleDto>> GetAllAsync();
-        Task<IEnumerable<VehicleDto>> GetAllByDriverIdAndDayAsync(int id, DateOnly date);
+        Task<IEnumerable<TodaysVehiclesForDriver>> GetAllByDriverIdAndDayAsync(string id, DateOnly date);
         Task<VehicleDto> GetByIdAsync(Guid id);
         Task<VehicleSearchDto> GetByRegNoAsync(string regNo);
         Task<VehicleDto> CreateAsync(VehicleDto vehicleDto);

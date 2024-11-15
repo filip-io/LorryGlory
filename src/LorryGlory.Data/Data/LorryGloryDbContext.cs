@@ -293,10 +293,11 @@ namespace LorryGlory.Data.Data
                 // Value objects (nested owned entities)
                 entity.OwnsOne(e => e.Status);
                 entity.OwnsOne(e => e.Inspection);
-                entity.OwnsOne(e => e.TechnicalData, td =>
-                {
-                    td.OwnsOne(t => t.Category);
-                });
+                entity.OwnsOne(e => e.TechnicalData);
+                //entity.OwnsOne(e => e.TechnicalData, td =>
+                //{
+                //    td.OwnsOne(t => t.Category);
+                //});
                 entity.OwnsOne(e => e.Eco);
 
                 // Company relationship

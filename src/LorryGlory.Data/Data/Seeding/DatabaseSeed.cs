@@ -24,7 +24,7 @@ namespace LorryGlory.Data.Data.Seeding
         public static void SeedData(this ModelBuilder modelBuilder)
         {
             SeedCompanies(modelBuilder);
-            SeedVehicles(modelBuilder);
+            //SeedVehicles(modelBuilder);
             SeedVehicleProblems(modelBuilder);
             SeedFileLinks(modelBuilder);
             SeedStaffMembers(modelBuilder);

@@ -1,9 +1,11 @@
-﻿using LorryGlory.Api.Models;
+﻿using LorryGlory.Api.Helpers;
+using LorryGlory.Api.Models;
 using LorryGlory.Api.Models.DataTransferObjects;
-using LorryGlory.Core.Models.DTOs;
+using LorryGlory.Api.Models.DataTransferObjects.VehicleDtos;
+using LorryGlory.Core.Models.DTOs.VehicleDtos;
 using LorryGlory.Core.Services.IServices;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Reflection.Metadata.Ecma335;
 
 namespace LorryGlory.Api.Controllers
 {
@@ -18,7 +20,27 @@ namespace LorryGlory.Api.Controllers
             _vehicleService = vehicleService;
         }
 
-        [HttpPost]
+        [HttpPost("GetTodaysVehiclesForDriver")]
+        public async Task<IActionResult> GetTodaysVehicles(GetTodaysVehiclesDto dto)
+        {
+            try
+            {
+                var vehicles = await _vehicleService.GetAllByDriverIdAndDayAsync(dto.StaffId, dto.Day);
+                if (vehicles == null)
+                {
+                    return NotFound();
+                }
+
+                return Ok(vehicles);
+            }
+            catch (Exception ex)
+            {
+                // Logging and better error message.
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPost("Search")]
         public async Task<IActionResult> SearchVehicle([FromBody] LicensePlateSearchDto searchDto)
         {
             try
@@ -38,7 +60,7 @@ namespace LorryGlory.Api.Controllers
             }
             catch (Exception ex)
             {
-                // Log error and return status code.
+                // Logging and better error message.
                 return BadRequest(ex.Message);
             }
         }

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LorryGlory.Core.Models.DTOs
+namespace LorryGlory.Core.Models.DTOs.VehicleDtos
 {
     public class VehicleDto
     {

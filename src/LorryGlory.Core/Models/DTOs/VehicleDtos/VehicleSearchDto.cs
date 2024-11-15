@@ -8,7 +8,7 @@ using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace LorryGlory.Core.Models.DTOs
+namespace LorryGlory.Core.Models.DTOs.VehicleDtos
 {
     public class VehicleSearchDto
     {

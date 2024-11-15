@@ -1,5 +1,6 @@
-﻿using LorryGlory.Core.Models.DTOs;
+﻿using LorryGlory.Core.Models.DTOs.VehicleDtos;
 using LorryGlory.Core.Services.IServices;
+using LorryGlory.Data.Repositories.IRepositories;
 using System.Text;
 using System.Text.Json;
 
@@ -9,10 +10,12 @@ namespace LorryGlory.Core.Services
     {
         private readonly HttpClient _httpClient;
         private readonly string _mockApiUrl = "https://lorryglorymockapiapi20241113130521.azurewebsites.net/api/vehicle/search";
+        private readonly ITaskRepository _taskRepository;
 
-        public VehicleService(HttpClient client)
+        public VehicleService(HttpClient client, ITaskRepository taskRepo)
         {
             _httpClient = client;
+            _taskRepository = taskRepo;
         }
 
         public Task<VehicleDto> CreateAsync(VehicleDto vehicleDto)
@@ -30,9 +33,25 @@ namespace LorryGlory.Core.Services
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<VehicleDto>> GetAllByDriverIdAndDayAsync(int id, DateOnly date)
+        public async Task<IEnumerable<TodaysVehiclesForDriver>> GetAllByDriverIdAndDayAsync(string id, DateOnly date)
         {
-            throw new NotImplementedException();
+            var tasks = await _taskRepository.GetAllByDriverIdAndDayAsync(id, date);
+            if (tasks == null) return null;
+
+            var vehicles = tasks.Select(t => new TodaysVehiclesForDriver
+            {
+                Id = t.Vehicle.Id.ToString(),
+                RegNo = t.Vehicle.RegNo,
+                Make = t.Vehicle.Make,
+                Model = t.Vehicle.Model,
+                Color = t.Vehicle.Color,
+                Type = t.Vehicle.Type,
+                Status = t.Vehicle.Status.Status,
+                StartTime = t.StartTime,
+                EndTime = t.EndTime
+            });
+
+            return vehicles;
         }
 
         public Task<VehicleDto> GetByIdAsync(Guid id)
@@ -60,6 +79,8 @@ namespace LorryGlory.Core.Services
 
                 var jsonOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
                 var vehicle = JsonSerializer.Deserialize<VehicleSearchDto>(result, jsonOptions);
+
+                if (vehicle == null) return null;
 
                 return vehicle;
             }
