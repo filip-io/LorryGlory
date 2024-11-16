@@ -115,5 +115,26 @@ namespace LorryGlory.Api.Helpers
                 Errors = new[] { "The record has been modified by another user" }
             });
         }
+
+        /// <summary>
+        /// Handles database-related errors
+        /// </summary>
+        public static ActionResult<ApiResponse<T>> HandleDatabaseError<T>(
+            ILogger logger,
+            Exception ex,
+            string userMessage = "A database error occurred while processing your request.")
+        {
+            logger.LogError(ex, "Database error: {ErrorMessage}", ex.Message);
+
+            return new ObjectResult(new ApiResponse<T>
+            {
+                Success = false,
+                Message = userMessage,
+                Errors = new[] { userMessage }
+            })
+            {
+                StatusCode = StatusCodes.Status500InternalServerError
+            };
+        }
     }
 }
