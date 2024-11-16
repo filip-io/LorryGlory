@@ -208,11 +208,11 @@ namespace LorryGlory.Data.Data
                     .OnDelete(DeleteBehavior.Cascade);
 
                 // Vehicle relationship
-                entity.HasOne(e => e.Vehicle)
-                    .WithMany()
-                    .HasForeignKey(e => e.FK_VehicleId)
-                    .OnDelete(DeleteBehavior.SetNull)
-                    .IsRequired(false);
+                entity.HasOne(e => e.Vehicle)           // JobTask Entity: "I have one Vehicle property"
+                    .WithMany()                         // Vehicle Entity: "I can be referenced by many JobTasks (but I don't track them)"
+                    .HasForeignKey(e => e.FK_VehicleId) // JobTask Entity: "I use FK_VehicleId to reference my Vehicle"
+                    .OnDelete(DeleteBehavior.SetNull)   // JobTask Entity: "If my Vehicle is deleted, set my FK_VehicleId to null"
+                    .IsRequired(false);                 // JobTask Entity: "My Vehicle/FK_VehicleId can be null"
             });
         }
 

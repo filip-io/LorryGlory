@@ -6,8 +6,8 @@ namespace LorryGlory.Core.Models.DTOs
     public class JobTaskDto
     {
         public Guid Id { get; set; }
-        public string Title { get; set; }
-        public string Description { get; set; }
+        public string? Title { get; set; }
+        public string? Description { get; set; }
         public JobTaskStatus Status { get; set; }
         public bool IsCompleted { get; set; }
 
@@ -15,8 +15,8 @@ namespace LorryGlory.Core.Models.DTOs
         public ContactPersonDto? ContactPerson { get; set; }
 
         // Addresses
-        public AddressDto PickupAddress { get; set; }
-        public AddressDto DeliveryAddress { get; set; }
+        public AddressDto? PickupAddress { get; set; }
+        public AddressDto? DeliveryAddress { get; set; }
 
         // Timestamps
         public DateTime StartTime { get; set; }
@@ -25,19 +25,16 @@ namespace LorryGlory.Core.Models.DTOs
         public DateTime UpdatedAt { get; set; }
 
         // Staff Member Info
-        public string StaffMemberId { get; set; }
-        public StaffMemberDto StaffMember { get; set; }
+        public string? StaffMemberId { get; set; }
+        public StaffMemberDto? StaffMember { get; set; }
 
         // Job Info
-        public Guid JobId { get; set; }
         public JobDto Job { get; set; }
 
         // Vehicle Info (optional)
-        public Guid? VehicleId { get; set; }
         public VehicleDto? Vehicle { get; set; }
 
         // File Link (optional)
-        public Guid? FileLinkId { get; set; }
         public FileLinkDto? FileLink { get; set; }
 
         // Report
@@ -45,6 +42,6 @@ namespace LorryGlory.Core.Models.DTOs
 
         // Company/Tenant Info
         public Guid TenantId { get; set; }
-        public string CompanyName { get; set; }
+        public string? CompanyName { get; set; }
     }
 }

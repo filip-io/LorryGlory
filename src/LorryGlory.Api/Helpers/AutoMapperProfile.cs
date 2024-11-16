@@ -13,9 +13,6 @@ namespace LorryGlory.Api.Helpers
         {
             CreateMap<JobTask, JobTaskDto>()
                 .ForMember(dest => dest.StaffMemberId, opt => opt.MapFrom(src => src.FK_StaffMemberId))
-                .ForMember(dest => dest.JobId, opt => opt.MapFrom(src => src.FK_JobId))
-                .ForMember(dest => dest.VehicleId, opt => opt.MapFrom(src => src.FK_VehicleId))
-                .ForMember(dest => dest.FileLinkId, opt => opt.MapFrom(src => src.FK_FileLink))
                 .ForMember(dest => dest.TenantId, opt => opt.MapFrom(src => src.FK_TenantId))
                 .ForMember(dest => dest.CompanyName, opt => opt.MapFrom(src => src.Company.CompanyName));
 
