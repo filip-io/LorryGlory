@@ -23,16 +23,21 @@ namespace LorryGlory.Api.Controllers
 
         // GET /api/tasks
         [HttpGet]
-        public async Task<ActionResult<ApiResponse<IEnumerable<JobTaskDto>>>> GetAllTasksAsync()
+        public async Task<ActionResult<ApiResponse<IEnumerable<JobTaskDto>>>> GetAllAsync()
         {
             try
             {
                 var tasks = await _taskService.GetAllAsync();
-                return ResponseHelper.HandleSuccess(_logger, tasks, "Tasks retrieved successfully");
+
+                return ResponseHelper.HandleSuccess(_logger, tasks,
+                    tasks.Any() ? "Tasks retrieved successfully" : "No tasks found");
             }
-            catch (KeyNotFoundException ex)
+            catch (InvalidOperationException ex)
             {
-                return ResponseHelper.HandleNotFound<IEnumerable<JobTaskDto>>(_logger, ex.Message);
+                return ResponseHelper.HandleDatabaseError<IEnumerable<JobTaskDto>>(
+                    _logger,
+                    ex,
+                    "An error occurred while retrieving tasks from the database.");
             }
             catch (Exception ex)
             {
@@ -42,7 +47,7 @@ namespace LorryGlory.Api.Controllers
 
         // GET /api/tasks/driver/123e4567-e89b-12d3-a456-426614174000/day/2024-11-07
         [HttpGet("driver/{id}/day/{date}")]
-        public async Task<ActionResult<ApiResponse<IEnumerable<JobTaskDto>>>> GetAllByDriverIdAndDayAsync(Guid id, DateOnly date)
+        public async Task<ActionResult<ApiResponse<IEnumerable<JobTaskDto>>>> GetAllByDriverIdAndDayAsync(Guid id, DateOnly date) // Pontus 
         {
             try
             {
