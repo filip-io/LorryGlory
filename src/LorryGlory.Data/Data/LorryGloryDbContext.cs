@@ -206,6 +206,13 @@ namespace LorryGlory.Data.Data
                     .WithOne(r => r.JobTask)
                     .HasForeignKey<JobTaskReport>(r => r.FK_JobTaskId)
                     .OnDelete(DeleteBehavior.Cascade);
+
+                // Vehicle relationship
+                entity.HasOne(e => e.Vehicle)
+                    .WithMany()
+                    .HasForeignKey(e => e.FK_VehicleId)
+                    .OnDelete(DeleteBehavior.SetNull)
+                    .IsRequired(false);
             });
         }
 
@@ -299,10 +306,7 @@ namespace LorryGlory.Data.Data
                 // Value objects (nested owned entities)
                 entity.OwnsOne(e => e.Status);
                 entity.OwnsOne(e => e.Inspection);
-                entity.OwnsOne(e => e.TechnicalData, td =>
-                {
-                    td.OwnsOne(t => t.Category);
-                });
+                entity.OwnsOne(e => e.TechnicalData);
                 entity.OwnsOne(e => e.Eco);
 
                 // Company relationship

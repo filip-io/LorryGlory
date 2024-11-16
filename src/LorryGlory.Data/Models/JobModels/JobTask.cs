@@ -36,7 +36,7 @@ namespace LorryGlory.Data.Models.JobModels
 
         [ForeignKey("Vehicle")]
         public Guid? FK_VehicleId { get; set; }
-        public Vehicle Vehicle { get; set; }
+        public Vehicle? Vehicle { get; set; }
 
 
         [ForeignKey("FileLink")]
