@@ -213,6 +213,14 @@ namespace LorryGlory.Data.Data
                     .HasForeignKey(e => e.FK_VehicleId) // JobTask Entity: "I use FK_VehicleId to reference my Vehicle"
                     .OnDelete(DeleteBehavior.SetNull)   // JobTask Entity: "If my Vehicle is deleted, set my FK_VehicleId to null"
                     .IsRequired(false);                 // JobTask Entity: "My Vehicle/FK_VehicleId can be null"
+
+                // Default values for CreatedAt and UpdatedAt
+                entity.Property(e => e.CreatedAt)
+                    .HasDefaultValueSql("GETDATE()")
+                    .ValueGeneratedOnAdd();
+
+                entity.Property(e => e.UpdatedAt)
+                    .ValueGeneratedOnAddOrUpdate();
             });
         }
 
