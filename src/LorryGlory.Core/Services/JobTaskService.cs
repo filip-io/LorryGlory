@@ -24,19 +24,21 @@ namespace LorryGlory.Core.Services
         public async Task<IEnumerable<JobTaskDto>> GetAllAsync()
         {
             var jobTasks = await _jobTaskRepository.GetAllAsync();
-
-            var jobTasksList = _mapper.Map<IEnumerable<JobTaskDto>>(jobTasks);
-
-            return jobTasksList;
+            return _mapper.Map<IEnumerable<JobTaskDto>>(jobTasks);
         }
+
         public Task<IEnumerable<JobTaskDto>> GetAllByDriverIdAndDayAsync(Guid id, DateOnly date)
         {
             throw new NotImplementedException();
         }
 
-        public Task<JobTaskDto> GetByIdAsync(Guid id)
+        public async Task<JobTaskDto> GetByIdAsync(Guid id)
         {
-            throw new NotImplementedException();
+            var jobTask = await _jobTaskRepository.GetByIdAsync(id);
+
+            var jobTaskDto = _mapper.Map<JobTaskDto>(jobTask);
+
+            return jobTaskDto;
         }
 
         public Task<JobTaskDto> CreateAsync(JobTaskDto jobTaskDto)
