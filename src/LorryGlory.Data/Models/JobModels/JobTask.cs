@@ -12,21 +12,21 @@ namespace LorryGlory.Data.Models.JobModels
         [Key]
         public Guid Id { get; set; }
         public string Title { get; set; }
-        public string Description { get; set; }
+        public string? Description { get; set; }
         public JobTaskStatus Status { get; set; }
         public bool IsCompleted { get; set; }
 
         public ContactPerson? ContactPerson { get; set; }
-        public Address PickupAddress { get; set; }
-        public Address DeliveryAddress { get; set; }
+        public Address? PickupAddress { get; set; }
+        public Address? DeliveryAddress { get; set; }
 
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
 
 
         [ForeignKey("StaffMember")]
-        public string FK_StaffMemberId { get; set; }
-        public StaffMember StaffMember { get; set; }
+        public string? FK_StaffMemberId { get; set; }
+        public StaffMember? StaffMember { get; set; }
 
 
         [ForeignKey("Job")]
@@ -41,10 +41,10 @@ namespace LorryGlory.Data.Models.JobModels
 
         [ForeignKey("FileLink")]
         public Guid? FK_FileLink { get; set; }
-        public FileLink FileLink { get; set; }
+        public FileLink? FileLink { get; set; }
 
 
-        public JobTaskReport JobTaskReport { get; set; }
+        public JobTaskReport? JobTaskReport { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
 
