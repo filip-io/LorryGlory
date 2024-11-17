@@ -5,6 +5,7 @@ using LorryGlory.Core.Services.IServices;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
+using System.Data.Common;
 
 namespace LorryGlory.Api.Controllers
 {
@@ -28,16 +29,16 @@ namespace LorryGlory.Api.Controllers
             try
             {
                 var tasks = await _taskService.GetAllAsync();
-
                 return ResponseHelper.HandleSuccess(_logger, tasks,
                     tasks.Any() ? "Tasks retrieved successfully" : "No tasks found");
             }
             catch (InvalidOperationException ex)
             {
-                return ResponseHelper.HandleDatabaseError<IEnumerable<JobTaskDto>>(
-                    _logger,
-                    ex,
-                    "An error occurred while retrieving tasks from the database.");
+                return ResponseHelper.HandleBadRequest<IEnumerable<JobTaskDto>>(_logger, ex);
+            }
+            catch (DbException ex)
+            {
+                return ResponseHelper.HandleDatabaseError<IEnumerable<JobTaskDto>>(_logger, ex);
             }
             catch (Exception ex)
             {
@@ -107,7 +108,7 @@ namespace LorryGlory.Api.Controllers
             try
             {
                 if (id != jobTaskDto.Id)
-                    return ResponseHelper.HandleBadRequest<JobTaskDto>(_logger, "URL id does not match task item id");
+                    return ResponseHelper.HandleBadRequest<JobTaskDto>(_logger, "ID in URL does not match ID in request body");
 
                 var updatedTask = await _taskService.UpdateAsync(jobTaskDto);
                 return ResponseHelper.HandleSuccess(_logger, updatedTask, "Task updated successfully");

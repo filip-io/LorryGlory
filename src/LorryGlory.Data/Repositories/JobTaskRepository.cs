@@ -3,8 +3,10 @@ using LorryGlory.Data.Models.JobModels;
 using LorryGlory.Data.Repositories.IRepositories;
 using LorryGlory.Data.Services.IServices;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,18 +17,22 @@ namespace LorryGlory.Data.Repositories
     {
         private readonly LorryGloryDbContext _context;
         private readonly ITenantService _tenantService;
+        private readonly ILogger<JobTaskRepository> _logger;
 
-        public JobTaskRepository(LorryGloryDbContext lorryGloryDbContext, ITenantService tenantService)
+        public JobTaskRepository(LorryGloryDbContext lorryGloryDbContext, ITenantService tenantService, ILogger<JobTaskRepository> logger)
         {
             _context = lorryGloryDbContext;
             _tenantService = tenantService;
+            _logger = logger;
         }
 
         public async Task<IEnumerable<JobTask>> GetAllAsync()
         {
-            try
+            if (_tenantService.TenantId == Guid.Empty)
             {
-                var query = _context.JobTasks
+                throw new InvalidOperationException("TenantId is not set");
+            }
+                var jobTasksQuery = _context.JobTasks
                     .Include(jt => jt.StaffMember)
                     .Include(jt => jt.Job)
                     .Include(jt => jt.Vehicle)
@@ -35,18 +41,9 @@ namespace LorryGlory.Data.Repositories
                     .Include(jt => jt.Company)
                     .Where(jt => jt.FK_TenantId == _tenantService.TenantId);
 
-                // Log the SQL query
-                var sql = query.ToQueryString();
-                Console.WriteLine($"Generated SQL: {sql}");
+                _logger.LogDebug("Generated SQL: {Sql}", jobTasksQuery.ToQueryString());
 
-                return await query.ToListAsync();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error in GetAllAsync: {ex.Message}");
-                Console.WriteLine($"Stack trace: {ex.StackTrace}");
-                throw;
-            }
+                return await jobTasksQuery.ToListAsync();
         }
 
         public Task<IEnumerable<JobTask?>> GetAllByDriverIdAndDayAsync(Guid id, DateOnly date)

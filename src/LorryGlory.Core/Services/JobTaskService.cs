@@ -2,6 +2,7 @@
 using LorryGlory.Core.Models.DTOs;
 using LorryGlory.Core.Services.IServices;
 using LorryGlory.Data.Repositories.IRepositories;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,8 +24,8 @@ namespace LorryGlory.Core.Services
 
         public async Task<IEnumerable<JobTaskDto>> GetAllAsync()
         {
-            var jobTasks = await _jobTaskRepository.GetAllAsync();
-            return _mapper.Map<IEnumerable<JobTaskDto>>(jobTasks);
+                var jobTasks = await _jobTaskRepository.GetAllAsync();
+                return _mapper.Map<IEnumerable<JobTaskDto>>(jobTasks);
         }
 
         public Task<IEnumerable<JobTaskDto>> GetAllByDriverIdAndDayAsync(Guid id, DateOnly date)
