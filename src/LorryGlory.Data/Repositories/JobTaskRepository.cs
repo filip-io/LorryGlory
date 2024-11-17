@@ -41,7 +41,7 @@ namespace LorryGlory.Data.Repositories
                     .Include(jt => jt.Company)
                     .Where(jt => jt.FK_TenantId == _tenantService.TenantId);
 
-                _logger.LogDebug("Generated SQL: {Sql}", jobTasksQuery.ToQueryString());
+                //_logger.LogDebug("Generated SQL: {Sql}", jobTasksQuery.ToQueryString());
 
                 return await jobTasksQuery.ToListAsync();
         }

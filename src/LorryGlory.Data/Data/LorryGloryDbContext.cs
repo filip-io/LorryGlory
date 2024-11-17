@@ -215,12 +215,12 @@ namespace LorryGlory.Data.Data
                     .IsRequired(false);                 // JobTask Entity: "My Vehicle/FK_VehicleId can be null"
 
                 // Default values for CreatedAt and UpdatedAt
-                entity.Property(e => e.CreatedAt)
-                    .HasDefaultValueSql("GETDATE()")
-                    .ValueGeneratedOnAdd();
+                //entity.Property(e => e.CreatedAt)
+                //    .HasDefaultValueSql("GETDATE()")
+                //    .ValueGeneratedOnAdd();
 
-                entity.Property(e => e.UpdatedAt)
-                    .ValueGeneratedOnAddOrUpdate();
+                //entity.Property(e => e.UpdatedAt)
+                //    .ValueGeneratedOnAddOrUpdate();
             });
         }
 
@@ -268,6 +268,14 @@ namespace LorryGlory.Data.Data
                     .WithMany()
                     .HasForeignKey(e => e.FK_FileLink)
                     .OnDelete(DeleteBehavior.Restrict);
+
+                // Default values for CreatedAt and UpdatedAt
+                //entity.Property(e => e.CreatedAt)
+                //    .HasDefaultValueSql("GETDATE()")
+                //    .ValueGeneratedOnAdd();
+
+                //entity.Property(e => e.UpdatedAt)
+                //    .ValueGeneratedOnAddOrUpdate();
             });
         }
 

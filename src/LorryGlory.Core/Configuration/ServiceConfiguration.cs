@@ -14,17 +14,17 @@ public static class ServiceConfiguration
 {
     public static void ConfigureDatabase(this IServiceCollection serviceCollection, string connectionString)
     {
-        //serviceCollection.AddDbContext<LorryGloryDbContext>(options => options.UseSqlServer(connectionString));
+        serviceCollection.AddDbContext<LorryGloryDbContext>(options => options.UseSqlServer(connectionString));
 
-        serviceCollection.AddDbContext<LorryGloryDbContext>((options) =>
-        {
-            options.UseSqlServer(connectionString);
-            options.EnableSensitiveDataLogging();
-            options.LogTo(Console.WriteLine, new[] {
-                DbLoggerCategory.Database.Command.Name,
-                DbLoggerCategory.Query.Name
-            });
-        });
+        //serviceCollection.AddDbContext<LorryGloryDbContext>((options) =>
+        //{
+        //    options.UseSqlServer(connectionString);
+        //    options.EnableSensitiveDataLogging();
+        //    options.LogTo(Console.WriteLine, new[] {
+        //        DbLoggerCategory.Database.Command.Name,
+        //        DbLoggerCategory.Query.Name
+        //    });
+        //});
 
         // Tenant
         serviceCollection.AddScoped<ITenantService, TenantService>();
