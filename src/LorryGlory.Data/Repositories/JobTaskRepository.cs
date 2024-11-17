@@ -26,24 +26,24 @@ namespace LorryGlory.Data.Repositories
             _logger = logger;
         }
 
-        public async Task<IEnumerable<JobTask>> GetAllAsync()
+        public async Task<IEnumerable<JobTask?>> GetAllAsync()
         {
             if (_tenantService.TenantId == Guid.Empty)
             {
                 throw new InvalidOperationException("TenantId is not set");
             }
-                var jobTasksQuery = _context.JobTasks
-                    .Include(jt => jt.StaffMember)
-                    .Include(jt => jt.Job)
-                    .Include(jt => jt.Vehicle)
-                    .Include(jt => jt.FileLink)
-                    .Include(jt => jt.JobTaskReport)
-                    .Include(jt => jt.Company)
-                    .Where(jt => jt.FK_TenantId == _tenantService.TenantId);
+            var jobTasksQuery = _context.JobTasks
+                .Include(jt => jt.StaffMember)
+                .Include(jt => jt.Job)
+                .Include(jt => jt.Vehicle)
+                .Include(jt => jt.FileLink)
+                .Include(jt => jt.JobTaskReport)
+                .Include(jt => jt.Company)
+                .Where(jt => jt.FK_TenantId == _tenantService.TenantId);
 
-                //_logger.LogDebug("Generated SQL: {Sql}", jobTasksQuery.ToQueryString());
+            //_logger.LogDebug("Generated SQL: {Sql}", jobTasksQuery.ToQueryString());
 
-                return await jobTasksQuery.ToListAsync();
+            return await jobTasksQuery.ToListAsync();
         }
 
         public Task<IEnumerable<JobTask?>> GetAllByDriverIdAndDayAsync(Guid id, DateOnly date)
@@ -51,9 +51,24 @@ namespace LorryGlory.Data.Repositories
             throw new NotImplementedException();
         }
 
-        public Task<JobTask?> GetByIdAsync(Guid id)
+        public async Task<JobTask?> GetByIdAsync(Guid id)
         {
-            throw new NotImplementedException();
+            if (_tenantService.TenantId == Guid.Empty)
+            {
+                throw new InvalidOperationException("TenantId is not set");
+            }
+
+            var jobTaskQuery = _context.JobTasks
+                    .Include(jt => jt.StaffMember)
+                    .Include(jt => jt.Job)
+                    .Include(jt => jt.Vehicle)
+                    .Include(jt => jt.FileLink)
+                    .Include(jt => jt.JobTaskReport)
+                    .Include(jt => jt.Company)
+                    .Where(jt => jt.FK_TenantId == _tenantService.TenantId)
+                    .Where(jt => jt.Id == id);
+
+            return await jobTaskQuery.FirstOrDefaultAsync();
         }
 
         public Task<JobTask> AddAsync(JobTask jobTask)

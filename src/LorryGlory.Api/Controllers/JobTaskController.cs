@@ -72,11 +72,21 @@ namespace LorryGlory.Api.Controllers
             try
             {
                 var task = await _taskService.GetByIdAsync(id);
-                return ResponseHelper.HandleSuccess(_logger, task, $"Task {id} retrieved successfully");
+
+                if (task == null)
+                {
+                    return ResponseHelper.HandleNotFound<JobTaskDto>(_logger, $"Task with ID: {id} not found");
+
+                }
+                return ResponseHelper.HandleSuccess(_logger, task, $"Task with ID: {id} retrieved successfully");
             }
             catch (KeyNotFoundException ex)
             {
                 return ResponseHelper.HandleNotFound<JobTaskDto>(_logger, ex.Message);
+            }
+            catch (DbException ex)
+            {
+                return ResponseHelper.HandleDatabaseError<JobTaskDto>(_logger, ex);
             }
             catch (Exception ex)
             {
@@ -95,6 +105,10 @@ namespace LorryGlory.Api.Controllers
             catch (ValidationException ex)
             {
                 return ResponseHelper.HandleValidationException<JobTaskDto>(_logger, ex);
+            }
+            catch (DbException ex)
+            {
+                return ResponseHelper.HandleDatabaseError<JobTaskDto>(_logger, ex);
             }
             catch (Exception ex)
             {
