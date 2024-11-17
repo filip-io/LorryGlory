@@ -11,21 +11,24 @@ namespace LorryGlory.Api.Helpers
     {
         public MappingProfile()
         {
-            CreateMap<JobTask, JobTaskDto>()
-                .ForMember(dest => dest.StaffMemberId, opt => opt.MapFrom(src => src.FK_StaffMemberId))
-                .ForMember(dest => dest.TenantId, opt => opt.MapFrom(src => src.FK_TenantId))
-                .ForMember(dest => dest.CompanyName, opt => opt.MapFrom(src => src.Company.CompanyName));
+            // JobTask mappings
+            CreateMap<JobTask, JobTaskDto>().ReverseMap();
+            CreateMap<JobTaskCreateDto, JobTask>();
+            CreateMap<JobTaskUpdateDto, JobTask>();
 
-            CreateMap<ContactPerson, ContactPersonDto>();
-            CreateMap<Address, AddressDto>()
-                .ForMember(dest => dest.Street, opt => opt.MapFrom(src => src.AddressStreet))
-                .ForMember(dest => dest.City, opt => opt.MapFrom(src => src.AddressCity));
+            // Value objects
+            CreateMap<ContactPerson, ContactPersonDto>().ReverseMap();
+            CreateMap<ContactPersonCreateUpdateDto, ContactPerson>();
 
-            CreateMap<StaffMember, StaffMemberDto>();
-            CreateMap<Job, JobDto>();
-            CreateMap<Vehicle, VehicleDto>();
-            CreateMap<FileLink, FileLinkDto>();
-            CreateMap<JobTaskReport, JobTaskReportDto>();
+            CreateMap<Address, AddressDto>().ReverseMap();
+            CreateMap<AddressCreateUpdateDto, Address>();
+
+            // Related entities
+            CreateMap<StaffMember, StaffMemberDto>().ReverseMap();
+            CreateMap<Job, JobDto>().ReverseMap();
+            CreateMap<Vehicle, VehicleDto>().ReverseMap();
+            CreateMap<FileLink, FileLinkDto>().ReverseMap();
+            CreateMap<JobTaskReport, JobTaskReportDto>().ReverseMap();
         }
     }
 }
