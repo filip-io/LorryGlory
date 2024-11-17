@@ -15,7 +15,7 @@ namespace LorryGlory.Data.Data
     {
         private readonly ITenantService _tenantService;
 
-        public LorryGloryDbContext(DbContextOptions options, ITenantService tenantService)
+        public LorryGloryDbContext(DbContextOptions<LorryGloryDbContext> options, ITenantService tenantService)
             : base(options)
         {
             _tenantService = tenantService;
