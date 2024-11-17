@@ -7,7 +7,7 @@ namespace LorryGlory.Api
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -25,24 +25,10 @@ namespace LorryGlory.Api
 
             builder.Services.AddAuthentication(IdentityConstants.ApplicationScheme)
                 .AddIdentityCookies();
-            builder.Services.AddAuthorizationBuilder();
-// OBS ska den och andra till ServiceConfiguration??
-            builder.Services.AddIdentityCore<StaffMember>()
-               .AddEntityFrameworkStores<LorryGloryDbContext>()
-               .AddApiEndpoints();
-            builder.Services.Configure<IdentityOptions>(options =>
-            {
-                // Password settings.
-                options.Password.RequireDigit = false;
-                options.Password.RequireLowercase = false;
-                options.Password.RequireNonAlphanumeric = false;
-                options.Password.RequireUppercase = false;
-                options.Password.RequiredLength = 1;
-                options.Password.RequiredUniqueChars = 0;
-
-                // Email settings.
-                options.SignIn.RequireConfirmedEmail = false;
-            });
+            
+            builder.Services.ConfigureAuthorization();
+            builder.Services.ConfigureIdentity();
+            builder.Services.ConfigureCookies();
 
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
@@ -58,16 +44,34 @@ namespace LorryGlory.Api
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+            await EnsureRoles(app.Services);
 
             app.UseHttpsRedirection();
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapControllers();
 
             app.Run();
+        }
+
+        // where to put that
+        public static async Task EnsureRoles(IServiceProvider serviceProvider)
+        {
+            using var scope = serviceProvider.CreateScope();
+            var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+
+            var roles = new[] { "Admin", "User", "SuperAdmin" };
+            foreach (var role in roles)
+            {
+                if (!await roleManager.RoleExistsAsync(role))
+                {
+                    await roleManager.CreateAsync(new IdentityRole(role));
+                }
+            }
         }
     }
 }
