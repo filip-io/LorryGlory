@@ -1,7 +1,7 @@
 ﻿using LorryGlory.Api.Models;
 using LorryGlory.Api.Helpers;
 using LorryGlory.Core.Models.DTOs;
-using LorryGlory.Core.Services.IServices;  
+using LorryGlory.Core.Services.IServices;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
@@ -95,11 +95,11 @@ namespace LorryGlory.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<ApiResponse<JobTaskDto>>> CreateAsync(JobTaskDto jobTaskDto)
+        public async Task<ActionResult<ApiResponse<JobTaskDto>>> CreateAsync(JobTaskCreateDto jobTaskCreateDto)
         {
             try
             {
-                var newJobTask = await _taskService.CreateAsync(jobTaskDto);
+                var newJobTask = await _taskService.CreateAsync(jobTaskCreateDto);
                 return ResponseHelper.HandleSuccess(_logger, newJobTask, "Task created successfully");
             }
             catch (ValidationException ex)
@@ -117,14 +117,14 @@ namespace LorryGlory.Api.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<ApiResponse<JobTaskDto>>> UpdateAsync(Guid id, [FromBody] JobTaskDto jobTaskDto)
+        public async Task<ActionResult<ApiResponse<JobTaskDto>>> UpdateAsync(Guid id, [FromBody] JobTaskUpdateDto jobTaskUpdateDto)
         {
             try
             {
-                if (id != jobTaskDto.Id)
+                if (id != jobTaskUpdateDto.Id)
                     return ResponseHelper.HandleBadRequest<JobTaskDto>(_logger, "ID in URL does not match ID in request body");
 
-                var updatedTask = await _taskService.UpdateAsync(jobTaskDto);
+                var updatedTask = await _taskService.UpdateAsync(jobTaskUpdateDto);
                 return ResponseHelper.HandleSuccess(_logger, updatedTask, "Task updated successfully");
             }
             catch (ValidationException ex)
@@ -159,6 +159,10 @@ namespace LorryGlory.Api.Controllers
             catch (KeyNotFoundException ex)
             {
                 return ResponseHelper.HandleNotFound<JobTaskDto>(_logger, ex.Message);
+            }
+            catch (DbUpdateConcurrencyException ex)
+            {
+                return ResponseHelper.HandleConcurrencyException<JobTaskDto>(_logger, ex);
             }
             catch (Exception ex)
             {

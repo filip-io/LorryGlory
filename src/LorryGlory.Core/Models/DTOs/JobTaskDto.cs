@@ -92,6 +92,9 @@ public class JobTaskCreateDto
 public class JobTaskUpdateDto
 {
     [Required]
+    public Guid Id { get; set; }
+
+    [Required]
     [StringLength(100, MinimumLength = 3)]
     public string Title { get; set; }
 
