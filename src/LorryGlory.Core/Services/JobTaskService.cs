@@ -33,7 +33,7 @@ namespace LorryGlory.Core.Services
                 return _mapper.Map<IEnumerable<JobTaskDto>>(jobTasks);
         }
 
-        public Task<IEnumerable<JobTaskDto>> GetAllByDriverIdAndDayAsync(Guid id, DateOnly date)
+        public Task<IEnumerable<JobTaskDto>> GetAllByDriverIdAndDayAsync(string id, DateOnly date)
         {
             throw new NotImplementedException();
         }

@@ -46,9 +46,24 @@ namespace LorryGlory.Data.Repositories
             return await jobTasksQuery.ToListAsync();
         }
 
-        public Task<IEnumerable<JobTask?>> GetAllByDriverIdAndDayAsync(Guid id, DateOnly date)
+        public async Task<IEnumerable<JobTask?>> GetAllByDriverIdAndDayAsync(string id, DateOnly date)
         {
-            throw new NotImplementedException();
+            if (_tenantService.TenantId == Guid.Empty)
+            {
+                throw new InvalidOperationException("TenantId is not set");
+            }
+
+            var jobTasksQuery = _context.JobTasks
+                .Include(jt => jt.StaffMember)
+                .Include(jt => jt.Job)
+                .Include(jt => jt.Vehicle)
+                .Include(jt => jt.FileLink)
+                .Include(jt => jt.JobTaskReport)
+                .Include(jt => jt.Company)
+                .Where(jt => jt.FK_TenantId == _tenantService.TenantId)
+                .Where(jt => jt.FK_StaffMemberId == id);
+
+            return await jobTasksQuery.ToListAsync();
         }
 
         public async Task<JobTask?> GetByIdAsync(Guid id)

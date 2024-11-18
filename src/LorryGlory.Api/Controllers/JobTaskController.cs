@@ -48,12 +48,13 @@ namespace LorryGlory.Api.Controllers
 
         // GET /api/tasks/driver/123e4567-e89b-12d3-a456-426614174000/day/2024-11-07
         [HttpGet("driver/{id}/day/{date}")]
-        public async Task<ActionResult<ApiResponse<IEnumerable<JobTaskDto>>>> GetAllByDriverIdAndDayAsync(Guid id, DateOnly date) // Pontus 
+        public async Task<ActionResult<ApiResponse<IEnumerable<JobTaskDto>>>> GetAllByDriverIdAndDayAsync(string id, DateOnly date)
         {
             try
             {
                 var tasks = await _taskService.GetAllByDriverIdAndDayAsync(id, date);
-                return ResponseHelper.HandleSuccess(_logger, tasks, $"Tasks for driver {id} on {date} retrieved successfully");
+                return ResponseHelper.HandleSuccess(_logger, tasks, 
+                    tasks.Any() ? $"Tasks for driver {id} on {date} retrieved successfully" : $"No tasks exist for driver with ID: {id} on {date}");
             }
             catch (KeyNotFoundException ex)
             {
