@@ -8,7 +8,7 @@
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
         <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
         <link rel="stylesheet" href="~/LorryGlory_Frontend_MVC.styles.css" asp-append-version="true" />
-        <link href="~/css/output.css" rel="stylesheet" />
+        <link rel="stylesheet" href="~/css/output.css" asp-append-version="true" />
         <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
     </head>
 
@@ -64,6 +64,9 @@
                                         Menu</a>
                                     <a asp-controller="CurrentVehicle" asp-action="Index" class="block w-full max-w-xs px-4 py-2 text-lg text-white bg-blue-600 rounded-lg shadow-md hover:bg-blue-700 hover:shadow-lg transition duration-200">
                                         Current Vehicle</a>
+                                    <a asp-controller="DetailedVehicle" asp-action="Index" class="block w-full max-w-xs px-4 py-2 text-lg text-white bg-blue-600 rounded-lg shadow-md hover:bg-blue-700 hover:shadow-lg transition duration-200">
+                                        Detailed Vehicle
+                                    </a>
                                     <a href="#" class="block w-full max-w-xs px-4 py-2 text-lg text-white bg-gray-600 rounded-lg shadow-md hover:bg-blue-700 hover:shadow-lg transition duration-200">
                                         Settings</a>
                                     <a href="#" class="block w-full max-w-xs px-4 py-2 text-lg text-white bg-yellow-600 rounded-lg shadow-md hover:bg-blue-700 hover:shadow-lg transition duration-200">
@@ -79,6 +82,7 @@
                             <a asp-controller="Login" asp-action="Index" class="text-gray-800 hover:text-blue-600">Login</a>
                             <a asp-controller="Menu" asp-action="Index" class="text-gray-800 hover:text-blue-600">Menu</a>
                             <a asp-controller="CurrentVehicle" asp-action="Index" class="text-gray-800 hover:text-blue-600">Current Vehicle</a>
+                            <a asp-controller="DetailedVehicle" asp-action="Index" class="text-gray-800 hover:text-blue-600">Detailed Vehicle</a>
                         </div>
                     </div>
                 </div>
