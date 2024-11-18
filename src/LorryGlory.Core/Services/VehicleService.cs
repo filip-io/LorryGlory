@@ -61,9 +61,13 @@ namespace LorryGlory.Core.Services
             return vehicles;
         }
 
-        public Task<VehicleDto> GetByIdAsync(Guid id)
+        public async Task<VehicleDto> GetByIdAsync(Guid id)
         {
-            throw new NotImplementedException();
+            var vehicle = await _vehicleRepository.GetByIdAsync(id);
+            if (vehicle == null) return null;
+
+            var vehicleDto = vehicle.ToVehicleDto();
+            return vehicleDto;
         }
 
         public async Task<VehicleSearchDto> GetByRegNoAsync(string regNo)

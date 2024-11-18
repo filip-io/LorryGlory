@@ -1,11 +1,9 @@
-﻿using LorryGlory.Api.Helpers;
-using LorryGlory.Api.Models;
+﻿using LorryGlory.Api.Models;
 using LorryGlory.Api.Models.DataTransferObjects;
 using LorryGlory.Api.Models.DataTransferObjects.VehicleDtos;
 using LorryGlory.Core.Models.DTOs.VehicleDtos;
 using LorryGlory.Core.Services.IServices;
 using Microsoft.AspNetCore.Mvc;
-using System.Reflection.Metadata.Ecma335;
 
 namespace LorryGlory.Api.Controllers
 {
@@ -26,8 +24,23 @@ namespace LorryGlory.Api.Controllers
             try
             {
                 var vehicles = await _vehicleService.GetAllAsync();
-
                 return Ok(vehicles);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet("GetById/{id}")]
+        public async Task<IActionResult> GetById(Guid id)
+        {
+            try
+            {
+                var vehicle = await _vehicleService.GetByIdAsync(id);
+                if (vehicle == null) return NotFound();
+
+                return Ok(vehicle);
             }
             catch (Exception ex)
             {

@@ -27,13 +27,16 @@ namespace LorryGlory.Data.Repositories
         public async Task<IEnumerable<Vehicle?>> GetAllVehiclesAsync()
         {
             var vehicles = await _context.Vehicles.ToListAsync();
-
             return vehicles;
         }
 
-        public Task<Vehicle?> GetByIdAsync(Guid id)
+        public async Task<Vehicle?> GetByIdAsync(Guid id)
         {
-            throw new NotImplementedException();
+            var vehicle = await _context.Vehicles
+                .Include(v => v.Company)
+                .Include(v => v.VehicleProblems)
+                .SingleOrDefaultAsync(v => v.Id == id);
+            return vehicle;
         }
 
         public Task<Vehicle?> GetByRegNoAsync(string regNo)
