@@ -1,4 +1,5 @@
-﻿using LorryGlory.Core.Models.DTOs.VehicleDtos;
+﻿using LorryGlory.Core.Mappings;
+using LorryGlory.Core.Models.DTOs.VehicleDtos;
 using LorryGlory.Core.Services.IServices;
 using LorryGlory.Data.Repositories.IRepositories;
 using System.Text;
@@ -11,11 +12,13 @@ namespace LorryGlory.Core.Services
         private readonly HttpClient _httpClient;
         private readonly string _mockApiUrl = "https://lorryglorymockapiapi20241113130521.azurewebsites.net/api/vehicle/search";
         private readonly ITaskRepository _taskRepository;
+        private readonly IVehicleRepository _vehicleRepository;
 
-        public VehicleService(HttpClient client, ITaskRepository taskRepo)
+        public VehicleService(HttpClient client, ITaskRepository taskRepo, IVehicleRepository vehicleRepo)
         {
             _httpClient = client;
             _taskRepository = taskRepo;
+            _vehicleRepository = vehicleRepo;
         }
 
         public Task<VehicleDto> CreateAsync(VehicleDto vehicleDto)
@@ -28,9 +31,13 @@ namespace LorryGlory.Core.Services
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<VehicleDto>> GetAllAsync()
+        public async Task<IEnumerable<GetAllVehiclesDto>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            var vehicles = await _vehicleRepository.GetAllVehiclesAsync();
+
+            var result = vehicles.Select(v => v?.ToGetAllVehiclesDto());
+
+            return result;
         }
 
         public async Task<IEnumerable<TodaysVehiclesForDriver>> GetAllByDriverIdAndDayAsync(string id, DateOnly date)

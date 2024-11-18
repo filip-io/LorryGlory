@@ -1,15 +1,18 @@
 ﻿using LorryGlory.Data.Models.CompanyModels;
-using LorryGlory.Data.Models.VehicleModels.Enums;
-using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations;
+using LorryGlory.Data.Models.VehicleModels;
+using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Runtime.CompilerServices;
 
-namespace LorryGlory.Data.Models.VehicleModels
+namespace LorryGlory.Core.Models.DTOs.VehicleDtos
 {
-    [Index(nameof(RegNo), IsUnique = true)]
-    public class Vehicle
+    public class GetAllVehiclesDto
     {
-        [Key]
         public Guid Id { get; set; }
         public string RegNo { get; set; }
         public string Vin { get; set; }
@@ -27,11 +30,11 @@ namespace LorryGlory.Data.Models.VehicleModels
         public TechnicalData? TechnicalData { get; set; }
         public EcoDetails? Eco { get; set; }
 
-        public ICollection<VehicleProblem>? VehicleProblems { get; set; }
+        //public ICollection<VehicleProblem>? VehicleProblems { get; set; }
 
-        [ForeignKey("Company")]
-        public Guid? FK_TenantId { get; set; }
-        public Company? Company { get; set; }
+        //[ForeignKey("Company")]
+        //public Guid? FK_TenantId { get; set; }
+        //public Company? Company { get; set; }
     }
     public class VehicleStatus
     {
@@ -72,7 +75,7 @@ namespace LorryGlory.Data.Models.VehicleModels
         public int AxleWidth1 { get; set; } // Distance between axle 1 - 2
         public int AxleWidth2 { get; set; } // Distance between axle 2 - 3
         public int AxleWidth3 { get; set; } // Distance between axle 3 - 4
-        //public int FK_Category_Id { get; set; }
+        public int FK_Category_Id { get; set; }
         public string Category { get; set; } // Used to be VehicleCategoryEu
     }
     public class EcoDetails
@@ -80,9 +83,4 @@ namespace LorryGlory.Data.Models.VehicleModels
         [StringLength(maximumLength: 3)]
         public string EuroClass { get; set; }
     }
-    //public class VehicleCategoryEu
-    //{
-    //    public string Code { get; set; }
-    //    public string Type { get; set; }
-    //}
 }

@@ -1,11 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
 namespace LorryGlory.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class UpdateVehicle3 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -31,7 +32,7 @@ namespace LorryGlory.Data.Migrations
                     TenantId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CompanyName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     OrganizationNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Address_AddressStreet = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Address_PostalCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Address_AddressCity = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -157,7 +158,7 @@ namespace LorryGlory.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    RegNo = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    RegNo = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Vin = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Make = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Model = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -166,8 +167,8 @@ namespace LorryGlory.Data.Migrations
                     TypeClass = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     VehicleYear = table.Column<int>(type: "int", nullable: false),
                     ModelYear = table.Column<int>(type: "int", nullable: false),
-                    StolenStatus = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Status_Status = table.Column<int>(type: "int", nullable: true),
+                    StolenStatus = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Status_Status = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Status_FirstRegistered = table.Column<DateOnly>(type: "date", nullable: true),
                     Inspection_LatestInspection = table.Column<DateOnly>(type: "date", nullable: true),
                     Inspection_InspectionValidUntil = table.Column<DateOnly>(type: "date", nullable: true),
@@ -175,10 +176,10 @@ namespace LorryGlory.Data.Migrations
                     TechnicalData_PowerHp = table.Column<int>(type: "int", nullable: true),
                     TechnicalData_PowerKw = table.Column<int>(type: "int", nullable: true),
                     TechnicalData_CylinderVolume = table.Column<int>(type: "int", nullable: true),
-                    TechnicalData_Fuel = table.Column<int>(type: "int", nullable: true),
-                    TechnicalData_Transmission = table.Column<int>(type: "int", nullable: true),
+                    TechnicalData_Fuel = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TechnicalData_Transmission = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     TechnicalData_FourWheelDrive = table.Column<bool>(type: "bit", nullable: true),
-                    TechnicalData_Chassi = table.Column<int>(type: "int", nullable: true),
+                    TechnicalData_Chassi = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     TechnicalData_Length = table.Column<int>(type: "int", nullable: true),
                     TechnicalData_Width = table.Column<int>(type: "int", nullable: true),
                     TechnicalData_Height = table.Column<int>(type: "int", nullable: true),
@@ -195,11 +196,9 @@ namespace LorryGlory.Data.Migrations
                     TechnicalData_AxleWidth1 = table.Column<int>(type: "int", nullable: true),
                     TechnicalData_AxleWidth2 = table.Column<int>(type: "int", nullable: true),
                     TechnicalData_AxleWidth3 = table.Column<int>(type: "int", nullable: true),
-                    TechnicalData_FK_Category_Id = table.Column<int>(type: "int", nullable: true),
-                    TechnicalData_Category_Code = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    TechnicalData_Category_Type = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TechnicalData_Category = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Eco_EuroClass = table.Column<string>(type: "nvarchar(3)", maxLength: 3, nullable: true),
-                    FK_TenantId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    FK_TenantId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -333,7 +332,7 @@ namespace LorryGlory.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Status = table.Column<int>(type: "int", nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: true),
                     IsCompleted = table.Column<bool>(type: "bit", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     EstimatedTotalTime = table.Column<TimeSpan>(type: "time", nullable: true),
@@ -478,7 +477,8 @@ namespace LorryGlory.Data.Migrations
                     CreatedById = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     UpdatedById = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    StaffMemberId = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -489,6 +489,11 @@ namespace LorryGlory.Data.Migrations
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_JobTaskReports_AspNetUsers_StaffMemberId",
+                        column: x => x.StaffMemberId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_JobTaskReports_AspNetUsers_UpdatedById",
                         column: x => x.UpdatedById,
@@ -523,7 +528,7 @@ namespace LorryGlory.Data.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "FK_TenantId", "FirstName", "JobTitle", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PersonalNumber", "PhoneNumber", "PhoneNumberConfirmed", "PreferredLanguage", "SecurityStamp", "TwoFactorEnabled", "UserName", "Address_AddressCity", "Address_AddressCountry", "Address_AddressStreet", "Address_PostalCode" },
-                values: new object[] { "1STAFFM", 0, "2d5d823c-05c1-4f60-a6e8-abea43b6599a", "magda@m.m", false, new Guid("1d2b0228-4d0d-4c23-8b49-01a698857709"), "Magda", 2, "Kubien", false, null, null, null, null, "YYYYMMDD-0000", null, false, "PL", "e6a49b39-edf4-49ea-926e-91a35fc94e56", false, "magda@m.m", "Kato", "PL", "Vägen till ingenstans", "44444" });
+                values: new object[] { "1STAFFM", 0, "b8cd87bf-b671-466e-9e06-bff159186bc8", "magda@m.m", false, new Guid("1d2b0228-4d0d-4c23-8b49-01a698857709"), "Magda", 2, "Kubien", false, null, null, null, null, "YYYYMMDD-0000", null, false, "PL", "bd36c4ff-e1a4-4533-80c2-0c701da852ad", false, "magda@m.m", "Kato", "PL", "Vägen till ingenstans", "44444" });
 
             migrationBuilder.InsertData(
                 table: "FileLinks",
@@ -533,17 +538,17 @@ namespace LorryGlory.Data.Migrations
             migrationBuilder.InsertData(
                 table: "Jobs",
                 columns: new[] { "Id", "ActualTotalTime", "CreatedAt", "Description", "EstimatedTotalTime", "FK_ClientId", "FK_FileLink", "FK_TenantId", "IsCompleted", "Status", "UpdatedAt" },
-                values: new object[] { new Guid("1a2b0228-4d0d-4c23-8b49-01a698857709"), null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Test Job", null, null, null, new Guid("1d2b0228-4d0d-4c23-8b49-01a698857709"), false, 0, null });
+                values: new object[] { new Guid("1a2b0228-4d0d-4c23-8b49-01a698857709"), null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Test Job", null, null, null, new Guid("1d2b0228-4d0d-4c23-8b49-01a698857709"), false, null, null });
 
             migrationBuilder.InsertData(
                 table: "Vehicles",
-                columns: new[] { "Id", "Eco_EuroClass", "Inspection_InspectionValidUntil", "Inspection_LatestInspection", "Inspection_Meter", "TechnicalData_AxleWidth1", "TechnicalData_AxleWidth2", "TechnicalData_AxleWidth3", "TechnicalData_CarriageWeight", "TechnicalData_Chassi", "TechnicalData_CylinderVolume", "TechnicalData_FK_Category_Id", "TechnicalData_FourWheelDrive", "TechnicalData_Fuel", "TechnicalData_Height", "TechnicalData_KerbWeight", "TechnicalData_Length", "TechnicalData_LoadWeight", "TechnicalData_PowerHp", "TechnicalData_PowerKw", "TechnicalData_TireBack", "TechnicalData_TireFront", "TechnicalData_TotalWeight", "TechnicalData_TrailerWeight", "TechnicalData_TrailerWeightB", "TechnicalData_TrailerWeightBe", "TechnicalData_Transmission", "TechnicalData_UnbrakedTrailerWeight", "TechnicalData_Width", "Color", "FK_TenantId", "Make", "Model", "ModelYear", "RegNo", "StolenStatus", "Type", "TypeClass", "VehicleYear", "Vin", "Status_FirstRegistered", "Status_Status" },
-                values: new object[] { new Guid("3d2b0228-4d0d-4c23-8b49-01a698857709"), "6", new DateOnly(2024, 1, 1), new DateOnly(2023, 1, 1), 150000, 3600, 1350, 0, 40000, 12, 13000, 1, true, 2, 4000, 7500, 16500, 32500, 450, 335, "315/80R22.5", "315/80R22.5", 40000, 36000, 3500, 3500, 1, 750, 2550, "RED", new Guid("1d2b0228-4d0d-4c23-8b49-01a698857709"), "Scania", "R450", 2020, "ABC123", "NOT_STOLEN", "DRAGBIL", "LASTBIL", 2020, "YS2R4X20009176429", new DateOnly(2020, 1, 1), 2 });
+                columns: new[] { "Id", "Eco_EuroClass", "Inspection_InspectionValidUntil", "Inspection_LatestInspection", "Inspection_Meter", "TechnicalData_AxleWidth1", "TechnicalData_AxleWidth2", "TechnicalData_AxleWidth3", "TechnicalData_CarriageWeight", "TechnicalData_Category", "TechnicalData_Chassi", "TechnicalData_CylinderVolume", "TechnicalData_FourWheelDrive", "TechnicalData_Fuel", "TechnicalData_Height", "TechnicalData_KerbWeight", "TechnicalData_Length", "TechnicalData_LoadWeight", "TechnicalData_PowerHp", "TechnicalData_PowerKw", "TechnicalData_TireBack", "TechnicalData_TireFront", "TechnicalData_TotalWeight", "TechnicalData_TrailerWeight", "TechnicalData_TrailerWeightB", "TechnicalData_TrailerWeightBe", "TechnicalData_Transmission", "TechnicalData_UnbrakedTrailerWeight", "TechnicalData_Width", "Color", "FK_TenantId", "Make", "Model", "ModelYear", "RegNo", "StolenStatus", "Type", "TypeClass", "VehicleYear", "Vin", "Status_FirstRegistered", "Status_Status" },
+                values: new object[] { new Guid("3d2b0228-4d0d-4c23-8b49-01a698857709"), "6", new DateOnly(2024, 1, 1), new DateOnly(2023, 1, 1), 150000, 3600, 1350, 0, 40000, "M1", "Lastbil", 13000, true, "Diesel", 4000, 7500, 16500, 32500, 450, 335, "315/80R22.5", "315/80R22.5", 40000, 36000, 3500, 3500, "Manuell", 750, 2550, "RED", new Guid("1d2b0228-4d0d-4c23-8b49-01a698857709"), "Scania", "R450", 2020, "ABC123", "NOT_STOLEN", "DRAGBIL", "LASTBIL", 2020, "YS2R4X20009176429", new DateOnly(2020, 1, 1), "I Trafik" });
 
             migrationBuilder.InsertData(
                 table: "JobTasks",
                 columns: new[] { "Id", "CreatedAt", "Description", "EndTime", "FK_FileLink", "FK_JobId", "FK_StaffMemberId", "FK_TenantId", "FK_VehicleId", "IsCompleted", "StartTime", "Status", "Title", "UpdatedAt", "ContactPerson_Email", "ContactPerson_Name", "ContactPerson_PhoneNumber", "DeliveryAddress_AddressCity", "DeliveryAddress_AddressCountry", "DeliveryAddress_AddressStreet", "DeliveryAddress_PostalCode", "PickupAddress_AddressCity", "PickupAddress_AddressCountry", "PickupAddress_AddressStreet", "PickupAddress_PostalCode" },
-                values: new object[] { new Guid("9a2b0228-4d0d-4c23-8b49-01a698857709"), new DateTime(2024, 11, 12, 17, 40, 13, 52, DateTimeKind.Local).AddTicks(7315), "Test delivery task", new DateTime(2024, 11, 12, 19, 40, 13, 52, DateTimeKind.Local).AddTicks(7315), new Guid("5d2b0228-4d0d-4c23-8b49-01a698857709"), new Guid("1a2b0228-4d0d-4c23-8b49-01a698857709"), "1STAFFM", new Guid("1d2b0228-4d0d-4c23-8b49-01a698857709"), new Guid("3d2b0228-4d0d-4c23-8b49-01a698857709"), false, new DateTime(2024, 11, 12, 17, 40, 13, 52, DateTimeKind.Local).AddTicks(7315), 666, "Delivery Task", new DateTime(2024, 11, 12, 17, 40, 13, 52, DateTimeKind.Local).AddTicks(7315), "john@example.com", "John Doe", null, "Delivery City", "Sweden", "Delivery Street 2", "67890", "Pickup City", "Sweden", "Pickup Street 1", "12345" });
+                values: new object[] { new Guid("9a2b0228-4d0d-4c23-8b49-01a698857709"), new DateTime(2024, 11, 17, 15, 46, 56, 229, DateTimeKind.Local).AddTicks(8564), "Test delivery task", new DateTime(2024, 11, 17, 17, 46, 56, 229, DateTimeKind.Local).AddTicks(8564), new Guid("5d2b0228-4d0d-4c23-8b49-01a698857709"), new Guid("1a2b0228-4d0d-4c23-8b49-01a698857709"), "1STAFFM", new Guid("1d2b0228-4d0d-4c23-8b49-01a698857709"), new Guid("3d2b0228-4d0d-4c23-8b49-01a698857709"), false, new DateTime(2024, 11, 17, 15, 46, 56, 229, DateTimeKind.Local).AddTicks(8564), 666, "Delivery Task", new DateTime(2024, 11, 17, 15, 46, 56, 229, DateTimeKind.Local).AddTicks(8564), "john@example.com", "John Doe", null, "Delivery City", "Sweden", "Delivery Street 2", "67890", "Pickup City", "Sweden", "Pickup Street 1", "12345" });
 
             migrationBuilder.InsertData(
                 table: "VehicleProblems",
@@ -649,6 +654,11 @@ namespace LorryGlory.Data.Migrations
                 column: "FK_TenantId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_JobTaskReports_StaffMemberId",
+                table: "JobTaskReports",
+                column: "StaffMemberId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_JobTaskReports_UpdatedById",
                 table: "JobTaskReports",
                 column: "UpdatedById");
@@ -712,6 +722,12 @@ namespace LorryGlory.Data.Migrations
                 name: "IX_Vehicles_FK_TenantId",
                 table: "Vehicles",
                 column: "FK_TenantId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Vehicles_RegNo",
+                table: "Vehicles",
+                column: "RegNo",
+                unique: true);
         }
 
         /// <inheritdoc />

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LorryGlory.Data.Migrations
 {
     [DbContext(typeof(LorryGloryDbContext))]
-    [Migration("20241112164013_Initial")]
-    partial class Initial
+    [Migration("20241117144656_UpdateVehicle3")]
+    partial class UpdateVehicle3
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -70,7 +70,6 @@ namespace LorryGlory.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PhoneNumber")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("TenantId");
@@ -162,7 +161,7 @@ namespace LorryGlory.Data.Migrations
                     b.Property<bool>("IsCompleted")
                         .HasColumnType("bit");
 
-                    b.Property<int>("Status")
+                    b.Property<int?>("Status")
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("UpdatedAt")
@@ -185,8 +184,7 @@ namespace LorryGlory.Data.Migrations
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "Test Job",
                             FK_TenantId = new Guid("1d2b0228-4d0d-4c23-8b49-01a698857709"),
-                            IsCompleted = false,
-                            Status = 0
+                            IsCompleted = false
                         });
                 });
 
@@ -256,19 +254,19 @@ namespace LorryGlory.Data.Migrations
                         new
                         {
                             Id = new Guid("9a2b0228-4d0d-4c23-8b49-01a698857709"),
-                            CreatedAt = new DateTime(2024, 11, 12, 17, 40, 13, 52, DateTimeKind.Local).AddTicks(7315),
+                            CreatedAt = new DateTime(2024, 11, 17, 15, 46, 56, 229, DateTimeKind.Local).AddTicks(8564),
                             Description = "Test delivery task",
-                            EndTime = new DateTime(2024, 11, 12, 19, 40, 13, 52, DateTimeKind.Local).AddTicks(7315),
+                            EndTime = new DateTime(2024, 11, 17, 17, 46, 56, 229, DateTimeKind.Local).AddTicks(8564),
                             FK_FileLink = new Guid("5d2b0228-4d0d-4c23-8b49-01a698857709"),
                             FK_JobId = new Guid("1a2b0228-4d0d-4c23-8b49-01a698857709"),
                             FK_StaffMemberId = "1STAFFM",
                             FK_TenantId = new Guid("1d2b0228-4d0d-4c23-8b49-01a698857709"),
                             FK_VehicleId = new Guid("3d2b0228-4d0d-4c23-8b49-01a698857709"),
                             IsCompleted = false,
-                            StartTime = new DateTime(2024, 11, 12, 17, 40, 13, 52, DateTimeKind.Local).AddTicks(7315),
+                            StartTime = new DateTime(2024, 11, 17, 15, 46, 56, 229, DateTimeKind.Local).AddTicks(8564),
                             Status = 666,
                             Title = "Delivery Task",
-                            UpdatedAt = new DateTime(2024, 11, 12, 17, 40, 13, 52, DateTimeKind.Local).AddTicks(7315)
+                            UpdatedAt = new DateTime(2024, 11, 17, 15, 46, 56, 229, DateTimeKind.Local).AddTicks(8564)
                         });
                 });
 
@@ -297,6 +295,9 @@ namespace LorryGlory.Data.Migrations
                     b.Property<Guid>("FK_TenantId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("StaffMemberId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2");
 
@@ -314,6 +315,8 @@ namespace LorryGlory.Data.Migrations
                         .IsUnique();
 
                     b.HasIndex("FK_TenantId");
+
+                    b.HasIndex("StaffMemberId");
 
                     b.HasIndex("UpdatedById");
 
@@ -417,7 +420,7 @@ namespace LorryGlory.Data.Migrations
                         {
                             Id = "1STAFFM",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "2d5d823c-05c1-4f60-a6e8-abea43b6599a",
+                            ConcurrencyStamp = "b8cd87bf-b671-466e-9e06-bff159186bc8",
                             Email = "magda@m.m",
                             EmailConfirmed = false,
                             FK_TenantId = new Guid("1d2b0228-4d0d-4c23-8b49-01a698857709"),
@@ -428,7 +431,7 @@ namespace LorryGlory.Data.Migrations
                             PersonalNumber = "YYYYMMDD-0000",
                             PhoneNumberConfirmed = false,
                             PreferredLanguage = "PL",
-                            SecurityStamp = "e6a49b39-edf4-49ea-926e-91a35fc94e56",
+                            SecurityStamp = "bd36c4ff-e1a4-4533-80c2-0c701da852ad",
                             TwoFactorEnabled = false,
                             UserName = "magda@m.m"
                         });
@@ -471,7 +474,7 @@ namespace LorryGlory.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("FK_TenantId")
+                    b.Property<Guid?>("FK_TenantId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Make")
@@ -487,10 +490,9 @@ namespace LorryGlory.Data.Migrations
 
                     b.Property<string>("RegNo")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("StolenStatus")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Type")
@@ -511,6 +513,9 @@ namespace LorryGlory.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("FK_TenantId");
+
+                    b.HasIndex("RegNo")
+                        .IsUnique();
 
                     b.ToTable("Vehicles");
 
@@ -1032,6 +1037,10 @@ namespace LorryGlory.Data.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("LorryGlory.Data.Models.StaffModels.StaffMember", null)
+                        .WithMany("JobTaskReports")
+                        .HasForeignKey("StaffMemberId");
+
                     b.HasOne("LorryGlory.Data.Models.StaffModels.StaffMember", "UpdatedBy")
                         .WithMany()
                         .HasForeignKey("UpdatedById")
@@ -1132,8 +1141,7 @@ namespace LorryGlory.Data.Migrations
                     b.HasOne("LorryGlory.Data.Models.CompanyModels.Company", "Company")
                         .WithMany("Vehicles")
                         .HasForeignKey("FK_TenantId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.OwnsOne("LorryGlory.Data.Models.VehicleModels.EcoDetails", "Eco", b1 =>
                         {
@@ -1208,20 +1216,23 @@ namespace LorryGlory.Data.Migrations
                             b1.Property<int>("CarriageWeight")
                                 .HasColumnType("int");
 
-                            b1.Property<int>("Chassi")
-                                .HasColumnType("int");
+                            b1.Property<string>("Category")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("Chassi")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
 
                             b1.Property<int>("CylinderVolume")
-                                .HasColumnType("int");
-
-                            b1.Property<int>("FK_Category_Id")
                                 .HasColumnType("int");
 
                             b1.Property<bool>("FourWheelDrive")
                                 .HasColumnType("bit");
 
-                            b1.Property<int>("Fuel")
-                                .HasColumnType("int");
+                            b1.Property<string>("Fuel")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
 
                             b1.Property<int>("Height")
                                 .HasColumnType("int");
@@ -1261,8 +1272,9 @@ namespace LorryGlory.Data.Migrations
                             b1.Property<int>("TrailerWeightBe")
                                 .HasColumnType("int");
 
-                            b1.Property<int>("Transmission")
-                                .HasColumnType("int");
+                            b1.Property<string>("Transmission")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
 
                             b1.Property<int>("UnbrakedTrailerWeight")
                                 .HasColumnType("int");
@@ -1277,30 +1289,6 @@ namespace LorryGlory.Data.Migrations
                             b1.WithOwner()
                                 .HasForeignKey("VehicleId");
 
-                            b1.OwnsOne("LorryGlory.Data.Models.VehicleModels.VehicleCategoryEu", "Category", b2 =>
-                                {
-                                    b2.Property<Guid>("TechnicalDataVehicleId")
-                                        .HasColumnType("uniqueidentifier");
-
-                                    b2.Property<string>("Code")
-                                        .IsRequired()
-                                        .HasColumnType("nvarchar(max)");
-
-                                    b2.Property<string>("Type")
-                                        .IsRequired()
-                                        .HasColumnType("nvarchar(max)");
-
-                                    b2.HasKey("TechnicalDataVehicleId");
-
-                                    b2.ToTable("Vehicles");
-
-                                    b2.WithOwner()
-                                        .HasForeignKey("TechnicalDataVehicleId");
-                                });
-
-                            b1.Navigation("Category")
-                                .IsRequired();
-
                             b1.HasData(
                                 new
                                 {
@@ -1309,11 +1297,11 @@ namespace LorryGlory.Data.Migrations
                                     AxleWidth2 = 1350,
                                     AxleWidth3 = 0,
                                     CarriageWeight = 40000,
-                                    Chassi = 12,
+                                    Category = "M1",
+                                    Chassi = "Lastbil",
                                     CylinderVolume = 13000,
-                                    FK_Category_Id = 1,
                                     FourWheelDrive = true,
-                                    Fuel = 2,
+                                    Fuel = "Diesel",
                                     Height = 4000,
                                     KerbWeight = 7500,
                                     Length = 16500,
@@ -1326,7 +1314,7 @@ namespace LorryGlory.Data.Migrations
                                     TrailerWeight = 36000,
                                     TrailerWeightB = 3500,
                                     TrailerWeightBe = 3500,
-                                    Transmission = 1,
+                                    Transmission = "Manuell",
                                     UnbrakedTrailerWeight = 750,
                                     Width = 2550
                                 });
@@ -1340,8 +1328,9 @@ namespace LorryGlory.Data.Migrations
                             b1.Property<DateOnly>("FirstRegistered")
                                 .HasColumnType("date");
 
-                            b1.Property<int>("Status")
-                                .HasColumnType("int");
+                            b1.Property<string>("Status")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
 
                             b1.HasKey("VehicleId");
 
@@ -1355,7 +1344,7 @@ namespace LorryGlory.Data.Migrations
                                 {
                                     VehicleId = new Guid("3d2b0228-4d0d-4c23-8b49-01a698857709"),
                                     FirstRegistered = new DateOnly(2020, 1, 1),
-                                    Status = 2
+                                    Status = "I Trafik"
                                 });
                         });
 
@@ -1485,6 +1474,8 @@ namespace LorryGlory.Data.Migrations
 
             modelBuilder.Entity("LorryGlory.Data.Models.StaffModels.StaffMember", b =>
                 {
+                    b.Navigation("JobTaskReports");
+
                     b.Navigation("JobTasks");
                 });
 

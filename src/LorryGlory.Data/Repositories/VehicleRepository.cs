@@ -1,15 +1,19 @@
-﻿using LorryGlory.Data.Models.VehicleModels;
+﻿using LorryGlory.Data.Data;
+using LorryGlory.Data.Models.VehicleModels;
 using LorryGlory.Data.Repositories.IRepositories;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace LorryGlory.Data.Repositories
 {
-    internal class VehicleRepository : IVehicleRepository
+    public class VehicleRepository : IVehicleRepository
     {
+        private readonly LorryGloryDbContext _context;
+
+        public VehicleRepository(LorryGloryDbContext context)
+        {
+             _context = context;
+        }
+
         public Task<Vehicle> AddAsync(Vehicle vehicle)
         {
             throw new NotImplementedException();
@@ -20,9 +24,11 @@ namespace LorryGlory.Data.Repositories
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<Vehicle?>> GetAllVehiclesAsync()
+        public async Task<IEnumerable<Vehicle?>> GetAllVehiclesAsync()
         {
-            throw new NotImplementedException();
+            var vehicles = await _context.Vehicles.ToListAsync();
+
+            return vehicles;
         }
 
         public Task<Vehicle?> GetByIdAsync(Guid id)

@@ -23,6 +23,7 @@ public static class ServiceConfiguration
         serviceCollection.AddScoped<IJobTaskService, JobTaskService>();
         serviceCollection.AddScoped<ITaskRepository, TaskRepository>();
         serviceCollection.AddScoped<IVehicleService, VehicleService>();
+        serviceCollection.AddScoped<IVehicleRepository, VehicleRepository>();
     }
 }
 

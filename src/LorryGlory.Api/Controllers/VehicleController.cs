@@ -20,6 +20,21 @@ namespace LorryGlory.Api.Controllers
             _vehicleService = vehicleService;
         }
 
+        [HttpGet("GetAll")]
+        public async Task<IActionResult> GetAllVehicles()
+        {
+            try
+            {
+                var vehicles = await _vehicleService.GetAllAsync();
+
+                return Ok(vehicles);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
         [HttpPost("GetTodaysVehiclesForDriver")]
         public async Task<IActionResult> GetTodaysVehicles(GetTodaysVehiclesDto dto)
         {

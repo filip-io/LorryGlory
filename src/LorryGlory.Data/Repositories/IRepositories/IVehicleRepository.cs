@@ -1,10 +1,4 @@
-﻿using LorryGlory.Data.Models.JobModels;
-using LorryGlory.Data.Models.VehicleModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using LorryGlory.Data.Models.VehicleModels;
 
 namespace LorryGlory.Data.Repositories.IRepositories
 {

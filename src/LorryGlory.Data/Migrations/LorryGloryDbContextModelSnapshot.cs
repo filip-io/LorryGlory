@@ -251,19 +251,19 @@ namespace LorryGlory.Data.Migrations
                         new
                         {
                             Id = new Guid("9a2b0228-4d0d-4c23-8b49-01a698857709"),
-                            CreatedAt = new DateTime(2024, 11, 15, 12, 16, 28, 77, DateTimeKind.Local).AddTicks(8696),
+                            CreatedAt = new DateTime(2024, 11, 17, 15, 46, 56, 229, DateTimeKind.Local).AddTicks(8564),
                             Description = "Test delivery task",
-                            EndTime = new DateTime(2024, 11, 15, 14, 16, 28, 77, DateTimeKind.Local).AddTicks(8696),
+                            EndTime = new DateTime(2024, 11, 17, 17, 46, 56, 229, DateTimeKind.Local).AddTicks(8564),
                             FK_FileLink = new Guid("5d2b0228-4d0d-4c23-8b49-01a698857709"),
                             FK_JobId = new Guid("1a2b0228-4d0d-4c23-8b49-01a698857709"),
                             FK_StaffMemberId = "1STAFFM",
                             FK_TenantId = new Guid("1d2b0228-4d0d-4c23-8b49-01a698857709"),
                             FK_VehicleId = new Guid("3d2b0228-4d0d-4c23-8b49-01a698857709"),
                             IsCompleted = false,
-                            StartTime = new DateTime(2024, 11, 15, 12, 16, 28, 77, DateTimeKind.Local).AddTicks(8696),
+                            StartTime = new DateTime(2024, 11, 17, 15, 46, 56, 229, DateTimeKind.Local).AddTicks(8564),
                             Status = 666,
                             Title = "Delivery Task",
-                            UpdatedAt = new DateTime(2024, 11, 15, 12, 16, 28, 77, DateTimeKind.Local).AddTicks(8696)
+                            UpdatedAt = new DateTime(2024, 11, 17, 15, 46, 56, 229, DateTimeKind.Local).AddTicks(8564)
                         });
                 });
 
@@ -417,7 +417,7 @@ namespace LorryGlory.Data.Migrations
                         {
                             Id = "1STAFFM",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "e4a5d548-0d9f-45ea-965d-dfe1576f1035",
+                            ConcurrencyStamp = "b8cd87bf-b671-466e-9e06-bff159186bc8",
                             Email = "magda@m.m",
                             EmailConfirmed = false,
                             FK_TenantId = new Guid("1d2b0228-4d0d-4c23-8b49-01a698857709"),
@@ -428,7 +428,7 @@ namespace LorryGlory.Data.Migrations
                             PersonalNumber = "YYYYMMDD-0000",
                             PhoneNumberConfirmed = false,
                             PreferredLanguage = "PL",
-                            SecurityStamp = "16610b10-0331-4bca-a529-09526ef7a896",
+                            SecurityStamp = "bd36c4ff-e1a4-4533-80c2-0c701da852ad",
                             TwoFactorEnabled = false,
                             UserName = "magda@m.m"
                         });
@@ -471,7 +471,7 @@ namespace LorryGlory.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("FK_TenantId")
+                    b.Property<Guid?>("FK_TenantId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Make")
@@ -515,6 +515,23 @@ namespace LorryGlory.Data.Migrations
                         .IsUnique();
 
                     b.ToTable("Vehicles");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("3d2b0228-4d0d-4c23-8b49-01a698857709"),
+                            Color = "RED",
+                            FK_TenantId = new Guid("1d2b0228-4d0d-4c23-8b49-01a698857709"),
+                            Make = "Scania",
+                            Model = "R450",
+                            ModelYear = 2020,
+                            RegNo = "ABC123",
+                            StolenStatus = "NOT_STOLEN",
+                            Type = "DRAGBIL",
+                            TypeClass = "LASTBIL",
+                            VehicleYear = 2020,
+                            Vin = "YS2R4X20009176429"
+                        });
                 });
 
             modelBuilder.Entity("LorryGlory.Data.Models.VehicleModels.VehicleProblem", b =>
@@ -1121,8 +1138,7 @@ namespace LorryGlory.Data.Migrations
                     b.HasOne("LorryGlory.Data.Models.CompanyModels.Company", "Company")
                         .WithMany("Vehicles")
                         .HasForeignKey("FK_TenantId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.OwnsOne("LorryGlory.Data.Models.VehicleModels.EcoDetails", "Eco", b1 =>
                         {
@@ -1140,6 +1156,13 @@ namespace LorryGlory.Data.Migrations
 
                             b1.WithOwner()
                                 .HasForeignKey("VehicleId");
+
+                            b1.HasData(
+                                new
+                                {
+                                    VehicleId = new Guid("3d2b0228-4d0d-4c23-8b49-01a698857709"),
+                                    EuroClass = "6"
+                                });
                         });
 
                     b.OwnsOne("LorryGlory.Data.Models.VehicleModels.Inspection", "Inspection", b1 =>
@@ -1162,6 +1185,15 @@ namespace LorryGlory.Data.Migrations
 
                             b1.WithOwner()
                                 .HasForeignKey("VehicleId");
+
+                            b1.HasData(
+                                new
+                                {
+                                    VehicleId = new Guid("3d2b0228-4d0d-4c23-8b49-01a698857709"),
+                                    InspectionValidUntil = new DateOnly(2024, 1, 1),
+                                    LatestInspection = new DateOnly(2023, 1, 1),
+                                    Meter = 150000
+                                });
                         });
 
                     b.OwnsOne("LorryGlory.Data.Models.VehicleModels.TechnicalData", "TechnicalData", b1 =>
@@ -1190,9 +1222,6 @@ namespace LorryGlory.Data.Migrations
                                 .HasColumnType("nvarchar(max)");
 
                             b1.Property<int>("CylinderVolume")
-                                .HasColumnType("int");
-
-                            b1.Property<int>("FK_Category_Id")
                                 .HasColumnType("int");
 
                             b1.Property<bool>("FourWheelDrive")
@@ -1256,6 +1285,36 @@ namespace LorryGlory.Data.Migrations
 
                             b1.WithOwner()
                                 .HasForeignKey("VehicleId");
+
+                            b1.HasData(
+                                new
+                                {
+                                    VehicleId = new Guid("3d2b0228-4d0d-4c23-8b49-01a698857709"),
+                                    AxleWidth1 = 3600,
+                                    AxleWidth2 = 1350,
+                                    AxleWidth3 = 0,
+                                    CarriageWeight = 40000,
+                                    Category = "M1",
+                                    Chassi = "Lastbil",
+                                    CylinderVolume = 13000,
+                                    FourWheelDrive = true,
+                                    Fuel = "Diesel",
+                                    Height = 4000,
+                                    KerbWeight = 7500,
+                                    Length = 16500,
+                                    LoadWeight = 32500,
+                                    PowerHp = 450,
+                                    PowerKw = 335,
+                                    TireBack = "315/80R22.5",
+                                    TireFront = "315/80R22.5",
+                                    TotalWeight = 40000,
+                                    TrailerWeight = 36000,
+                                    TrailerWeightB = 3500,
+                                    TrailerWeightBe = 3500,
+                                    Transmission = "Manuell",
+                                    UnbrakedTrailerWeight = 750,
+                                    Width = 2550
+                                });
                         });
 
                     b.OwnsOne("LorryGlory.Data.Models.VehicleModels.VehicleStatus", "Status", b1 =>
@@ -1276,6 +1335,14 @@ namespace LorryGlory.Data.Migrations
 
                             b1.WithOwner()
                                 .HasForeignKey("VehicleId");
+
+                            b1.HasData(
+                                new
+                                {
+                                    VehicleId = new Guid("3d2b0228-4d0d-4c23-8b49-01a698857709"),
+                                    FirstRegistered = new DateOnly(2020, 1, 1),
+                                    Status = "I Trafik"
+                                });
                         });
 
                     b.Navigation("Company");
