@@ -30,7 +30,7 @@ namespace LorryGlory.Api.Controllers
             {
                 var tasks = await _taskService.GetAllAsync();
                 return ResponseHelper.HandleSuccess(_logger, tasks,
-                    tasks.Any() ? "Tasks retrieved successfully" : "No tasks found");
+                    tasks.Any() ? "Tasks retrieved successfully" : "No tasks exist");
             }
             catch (InvalidOperationException ex)
             {
