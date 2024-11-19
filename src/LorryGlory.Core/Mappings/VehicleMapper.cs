@@ -12,7 +12,7 @@ internal static class VehicleMapper
     /// </summary>
     /// <param name="dto"></param>
     /// <returns></returns>
-    public static Vehicle ToVehicle(this CreateVehicleDto dto, Guid tenantId)
+    public static Vehicle ToVehicle(this CreateVehicleDto dto, Guid? tenantId)
     {
         return new()
         {
@@ -21,8 +21,8 @@ internal static class VehicleMapper
             Make = dto.Make,
             Model = dto.Model,
             Color = dto.Color,
-            Type = dto.Type,
-            TypeClass = dto.TypeClass,
+            Type = dto?.TechnicalData?.Chassi,
+            TypeClass = dto?.TypeClass,
             VehicleYear = dto.VehicleYear,
             ModelYear = dto.ModelYear,
             StolenStatus = dto.StolenStatus,

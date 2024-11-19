@@ -294,17 +294,13 @@ namespace LorryGlory.Data.Data
                 entity.OwnsOne(e => e.Status);
                 entity.OwnsOne(e => e.Inspection);
                 entity.OwnsOne(e => e.TechnicalData);
-                //entity.OwnsOne(e => e.TechnicalData, td =>
-                //{
-                //    td.OwnsOne(t => t.Category);
-                //});
                 entity.OwnsOne(e => e.Eco);
 
                 // Company relationship
-                entity.HasOne(e => e.Company)
-                    .WithMany(c => c.Vehicles)
-                    .HasForeignKey(e => e.FK_TenantId)
-                    .OnDelete(DeleteBehavior.Restrict);
+                //entity.HasOne(e => e.Company)
+                //    .WithMany(c => c.Vehicles)
+                //    .HasForeignKey(e => e.FK_TenantId)
+                //    .OnDelete(DeleteBehavior.Restrict);
             });
         }
 

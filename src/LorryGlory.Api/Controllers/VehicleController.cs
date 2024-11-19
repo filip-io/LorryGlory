@@ -4,6 +4,7 @@ using LorryGlory.Api.Models.DataTransferObjects.VehicleDtos;
 using LorryGlory.Core.Models.ApiDtos;
 using LorryGlory.Core.Models.DTOs.VehicleDtos;
 using LorryGlory.Core.Services.IServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LorryGlory.Api.Controllers
@@ -69,8 +70,7 @@ namespace LorryGlory.Api.Controllers
             }
         }
 
-        // Authorized for admin.
-        [HttpPost()]
+        [HttpPost("CreateVehicleAdmin")]
         public async Task<IActionResult> CreateVehicle([FromBody] CreateVehicleDto dto)
         {
             try
@@ -87,7 +87,7 @@ namespace LorryGlory.Api.Controllers
         }
 
         //// Authorized for drivers and low level access roles.
-        //[HttpPost()]
+        //[HttpPost("CreateVehicleDriver")]
         //public async Task<IActionResult> CreateVehicle()
         //{
 

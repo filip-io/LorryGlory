@@ -29,9 +29,13 @@ namespace LorryGlory.Core.Services
         {
             if (vehicleDto == null) return null;
 
-            //var tenantId = _tenantService.TenantId;
-            var tenantId = new Guid("1D2B0228-4D0D-4C23-8B49-01A698857709");
-            // TODO: Also get company.
+            Guid? tenantId = null;
+            //if (isAdmin)
+            //{
+            //    tenantId = new Guid("1D2B0228-4D0D-4C23-8B49-01A698857709"); // Use the _tenantService instead.
+            //    // TODO: Also get company.
+            //}
+            //var tenantId = new Guid("1D2B0228-4D0D-4C23-8B49-01A698857709");
 
             try
             {
