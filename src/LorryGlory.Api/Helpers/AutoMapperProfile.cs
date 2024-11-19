@@ -12,7 +12,14 @@ namespace LorryGlory.Api.Helpers
         public MappingProfile()
         {
             // JobTask mappings
-            CreateMap<JobTask, JobTaskDto>().ReverseMap();
+            CreateMap<JobTask, JobTaskDto>()
+                                .ForMember(dest => dest.ClientName,
+                          opt => opt.MapFrom(src => src.Job.Client.ClientName));
+
+            CreateMap<JobTask, JobTaskBasicDto>()
+                .ForMember(dest => dest.ClientName,
+                          opt => opt.MapFrom(src => src.Job.Client.ClientName));
+
             CreateMap<JobTaskCreateDto, JobTask>();
             CreateMap<JobTaskUpdateDto, JobTask>();
 

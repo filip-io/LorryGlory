@@ -53,8 +53,11 @@ namespace LorryGlory.Api.Controllers
             try
             {
                 var tasks = await _taskService.GetAllByDriverIdAndDayAsync(id, date);
-                return ResponseHelper.HandleSuccess(_logger, tasks, 
-                    tasks.Any() ? $"Tasks for driver {id} on {date} retrieved successfully" : $"No tasks exist for driver with ID: {id} on {date}");
+
+                return ResponseHelper.HandleSuccess(_logger, tasks,
+                    tasks.Any()
+                        ? $"Tasks for driver with ID: {id} on {date} retrieved successfully"
+                        : $"No tasks exist for driver with ID: {id} on {date}");
             }
             catch (KeyNotFoundException ex)
             {
