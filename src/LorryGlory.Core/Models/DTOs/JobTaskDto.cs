@@ -28,19 +28,15 @@ namespace LorryGlory.Core.Models.DTOs
         public DateTime UpdatedAt { get; set; }
 
         // Staff Member Info
-        public string StaffMemberId { get; set; }
         public StaffMemberDto StaffMember { get; set; }
 
         // Job Info
         public Guid JobId { get; set; }
-        public JobDto Job { get; set; }
 
         // Vehicle Info (optional)
-        public Guid? VehicleId { get; set; }
         public VehicleDto? Vehicle { get; set; }
 
         // File Link (optional)
-        public Guid? FileLinkId { get; set; }
         public FileLinkDto? FileLink { get; set; }
 
         // Report
