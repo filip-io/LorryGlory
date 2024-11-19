@@ -126,7 +126,7 @@ namespace LorryGlory.Api.Controllers
             try
             {
                 var vehicle = await _vehicleService.GetByRegNoAsync(searchDto.RegNo);
-                if (vehicle == null) return NotFound($"No vehicle with license plate {searchDto} found.");
+                if (vehicle == null) return NotFound($"No vehicle with license plate {searchDto.RegNo} found.");
 
                 var response = new ApiResponse<VehicleSearchDto>
                 {
