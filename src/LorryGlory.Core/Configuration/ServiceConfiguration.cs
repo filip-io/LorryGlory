@@ -39,7 +39,10 @@ public static class ServiceConfiguration
         // Vehicle
         serviceCollection.AddScoped<IVehicleService, VehicleService>();
         serviceCollection.AddScoped<IVehicleRepository, VehicleRepository>();
+        
+        // Staff
         serviceCollection.AddScoped<IStaffService, StaffService>();
+        serviceCollection.AddScoped<IStaffRepository, StaffRepository>();
     }
     public static void ConfigureAuthorization(this IServiceCollection serviceCollection)
     {
