@@ -29,6 +29,10 @@ public static class ServiceConfiguration
         // Tenant
         serviceCollection.AddScoped<ITenantService, TenantService>();
 
+        // Job
+        serviceCollection.AddScoped<IJobService, JobService>();
+        serviceCollection.AddScoped<IJobRepository, JobRepository>();
+
         // JobTask
         serviceCollection.AddScoped<IJobTaskService, JobTaskService>();
         serviceCollection.AddScoped<IJobTaskRepository, JobTaskRepository>();
