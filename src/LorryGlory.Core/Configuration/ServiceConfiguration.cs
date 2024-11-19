@@ -30,7 +30,7 @@ public static class ServiceConfiguration
             })
             .AddPolicy("AdminPolicy", policy =>
             {
-                policy.RequireRole("Admin");
+                policy.RequireRole("Admin","SuperAdmin");
             })
             .AddPolicy("UserPolicy", policy =>
             {

@@ -24,25 +24,26 @@ namespace LorryGlory.Core.Services
             _mapper = mapper;
         }
 
-        public Task<IEnumerable<StaffMemberDto>> GetAllAsync()
+        public async Task<IEnumerable<StaffMemberDto>> GetAllAsync()
+        {
+            var staffMembers = await _staffRepository.GetAllAsync();
+            return _mapper.Map<IEnumerable<StaffMemberDto>>(staffMembers);
+        }
+        public async Task<StaffMemberDto> GetByIdAsync(string id)
         {
             throw new NotImplementedException();
         }
-        public Task<StaffMemberDto> GetByIdAsync(string id)
-        {
-            throw new NotImplementedException();
-        }
-        public Task<StaffMemberDto> CreateAsync(StaffMemberDto staffMemberDto)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<StaffMemberDto> UpdateAsync(StaffMemberDto staffMemberDto)
+        public async Task<StaffMemberDto> CreateAsync(StaffMemberDto staffMemberDto)
         {
             throw new NotImplementedException();
         }
 
-        public Task<StaffMemberDto> DeleteAsync(string id)
+        public async Task<StaffMemberDto> UpdateAsync(StaffMemberDto staffMemberDto)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<StaffMemberDto> DeleteAsync(string id)
         {
             throw new NotImplementedException();
         }
