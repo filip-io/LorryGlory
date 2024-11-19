@@ -100,4 +100,33 @@ internal static class VehicleMapper
             FK_TenantId = vehicle.FK_TenantId,
         };
     }
+
+    public static void UpdateVehicleProperties(this Vehicle vehicle, VehicleSearchDto searchDto, UpdateVehicleDto updateDto)
+    {
+        // From Biluppgifter
+        vehicle.Vin = searchDto.Vin;
+        vehicle.Make = searchDto.Make;
+        vehicle.Model = searchDto.Model;
+        vehicle.Color = searchDto.Color;
+        vehicle.Type = searchDto.Type;
+        vehicle.TypeClass = searchDto.TypeClass;
+        vehicle.VehicleYear = searchDto.VehicleYear;
+        vehicle.ModelYear = searchDto.ModelYear;
+        vehicle.StolenStatus = searchDto.StolenStatus;
+
+        vehicle.Status.Status = searchDto.Status.Status;
+        vehicle.Status.FirstRegistered = searchDto.Status.FirstRegistered;
+
+        vehicle.Inspection.LatestInspection = searchDto.Inspection.LatestInspection;
+        vehicle.Inspection.InspectionValidUntil = searchDto.Inspection.InspectionValidUntil;
+        vehicle.Inspection.Meter = searchDto.Inspection.Meter;
+
+        vehicle.TechnicalData = GenericMapper.OneToOneMapper<VehicleSearchTechnicalData, TechnicalData>(searchDto.TechnicalData);
+
+        vehicle.Eco.EuroClass = searchDto.Eco.EuroClass;
+
+        // From UpdateVehiclDto
+        vehicle.TechnicalData.AxleWidth2 = updateDto.AxleWidth2;
+        vehicle.TechnicalData.AxleWidth3 = updateDto.AxleWidth3;
+    }
 }

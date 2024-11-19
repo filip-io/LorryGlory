@@ -61,9 +61,11 @@ namespace LorryGlory.Data.Repositories
             throw new NotImplementedException();
         }
 
-        public Task<Vehicle?> UpdateAsync(Vehicle vehicle)
+        public async Task<Vehicle?> UpdateAsync(Vehicle vehicle)
         {
-            throw new NotImplementedException();
+            _context.Vehicles.Update(vehicle);
+            await _context.SaveChangesAsync();
+            return vehicle;
         }
     }
 }

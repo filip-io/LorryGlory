@@ -90,21 +90,33 @@ namespace LorryGlory.Api.Controllers
         //[HttpPost("CreateVehicleDriver")]
         //public async Task<IActionResult> CreateVehicle()
         //{
-
         //}
 
-        //[HttpPut]
-        //public async Task<IActionResult> UpdateVehicle([FromBody] CreateVehicleDto dto)
-        //{
-        //    try
-        //    {
-        //        var vehicle = await _vehicleService.UpdateAsync(dto);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return BadRequest(ex.Message);
-        //    }
-        //}
+        /// <summary>
+        /// Intended for use by the admins at a company, not by the superadmin. Has limitations on which properties can be updated.
+        /// Anything that is retrieved from biluppgifter will not be possible to update if the user is a regular admin or employee.
+        /// This endpoint runs the scraper to get updated information from biluppgifter.
+        /// Currently updatable properties are:
+        /// AxleWidth2
+        /// AxleWidth3
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateVehicle([FromBody] UpdateVehicleDto dto, Guid id)
+        {
+            try
+            {
+                var vehicle = await _vehicleService.UpdateAsync(dto, id);
+                if (vehicle == null) return NotFound();
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteVehicle(Guid id)

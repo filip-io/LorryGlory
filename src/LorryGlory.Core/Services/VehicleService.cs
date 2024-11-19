@@ -30,11 +30,6 @@ namespace LorryGlory.Core.Services
             if (vehicleDto == null) return null;
 
             Guid? tenantId = null;
-            //if (isAdmin)
-            //{
-            //    tenantId = new Guid("1D2B0228-4D0D-4C23-8B49-01A698857709"); // Use the _tenantService instead.
-            //    // TODO: Also get company.
-            //}
             //var tenantId = new Guid("1D2B0228-4D0D-4C23-8B49-01A698857709");
 
             try
@@ -136,9 +131,18 @@ namespace LorryGlory.Core.Services
             }
         }
 
-        public Task<VehicleDto> UpdateAsync(VehicleDto vehicleDto)
+        public async Task<VehicleDto> UpdateAsync(UpdateVehicleDto updateVehicleDto, Guid id)
         {
-            throw new NotImplementedException();
+            if (updateVehicleDto == null) throw new ArgumentNullException();
+
+            var vehicle = await _vehicleRepository.GetByIdAsync(id, false) ?? throw new NullReferenceException();
+            var vehicleSearchDto = await GetByRegNoAsync(vehicle.RegNo) ?? throw new NullReferenceException();
+
+            vehicle.UpdateVehicleProperties(vehicleSearchDto, updateVehicleDto);
+
+            var updatedVehicle = await _vehicleRepository.UpdateAsync(vehicle);
+
+            return updatedVehicle.ToVehicleDto();
         }
     }
 }
