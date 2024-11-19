@@ -1,6 +1,7 @@
 ﻿using LorryGlory.Api.Models;
 using LorryGlory.Api.Models.DataTransferObjects;
 using LorryGlory.Api.Models.DataTransferObjects.VehicleDtos;
+using LorryGlory.Core.Models.ApiDtos;
 using LorryGlory.Core.Models.DTOs.VehicleDtos;
 using LorryGlory.Core.Services.IServices;
 using Microsoft.AspNetCore.Mvc;
@@ -67,6 +68,30 @@ namespace LorryGlory.Api.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        // Authorized for admin.
+        [HttpPost()]
+        public async Task<IActionResult> CreateVehicle([FromBody] CreateVehicleDto dto)
+        {
+            try
+            {
+                var vehicle = await _vehicleService.CreateAsync(dto);
+                if (vehicle == null) return BadRequest("Failed to create vehicle");
+
+                return Created();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        //// Authorized for drivers and low level access roles.
+        //[HttpPost()]
+        //public async Task<IActionResult> CreateVehicle()
+        //{
+
+        //}
 
         [HttpPost("Search")]
         public async Task<IActionResult> SearchVehicle([FromBody] LicensePlateSearchDto searchDto)

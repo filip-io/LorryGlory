@@ -1,7 +1,9 @@
 ﻿using LorryGlory.Core.Mappings;
+using LorryGlory.Core.Models.ApiDtos;
 using LorryGlory.Core.Models.DTOs.VehicleDtos;
 using LorryGlory.Core.Services.IServices;
 using LorryGlory.Data.Repositories.IRepositories;
+using LorryGlory.Data.Services.IServices;
 using System.Text;
 using System.Text.Json;
 
@@ -13,17 +15,37 @@ namespace LorryGlory.Core.Services
         private readonly string _mockApiUrl = "https://lorryglorymockapiapi20241113130521.azurewebsites.net/api/vehicle/search";
         private readonly ITaskRepository _taskRepository;
         private readonly IVehicleRepository _vehicleRepository;
+        private readonly ITenantService _tenantService;
 
-        public VehicleService(HttpClient client, ITaskRepository taskRepo, IVehicleRepository vehicleRepo)
+        public VehicleService(HttpClient client, ITaskRepository taskRepo, IVehicleRepository vehicleRepo, ITenantService tenantService)
         {
             _httpClient = client;
             _taskRepository = taskRepo;
             _vehicleRepository = vehicleRepo;
+            _tenantService = tenantService;
         }
 
-        public Task<VehicleDto> CreateAsync(VehicleDto vehicleDto)
+        public async Task<VehicleDto> CreateAsync(CreateVehicleDto vehicleDto)
         {
-            throw new NotImplementedException();
+            if (vehicleDto == null) return null;
+
+            //var tenantId = _tenantService.TenantId;
+            var tenantId = new Guid("1D2B0228-4D0D-4C23-8B49-01A698857709");
+            // TODO: Also get company.
+
+            try
+            {
+                var vehicle = VehicleMapper.ToVehicle(vehicleDto, tenantId);
+
+                vehicle = await _vehicleRepository.AddAsync(vehicle);
+
+                var result = vehicle.ToVehicleDto();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
 
         public Task<VehicleDto> DeleteAsync(Guid id)
@@ -70,6 +92,12 @@ namespace LorryGlory.Core.Services
             return vehicleDto;
         }
 
+        /// <summary>
+        /// Retrieves a vehicle using the mock api. The vehicle is returned to the front end, where it will be confirmed by a user.
+        /// </summary>
+        /// <param name="regNo"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
         public async Task<VehicleSearchDto> GetByRegNoAsync(string regNo)
         {
             try
