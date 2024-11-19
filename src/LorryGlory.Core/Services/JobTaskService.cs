@@ -1,5 +1,11 @@
-﻿using LorryGlory.Core.Models.DTOs;
+﻿using AutoMapper;
+using LorryGlory.Core.Models.DTOs;
 using LorryGlory.Core.Services.IServices;
+using LorryGlory.Data.Models.JobModels;
+using LorryGlory.Data.Repositories.IRepositories;
+using LorryGlory.Data.Services.IServices;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,48 +16,66 @@ namespace LorryGlory.Core.Services
 {
     public class JobTaskService : IJobTaskService
     {
-        public Task<IEnumerable<JobTaskDto>> GetAllAsync()
-        {
-            throw new NotImplementedException();
-        }
-        public Task<IEnumerable<JobTaskDto>> GetAllByDriverIdAndDayAsync(Guid id, DateOnly date)
-        {
-            throw new NotImplementedException();
-        }
+        private readonly IJobTaskRepository _jobTaskRepository;
+        private readonly ITenantService _tenantService;
+        private readonly IMapper _mapper;
 
-        public Task<JobTaskDto> GetByIdAsync(Guid id)
+        public JobTaskService(IJobTaskRepository jobTaskRepository, ITenantService tenantService, IMapper mapper)
         {
-            throw new NotImplementedException();
+            _jobTaskRepository = jobTaskRepository;
+            _tenantService = tenantService;
+            _mapper = mapper;
         }
 
-        public Task<JobTaskDto> CreateAsync(JobTaskDto jobTaskDto)
+        public async Task<IEnumerable<JobTaskDto>> GetAllAsync()
         {
-            throw new NotImplementedException();
+                var jobTasks = await _jobTaskRepository.GetAllAsync();
+                return _mapper.Map<IEnumerable<JobTaskDto>>(jobTasks);
         }
 
-
-        public Task<JobTaskDto> UpdateAsync(JobTaskDto jobTaskDto)
+        public Task<IEnumerable<JobTaskDto>> GetAllByDriverIdAndDayAsync(string id, DateOnly date)
         {
             throw new NotImplementedException();
         }
 
-        public Task<JobTaskDto> DeleteAsync(Guid id)
+        public async Task<JobTaskDto> GetByIdAsync(Guid id)
         {
-            throw new NotImplementedException();
+            var jobTask = await _jobTaskRepository.GetByIdAsync(id);
 
-            //public async Task<JobTaskDto> DeleteAsync(Guid id)
-            //{
-            //    var task = await _repository.GetByIdAsync(id);
-            //    if (task == null)
-            //    {
-            //        throw new KeyNotFoundException($"Task with ID: {id} not found.");
-            //    }
+            var jobTaskDto = _mapper.Map<JobTaskDto>(jobTask);
 
-            //    var taskDto = _mapper.Map<JobTaskDto>(task);
-            //    await _repository.DeleteAsync(task);
-            //    await _repository.SaveChangesAsync();
+            return jobTaskDto;
+        }
 
-            //    return taskDto;
+        public async Task<JobTaskDto> CreateAsync(JobTaskCreateDto jobTaskCreateDto)
+        {
+            if (_tenantService.TenantId == Guid.Empty)
+            {
+                throw new InvalidOperationException("TenantId is not set.");
+            }
+
+            var newJobTask = _mapper.Map<JobTask>(jobTaskCreateDto);
+
+            newJobTask.FK_TenantId = _tenantService.TenantId;
+
+            return _mapper.Map<JobTaskDto>(await _jobTaskRepository.CreateAsync(newJobTask));
+        }
+
+
+        public async Task<JobTaskDto> UpdateAsync(JobTaskUpdateDto jobTaskUpdateDto)
+        {
+            var updatedJobTask = _mapper.Map<JobTask>(jobTaskUpdateDto);
+
+            return _mapper.Map<JobTaskDto>(await _jobTaskRepository.UpdateAsync(updatedJobTask));
+        }
+
+        public async Task<JobTaskDto> DeleteAsync(Guid id)
+        {
+            var jobTask = await _jobTaskRepository.GetByIdAsync(id) ??
+                throw new KeyNotFoundException($"Job task with ID {id} not found.");
+
+            var deletedTask = await _jobTaskRepository.DeleteAsync(jobTask);
+            return _mapper.Map<JobTaskDto>(deletedTask);
         }
     }
 }

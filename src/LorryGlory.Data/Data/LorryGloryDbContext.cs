@@ -209,6 +209,21 @@ namespace LorryGlory.Data.Data
                     .WithOne(r => r.JobTask)
                     .HasForeignKey<JobTaskReport>(r => r.FK_JobTaskId)
                     .OnDelete(DeleteBehavior.Cascade);
+
+                // Vehicle relationship
+                entity.HasOne(e => e.Vehicle)           // JobTask Entity: "I have one Vehicle property"
+                    .WithMany()                         // Vehicle Entity: "I can be referenced by many JobTasks (but I don't track them)"
+                    .HasForeignKey(e => e.FK_VehicleId) // JobTask Entity: "I use FK_VehicleId to reference my Vehicle"
+                    .OnDelete(DeleteBehavior.SetNull)   // JobTask Entity: "If my Vehicle is deleted, set my FK_VehicleId to null"
+                    .IsRequired(false);                 // JobTask Entity: "My Vehicle/FK_VehicleId can be null"
+
+                // Default values for CreatedAt and UpdatedAt
+                //entity.Property(e => e.CreatedAt)
+                //    .HasDefaultValueSql("GETDATE()")
+                //    .ValueGeneratedOnAdd();
+
+                //entity.Property(e => e.UpdatedAt)
+                //    .ValueGeneratedOnAddOrUpdate();
             });
         }
 
@@ -228,7 +243,7 @@ namespace LorryGlory.Data.Data
                 entity.Property(e => e.CreatedAt).IsRequired();
                 entity.Property(e => e.UpdatedAt).IsRequired();
 
-                // Company relationship (multi-tenancy)
+                // Company relationship
                 entity.HasOne(e => e.Company)
                     .WithMany(c => c.JobTaskReports)
                     .HasForeignKey(e => e.FK_TenantId)
@@ -236,20 +251,34 @@ namespace LorryGlory.Data.Data
 
                 // Audit relationships
                 entity.HasOne(e => e.CreatedBy)
-                    .WithMany()  // No navigation property back to reports
+                    .WithMany()
                     .HasForeignKey(e => e.CreatedById)
                     .OnDelete(DeleteBehavior.Restrict);
 
                 entity.HasOne(e => e.UpdatedBy)
-                    .WithMany()  // No navigation property back to reports
+                    .WithMany()
                     .HasForeignKey(e => e.UpdatedById)
                     .OnDelete(DeleteBehavior.Restrict);
 
-                // FileLink relationship
+                // JobTask relationship (one-to-one)
+                entity.HasOne(e => e.JobTask)
+                    .WithOne(jt => jt.JobTaskReport)
+                    .HasForeignKey<JobTaskReport>(e => e.FK_JobTaskId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                // FileLink relationship (optional)
                 entity.HasOne(e => e.FileLink)
                     .WithMany()
                     .HasForeignKey(e => e.FK_FileLink)
                     .OnDelete(DeleteBehavior.Restrict);
+
+                // Default values for CreatedAt and UpdatedAt
+                //entity.Property(e => e.CreatedAt)
+                //    .HasDefaultValueSql("GETDATE()")
+                //    .ValueGeneratedOnAdd();
+
+                //entity.Property(e => e.UpdatedAt)
+                //    .ValueGeneratedOnAddOrUpdate();
             });
         }
 
@@ -297,10 +326,7 @@ namespace LorryGlory.Data.Data
                 // Value objects (nested owned entities)
                 entity.OwnsOne(e => e.Status);
                 entity.OwnsOne(e => e.Inspection);
-                entity.OwnsOne(e => e.TechnicalData, td =>
-                {
-                    td.OwnsOne(t => t.Category);
-                });
+                entity.OwnsOne(e => e.TechnicalData);
                 entity.OwnsOne(e => e.Eco);
 
                 // Company relationship

@@ -1,16 +1,17 @@
-﻿using LorryGlory.Data.Models.CompanyModels;
+﻿using LorryGlory.Data.Models.VehicleModels;
 using LorryGlory.Data.Models.VehicleModels.Enums;
-using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
+using System.Text;
+using System.Text.Json.Serialization;
+using System.Threading.Tasks;
 
-namespace LorryGlory.Data.Models.VehicleModels
+namespace LorryGlory.Core.Models.DTOs
 {
-    [Index(nameof(RegNo), IsUnique = true)]
-    public class Vehicle
+    public class VehicleSearchDto
     {
-        [Key]
-        public Guid Id { get; set; }
         public string RegNo { get; set; }
         public string Vin { get; set; }
         public string Make { get; set; }
@@ -22,30 +23,26 @@ namespace LorryGlory.Data.Models.VehicleModels
         public int ModelYear { get; set; }
         public string? StolenStatus { get; set; }
 
-        public VehicleStatus? Status { get; set; }
-        public Inspection? Inspection { get; set; }
-        public TechnicalData? TechnicalData { get; set; }
-        public EcoDetails? Eco { get; set; }
-
-        public ICollection<VehicleProblem>? VehicleProblems { get; set; }
-
-        [ForeignKey("Company")]
-        public Guid FK_TenantId { get; set; }
-        public Company Company { get; set; }
+        public VehicleSearchStatus? Status { get; set; }
+        public VehicleSearchInspection? Inspection { get; set; }
+        public VehicleSearchTechnicalData? TechnicalData { get; set; }
+        public VehicleSearchEcoDetails? Eco { get; set; }
     }
-    public class VehicleStatus
+
+    public class VehicleSearchStatus
     {
         public string Status { get; set; }
         public DateOnly FirstRegistered { get; set; }
     }
-    public class Inspection
+
+    public class VehicleSearchInspection
     {
         public DateOnly LatestInspection { get; set; }
         public DateOnly InspectionValidUntil { get; set; }
         public int Meter { get; set; } // mätarställning - parsa siffran, kommer som "xxx mil", räkna om till km
-
     }
-    public class TechnicalData
+
+    public class VehicleSearchTechnicalData
     {
         public int PowerHp { get; set; } // Make array or store as three separate props?
         public int PowerKw { get; set; } // Make array or store as three separate props?
@@ -74,14 +71,17 @@ namespace LorryGlory.Data.Models.VehicleModels
         public int AxleWidth2 { get; set; } // Distance between axle 2 - 3
         public int AxleWidth3 { get; set; } // Distance between axle 3 - 4
         public int FK_Category_Id { get; set; }
+        //public VehicleSearchCategoryEu Category { get; set; }
         public string Category { get; set; }
     }
-    public class EcoDetails
+
+    public class VehicleSearchEcoDetails
     {
         [StringLength(maximumLength: 3)]
         public string EuroClass { get; set; }
     }
-    public class VehicleCategoryEu
+
+    public class VehicleSearchCategoryEu
     {
         public string Code { get; set; }
         public string Type { get; set; }

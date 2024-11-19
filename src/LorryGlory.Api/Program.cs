@@ -29,9 +29,14 @@ namespace LorryGlory.Api
 
             builder.Services.AddHttpContextAccessor();
 
+            builder.Services.AddHttpClient();
+
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
+            // AutoMapper
+            builder.Services.AddAutoMapper(typeof(Program));
 
             var app = builder.Build();
             

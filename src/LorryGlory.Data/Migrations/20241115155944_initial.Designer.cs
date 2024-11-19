@@ -4,6 +4,7 @@ using LorryGlory.Data.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LorryGlory.Data.Migrations
 {
     [DbContext(typeof(LorryGloryDbContext))]
-    partial class LorryGloryDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241115155944_initial")]
+    partial class initial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -195,6 +198,7 @@ namespace LorryGlory.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("EndTime")
@@ -207,6 +211,7 @@ namespace LorryGlory.Data.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("FK_StaffMemberId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<Guid>("FK_TenantId")
@@ -249,18 +254,18 @@ namespace LorryGlory.Data.Migrations
                         new
                         {
                             Id = new Guid("9a2b0228-4d0d-4c23-8b49-01a698857709"),
-                            CreatedAt = new DateTime(2024, 11, 17, 1, 53, 55, 153, DateTimeKind.Local).AddTicks(3896),
+                            CreatedAt = new DateTime(2024, 11, 15, 16, 59, 43, 983, DateTimeKind.Local).AddTicks(5553),
                             Description = "Test delivery task",
-                            EndTime = new DateTime(2024, 11, 17, 3, 53, 55, 153, DateTimeKind.Local).AddTicks(3896),
+                            EndTime = new DateTime(2024, 11, 15, 18, 59, 43, 983, DateTimeKind.Local).AddTicks(5553),
                             FK_FileLink = new Guid("5d2b0228-4d0d-4c23-8b49-01a698857709"),
                             FK_JobId = new Guid("1a2b0228-4d0d-4c23-8b49-01a698857709"),
                             FK_StaffMemberId = "1STAFFM",
                             FK_TenantId = new Guid("1d2b0228-4d0d-4c23-8b49-01a698857709"),
                             IsCompleted = false,
-                            StartTime = new DateTime(2024, 11, 17, 1, 53, 55, 153, DateTimeKind.Local).AddTicks(3896),
+                            StartTime = new DateTime(2024, 11, 15, 16, 59, 43, 983, DateTimeKind.Local).AddTicks(5553),
                             Status = 666,
                             Title = "Delivery Task",
-                            UpdatedAt = new DateTime(2024, 11, 17, 1, 53, 55, 153, DateTimeKind.Local).AddTicks(3896)
+                            UpdatedAt = new DateTime(2024, 11, 15, 16, 59, 43, 983, DateTimeKind.Local).AddTicks(5553)
                         });
                 });
 
@@ -414,7 +419,7 @@ namespace LorryGlory.Data.Migrations
                         {
                             Id = "1STAFFM",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "c9f574e6-f863-47c7-8623-b9f052e323ba",
+                            ConcurrencyStamp = "5af874b3-e06e-41d1-99cf-d8369b0bf339",
                             Email = "magda@m.m",
                             EmailConfirmed = false,
                             FK_TenantId = new Guid("1d2b0228-4d0d-4c23-8b49-01a698857709"),
@@ -425,7 +430,7 @@ namespace LorryGlory.Data.Migrations
                             PersonalNumber = "YYYYMMDD-0000",
                             PhoneNumberConfirmed = false,
                             PreferredLanguage = "PL",
-                            SecurityStamp = "e59c16ef-71a0-42fa-a616-d7856662579c",
+                            SecurityStamp = "aaba4e3c-bdb1-4c67-be63-23bb1fc66a94",
                             TwoFactorEnabled = false,
                             UserName = "magda@m.m"
                         });
@@ -836,7 +841,8 @@ namespace LorryGlory.Data.Migrations
                     b.HasOne("LorryGlory.Data.Models.StaffModels.StaffMember", "StaffMember")
                         .WithMany("JobTasks")
                         .HasForeignKey("FK_StaffMemberId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("LorryGlory.Data.Models.CompanyModels.Company", "Company")
                         .WithMany("JobTasks")
@@ -962,13 +968,15 @@ namespace LorryGlory.Data.Migrations
 
                     b.Navigation("ContactPerson");
 
-                    b.Navigation("DeliveryAddress");
+                    b.Navigation("DeliveryAddress")
+                        .IsRequired();
 
                     b.Navigation("FileLink");
 
                     b.Navigation("Job");
 
-                    b.Navigation("PickupAddress");
+                    b.Navigation("PickupAddress")
+                        .IsRequired();
 
                     b.Navigation("StaffMember");
 
@@ -1381,7 +1389,8 @@ namespace LorryGlory.Data.Migrations
 
             modelBuilder.Entity("LorryGlory.Data.Models.JobModels.JobTask", b =>
                 {
-                    b.Navigation("JobTaskReport");
+                    b.Navigation("JobTaskReport")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("LorryGlory.Data.Models.StaffModels.StaffMember", b =>
