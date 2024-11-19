@@ -21,9 +21,11 @@ namespace LorryGlory.Data.Repositories
             return vehicle;
         }
 
-        public Task<Vehicle?> DeleteAsync(Vehicle vehicle)
+        public async Task<Vehicle?> DeleteAsync(Vehicle vehicle)
         {
-            throw new NotImplementedException();
+            _context.Vehicles.Remove(vehicle);
+            await _context.SaveChangesAsync();
+            return vehicle;
         }
 
         public async Task<IEnumerable<Vehicle?>> GetAllVehiclesAsync()
@@ -32,12 +34,25 @@ namespace LorryGlory.Data.Repositories
             return vehicles;
         }
 
-        public async Task<Vehicle?> GetByIdAsync(Guid id)
+        public async Task<Vehicle?> GetByIdAsync(Guid id, bool ignoreQueryFilters = false)
         {
-            var vehicle = await _context.Vehicles
-                .Include(v => v.Company)
-                .Include(v => v.VehicleProblems)
-                .SingleOrDefaultAsync(v => v.Id == id);
+            Vehicle? vehicle = null;
+            switch (ignoreQueryFilters)
+            {
+                case true:
+                    vehicle = await _context.Vehicles.IgnoreQueryFilters()
+                        .Include(v => v.Company)
+                        .Include(v => v.VehicleProblems)
+                        .SingleOrDefaultAsync(v => v.Id == id);
+                    break;
+                case false:
+                    vehicle = await _context.Vehicles
+                        .Include(v => v.Company)
+                        .Include(v => v.VehicleProblems)
+                        .SingleOrDefaultAsync(v => v.Id == id);
+                    break;
+            }
+            
             return vehicle;
         }
 

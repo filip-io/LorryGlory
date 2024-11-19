@@ -52,9 +52,12 @@ namespace LorryGlory.Core.Services
             }
         }
 
-        public Task<VehicleDto> DeleteAsync(Guid id)
+        public async Task<VehicleDto> DeleteAsync(Guid id)
         {
-            throw new NotImplementedException();
+            var vehicle = await _vehicleRepository.GetByIdAsync(id, true);
+            var result = await _vehicleRepository.DeleteAsync(vehicle);
+
+            return result?.ToVehicleDto() ?? null;
         }
 
         public async Task<IEnumerable<GetAllVehiclesDto>> GetAllAsync()
@@ -89,7 +92,7 @@ namespace LorryGlory.Core.Services
 
         public async Task<VehicleDto> GetByIdAsync(Guid id)
         {
-            var vehicle = await _vehicleRepository.GetByIdAsync(id);
+            var vehicle = await _vehicleRepository.GetByIdAsync(id, false);
             if (vehicle == null) return null;
 
             var vehicleDto = vehicle.ToVehicleDto();

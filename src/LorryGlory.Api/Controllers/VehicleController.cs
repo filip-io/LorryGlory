@@ -93,6 +93,33 @@ namespace LorryGlory.Api.Controllers
 
         //}
 
+        //[HttpPut]
+        //public async Task<IActionResult> UpdateVehicle([FromBody] CreateVehicleDto dto)
+        //{
+        //    try
+        //    {
+        //        var vehicle = await _vehicleService.UpdateAsync(dto);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return BadRequest(ex.Message);
+        //    }
+        //}
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteVehicle(Guid id)
+        {
+            try
+            {
+                await _vehicleService.DeleteAsync(id);
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
         [HttpPost("Search")]
         public async Task<IActionResult> SearchVehicle([FromBody] LicensePlateSearchDto searchDto)
         {
