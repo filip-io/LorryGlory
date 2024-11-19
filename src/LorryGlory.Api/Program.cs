@@ -1,7 +1,7 @@
-﻿using LorryGlory.Core.Configuration;
-using LorryGlory.Data.Data;
+﻿using LorryGlory.Api.Helpers;
+using LorryGlory.Core.Configuration;
 using LorryGlory.Data.Models.StaffModels;
-using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace LorryGlory.Api
 {
@@ -22,13 +22,12 @@ namespace LorryGlory.Api
             // instead of adding them all here in Program.cs.
             builder.Services.ConfigureDatabase(connectionString);
             builder.Services.ConfigureScopes();
-
-            builder.Services.AddAuthentication(IdentityConstants.ApplicationScheme)
-                .AddIdentityCookies();
             
             builder.Services.ConfigureAuthorization();
             builder.Services.ConfigureIdentity();
             builder.Services.ConfigureCookies();
+
+            builder.Services.AddHttpContextAccessor();
 
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
@@ -44,12 +43,14 @@ namespace LorryGlory.Api
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
-            await EnsureRoles(app.Services);
+            await RoleHelper.EnsureRoles(app.Services);
+            await RoleHelper.EnsureSuperAdminAccount(app.Services);
 
             app.UseHttpsRedirection();
 
             app.UseRouting();
 
+            app.UseCookiePolicy();
             app.UseAuthentication();
             app.UseAuthorization();
 
@@ -58,20 +59,6 @@ namespace LorryGlory.Api
             app.Run();
         }
 
-        // where to put that
-        public static async Task EnsureRoles(IServiceProvider serviceProvider)
-        {
-            using var scope = serviceProvider.CreateScope();
-            var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-
-            var roles = new[] { "Admin", "User", "SuperAdmin" };
-            foreach (var role in roles)
-            {
-                if (!await roleManager.RoleExistsAsync(role))
-                {
-                    await roleManager.CreateAsync(new IdentityRole(role));
-                }
-            }
-        }
+       
     }
 }

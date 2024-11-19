@@ -6,6 +6,7 @@ using LorryGlory.Data.Models.JobModels;
 using LorryGlory.Data.Models.StaffModels;
 using LorryGlory.Data.Models.VehicleModels;
 using LorryGlory.Data.Services.IServices;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -37,6 +38,7 @@ namespace LorryGlory.Data.Data
         {
             base.OnModelCreating(modelBuilder);
 
+
             // Load entity configs
             ConfigureCompany(modelBuilder);
             ConfigureClient(modelBuilder);
@@ -49,8 +51,9 @@ namespace LorryGlory.Data.Data
             ConfigureVehicle(modelBuilder);
             ConfigureVehicleProblem(modelBuilder);
 
+
             // Populate seed data
-            modelBuilder.SeedData();
+            //modelBuilder.SeedData();
         }
 
         private void ConfigureCompany(ModelBuilder modelBuilder)
@@ -59,7 +62,7 @@ namespace LorryGlory.Data.Data
             {
                 // Key and filter
                 entity.HasKey(e => e.TenantId);
-                entity.HasQueryFilter(e => e.TenantId == _tenantService.TenantId);
+                entity.HasQueryFilter(e => _tenantService.IsSuperAdmin() || e.TenantId == _tenantService.TenantId);
 
                 // Value objects
                 entity.OwnsOne(e => e.Address);
@@ -116,7 +119,7 @@ namespace LorryGlory.Data.Data
         {
             modelBuilder.Entity<Client>(entity =>
             {
-                entity.HasQueryFilter(e => e.FK_TenantId == _tenantService.TenantId);
+                entity.HasQueryFilter(e => _tenantService.IsSuperAdmin() || e.FK_TenantId == _tenantService.TenantId);
                 entity.OwnsOne(e => e.Address);
 
                 entity.HasOne(e => e.Company)
@@ -134,7 +137,7 @@ namespace LorryGlory.Data.Data
                 entity.HasKey(e => e.Id);
 
                 // Query filter for multi-tenancy
-                entity.HasQueryFilter(e => e.FK_TenantId == _tenantService.TenantId);
+                entity.HasQueryFilter(e => _tenantService.IsSuperAdmin() || e.FK_TenantId == _tenantService.TenantId);
 
                 // Required fields
                 entity.Property(e => e.UriLink).IsRequired();
@@ -162,7 +165,7 @@ namespace LorryGlory.Data.Data
         {
             modelBuilder.Entity<Job>(entity =>
             {
-                entity.HasQueryFilter(e => e.FK_TenantId == _tenantService.TenantId);
+                entity.HasQueryFilter(e => _tenantService.IsSuperAdmin() || e.FK_TenantId == _tenantService.TenantId);
                 entity.OwnsOne(e => e.ContactPerson);
 
                 entity.HasOne(e => e.Company)
@@ -182,7 +185,7 @@ namespace LorryGlory.Data.Data
             modelBuilder.Entity<JobTask>(entity =>
             {
                 // Query filter
-                entity.HasQueryFilter(e => e.FK_TenantId == _tenantService.TenantId);
+                entity.HasQueryFilter(e => _tenantService.IsSuperAdmin() || e.FK_TenantId == _tenantService.TenantId);
 
                 // Value objects (owned entities)
                 entity.OwnsOne(e => e.PickupAddress);
@@ -215,7 +218,7 @@ namespace LorryGlory.Data.Data
             {
                 // Primary key and query filter
                 entity.HasKey(e => e.Id);
-                entity.HasQueryFilter(e => e.FK_TenantId == _tenantService.TenantId);
+                entity.HasQueryFilter(e => _tenantService.IsSuperAdmin() || e.FK_TenantId == _tenantService.TenantId);
 
                 // Required fields
                 entity.Property(e => e.FK_JobTaskId).IsRequired();
@@ -254,8 +257,9 @@ namespace LorryGlory.Data.Data
         {
             modelBuilder.Entity<StaffMember>(entity =>
             {
-                // Query filter
-                entity.HasQueryFilter(e => e.FK_TenantId == _tenantService.TenantId);
+
+                // Query filter here would not allow login
+                // entity.HasQueryFilter(e => _tenantService.IsSuperAdmin() || e.FK_TenantId == _tenantService.TenantId);
 
                 // Value objects
                 entity.OwnsOne(e => e.Address);
@@ -273,7 +277,7 @@ namespace LorryGlory.Data.Data
             modelBuilder.Entity<StaffRelation>(entity =>
             {
                 // Query filter
-                entity.HasQueryFilter(e => e.FK_TenantId == _tenantService.TenantId);
+                entity.HasQueryFilter(e => _tenantService.IsSuperAdmin() || e.FK_TenantId == _tenantService.TenantId);
 
                 // Company relationship
                 entity.HasOne(e => e.Company)
@@ -288,7 +292,7 @@ namespace LorryGlory.Data.Data
             modelBuilder.Entity<Vehicle>(entity =>
             {
                 // Query filter
-                entity.HasQueryFilter(e => e.FK_TenantId == _tenantService.TenantId);
+                entity.HasQueryFilter(e => _tenantService.IsSuperAdmin() || e.FK_TenantId == _tenantService.TenantId);
 
                 // Value objects (nested owned entities)
                 entity.OwnsOne(e => e.Status);
@@ -312,7 +316,7 @@ namespace LorryGlory.Data.Data
             modelBuilder.Entity<VehicleProblem>(entity =>
             {
                 // Query filter
-                entity.HasQueryFilter(e => e.FK_TenantId == _tenantService.TenantId);
+                entity.HasQueryFilter(e => _tenantService.IsSuperAdmin() || e.FK_TenantId == _tenantService.TenantId);
 
                 // Company relationship
                 entity.HasOne(e => e.Company)

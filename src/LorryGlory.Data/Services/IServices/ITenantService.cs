@@ -9,5 +9,7 @@
         Guid[] GetTenants();
 
         event Action<Guid> OnTenantChanged;
+
+        bool IsSuperAdmin();
     }
 }

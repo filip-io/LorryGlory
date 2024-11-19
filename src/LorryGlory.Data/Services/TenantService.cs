@@ -1,9 +1,18 @@
-﻿using LorryGlory.Data.Services.IServices;
+﻿using LorryGlory.Data.Models.StaffModels;
+using LorryGlory.Data.Services.IServices;
+using Microsoft.AspNetCore.Http;
 
 namespace LorryGlory.Data.Services
 {
     public class TenantService : ITenantService
     {
+
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        public TenantService(IHttpContextAccessor httpContextAccessor)
+        {
+            _httpContextAccessor = httpContextAccessor;
+        }
+
 
         private Guid _currentTenantId;
         public Guid TenantId => _currentTenantId;
@@ -24,6 +33,12 @@ namespace LorryGlory.Data.Services
                 _currentTenantId = tenantId;
                 OnTenantChanged?.Invoke(tenantId);
             }
+        }
+
+        public bool IsSuperAdmin()
+        {
+            var user = _httpContextAccessor.HttpContext?.User;
+            return user?.IsInRole("SuperAdmin") ?? false;
         }
     }
 }

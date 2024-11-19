@@ -19,6 +19,7 @@ public static class ServiceConfiguration
         serviceCollection.AddScoped<ITenantService, TenantService>();
         serviceCollection.AddScoped<IJobTaskService, JobTaskService>();
         serviceCollection.AddScoped<IVehicleService, VehicleService>();
+        serviceCollection.AddScoped<IStaffService, StaffService>();
     }
     public static void ConfigureAuthorization(this IServiceCollection serviceCollection)
     {
@@ -65,7 +66,8 @@ public static class ServiceConfiguration
         serviceCollection.ConfigureApplicationCookie(options =>
         {
             options.LoginPath = "/auth/login";
-            options.Cookie.Name = IdentityConstants.ApplicationScheme;
+            options.Cookie.Name = "LorryGloryApp";
+            options.Cookie.HttpOnly = true;
             options.Cookie.SameSite = SameSiteMode.Strict;
             options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
         });

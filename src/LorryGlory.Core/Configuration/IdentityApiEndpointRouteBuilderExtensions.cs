@@ -11,6 +11,7 @@ using System.Text.Encodings.Web;
 using LorryGlory.Core.Models.DTOs;
 using LorryGlory.Data.Models;
 using LorryGlory.Data.Models.StaffModels;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.BearerToken;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
@@ -95,8 +96,8 @@ public static class IdentityApiEndpointRouteBuilderExtensions
                 JobTitle = registration.JobTitle,
                 PersonalNumber = registration.PersonalNumber,
                 PreferredLanguage = registration.PreferredLanguage,
-                Address= address,
-                FK_TenantId= new Guid("1D2B0228-4D0D-4C23-8B49-01A698857709")
+                Address = address,
+                FK_TenantId = new Guid("1D2B0228-4D0D-4C23-8B49-01A698857709")
             };
             await userStore.SetUserNameAsync(user, email, CancellationToken.None);
             await emailStore.SetEmailAsync(user, email, CancellationToken.None);
@@ -114,11 +115,18 @@ public static class IdentityApiEndpointRouteBuilderExtensions
         routeGroup.MapPost("/login", async Task<Results<Ok<AccessTokenResponse>, EmptyHttpResult, ProblemHttpResult>>
             ([FromBody] LoginRequest login, [FromQuery] bool? useCookies, [FromQuery] bool? useSessionCookies, [FromServices] IServiceProvider sp) =>
         {
+            var userManager = sp.GetRequiredService<UserManager<TUser>>();
             var signInManager = sp.GetRequiredService<SignInManager<TUser>>();
 
             var useCookieScheme = (useCookies == true) || (useSessionCookies == true);
             var isPersistent = (useCookies == true) && (useSessionCookies != true);
             signInManager.AuthenticationScheme = useCookieScheme ? IdentityConstants.ApplicationScheme : IdentityConstants.BearerScheme;
+
+            var user = await userManager.FindByEmailAsync(login.Email);
+            if (user == null)
+            {
+                return TypedResults.Problem("Invalid login attempt.", statusCode: StatusCodes.Status401Unauthorized);
+            }
 
             var result = await signInManager.PasswordSignInAsync(login.Email, login.Password, isPersistent, lockoutOnFailure: true);
 
@@ -138,6 +146,19 @@ public static class IdentityApiEndpointRouteBuilderExtensions
             {
                 return TypedResults.Problem(result.ToString(), statusCode: StatusCodes.Status401Unauthorized);
             }
+
+            // Add claim with TenantId
+            var currentPrincipal = await signInManager.CreateUserPrincipalAsync(user);
+
+            var identity = (ClaimsIdentity)currentPrincipal.Identity;
+            if (!string.IsNullOrEmpty(user.FK_TenantId?.ToString()))
+            {
+                identity.AddClaim(new Claim("TenantId", user.FK_TenantId.ToString()));
+            }
+            await signInManager.Context.SignInAsync(signInManager.AuthenticationScheme, currentPrincipal, new AuthenticationProperties
+            {
+                IsPersistent = isPersistent
+            });
 
             // The signInManager already produced the needed response in the form of a cookie or bearer token.
             return TypedResults.Empty;
