@@ -16,74 +16,55 @@ namespace LorryGlory.Data.Repositories
     public class JobTaskRepository : IJobTaskRepository
     {
         private readonly LorryGloryDbContext _context;
-        private readonly ITenantService _tenantService;
         private readonly ILogger<JobTaskRepository> _logger;
 
-        public JobTaskRepository(LorryGloryDbContext lorryGloryDbContext, ITenantService tenantService, ILogger<JobTaskRepository> logger)
+        public JobTaskRepository(LorryGloryDbContext lorryGloryDbContext, ILogger<JobTaskRepository> logger)
         {
             _context = lorryGloryDbContext;
-            _tenantService = tenantService;
             _logger = logger;
         }
 
         public async Task<IEnumerable<JobTask?>> GetAllAsync()
         {
-            if (_tenantService.TenantId == Guid.Empty)
-            {
-                throw new InvalidOperationException("TenantId is not set");
-            }
-            var jobTasksQuery = _context.JobTasks
+            var jobTasks = _context.JobTasks
                 .Include(jt => jt.StaffMember)
                 .Include(jt => jt.Job)
                 .Include(jt => jt.Vehicle)
                 .Include(jt => jt.FileLink)
                 .Include(jt => jt.JobTaskReport)
-                .Include(jt => jt.Company)
-                .Where(jt => jt.FK_TenantId == _tenantService.TenantId);
+                .Include(jt => jt.Company);
 
             //_logger.LogDebug("Generated SQL: {Sql}", jobTasksQuery.ToQueryString());
 
-            return await jobTasksQuery.ToListAsync();
+            return await jobTasks.ToListAsync();
         }
 
         public async Task<IEnumerable<JobTask?>> GetAllByDriverIdAndDayAsync(string id, DateOnly date)
         {
-            if (_tenantService.TenantId == Guid.Empty)
-            {
-                throw new InvalidOperationException("TenantId is not set");
-            }
-
-            var jobTasksQuery = _context.JobTasks
-                .Include(jt => jt.StaffMember)
+            var jobTasks = _context.JobTasks
                 .Include(jt => jt.Job)
+                    .ThenInclude(j => j.Client)
                 .Include(jt => jt.Vehicle)
                 .Include(jt => jt.FileLink)
                 .Include(jt => jt.JobTaskReport)
-                .Include(jt => jt.Company)
-                .Where(jt => jt.FK_TenantId == _tenantService.TenantId)
-                .Where(jt => jt.FK_StaffMemberId == id);
-
-            return await jobTasksQuery.ToListAsync();
+                .Where(jt => jt.FK_StaffMemberId == id &&
+                       DateOnly.FromDateTime(jt.StartTime) == date);
+            
+            return await jobTasks.ToListAsync();
         }
 
         public async Task<JobTask?> GetByIdAsync(Guid id)
         {
-            if (_tenantService.TenantId == Guid.Empty)
-            {
-                throw new InvalidOperationException("TenantId is not set");
-            }
-
-            var jobTaskQuery = _context.JobTasks
+            var jobTask = _context.JobTasks
                     .Include(jt => jt.StaffMember)
                     .Include(jt => jt.Job)
                     .Include(jt => jt.Vehicle)
                     .Include(jt => jt.FileLink)
                     .Include(jt => jt.JobTaskReport)
                     .Include(jt => jt.Company)
-                    .Where(jt => jt.FK_TenantId == _tenantService.TenantId)
                     .Where(jt => jt.Id == id);
 
-            return await jobTaskQuery.FirstOrDefaultAsync();
+            return await jobTask.FirstOrDefaultAsync();
         }
 
         public async Task<JobTask> CreateAsync(JobTask jobTask)
@@ -95,11 +76,6 @@ namespace LorryGlory.Data.Repositories
 
         public async Task<JobTask?> UpdateAsync(JobTask jobTask)
         {
-            if (_tenantService.TenantId == Guid.Empty)
-            {
-                throw new InvalidOperationException("TenantId is not set");
-            }
-
             var existingTask = await _context.JobTasks
                 .Include(jt => jt.StaffMember)
                 .Include(jt => jt.Job)
@@ -107,7 +83,7 @@ namespace LorryGlory.Data.Repositories
                 .Include(jt => jt.FileLink)
                 .Include(jt => jt.JobTaskReport)
                 .Include(jt => jt.Company)
-                .FirstOrDefaultAsync(jt => jt.Id == jobTask.Id && jt.FK_TenantId == _tenantService.TenantId);
+                .FirstOrDefaultAsync();
 
             if (existingTask == null)
             {

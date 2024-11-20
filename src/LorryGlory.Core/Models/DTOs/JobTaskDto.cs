@@ -28,11 +28,10 @@ namespace LorryGlory.Core.Models.DTOs
         public DateTime UpdatedAt { get; set; }
 
         // Staff Member Info
-        public string StaffMemberId { get; set; }
         public StaffMemberDto StaffMember { get; set; }
 
         // Job Info
-        public JobDto Job { get; set; }
+        public Guid FK_JobId { get; set; }
 
         // Vehicle Info (optional)
         public VehicleDto? Vehicle { get; set; }
@@ -43,10 +42,28 @@ namespace LorryGlory.Core.Models.DTOs
         // Report
         public JobTaskReportDto? JobTaskReport { get; set; }
 
-        // Company/Tenant Info
-        public Guid TenantId { get; set; }
-        public string CompanyName { get; set; }
+        // Client info
+        public string ClientName { get; set; }
     }
+}
+
+public class JobTaskBasicDto
+{
+    public Guid Id { get; set; }
+    public string Title { get; set; }
+    public string Description { get; set; }
+    public JobTaskStatus Status { get; set; }
+    public bool IsCompleted { get; set; }
+    public AddressDto PickupAddress { get; set; }
+    public AddressDto DeliveryAddress { get; set; }
+    public DateTime StartTime { get; set; }
+    public DateTime EndTime { get; set; }
+    public string FK_StaffMemberId { get; set; }
+    public Guid FK_JobId { get; set; }
+    public Guid? FK_VehicleId { get; set; }
+    public string ClientName { get; set; }
+    public FileLinkDto? FileLink { get; set; }
+    public JobTaskReportDto? JobTaskReport { get; set; }
 }
 
 public class JobTaskCreateDto
@@ -76,7 +93,12 @@ public class JobTaskCreateDto
     [Required]
     public DateTime EndTime { get; set; }
 
+    public DateTime CreatedAt { get; set; } = DateTime.Now;
+    public DateTime UpdatedAt { get; set; } = DateTime.Now;
+
     public string? FK_StaffMemberId { get; set; }
+
+    public Guid JobId { get; set; }
 
     [Required]
     public Guid FK_JobId { get; set; }
