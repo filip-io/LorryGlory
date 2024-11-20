@@ -19,6 +19,10 @@ namespace LorryGlory.Data.Models.JobModels
 
         public string? Description { get; set; }
 
+        public TimeSpan? ActualStartTime { get; set; }
+
+        public TimeSpan? ActualEndTime { get; set; }
+
         [ForeignKey("FileLink")]
         public Guid? FK_FileLink { get; set; }
         public FileLink? FileLink { get; set; }
