@@ -24,7 +24,7 @@ namespace LorryGlory.Data.Models.StaffModels
         public ICollection<JobTaskReport>? JobTaskReports { get; set; }
 
         [ForeignKey("Company")]
-        public Guid FK_TenantId { get; set; }
+        public Guid? FK_TenantId { get; set; }
         public Company Company { get; set; }
 
     }

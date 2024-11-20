@@ -4,6 +4,7 @@ using LorryGlory.Data.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LorryGlory.Data.Migrations
 {
     [DbContext(typeof(LorryGloryDbContext))]
-    partial class LorryGloryDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241117005355_UpdateEntityConfig")]
+    partial class UpdateEntityConfig
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -140,10 +143,8 @@ namespace LorryGlory.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("EndTime")
-                        .HasColumnType("datetime2");
 
                     b.Property<TimeSpan?>("EstimatedTotalTime")
                         .HasColumnType("time");
@@ -160,14 +161,8 @@ namespace LorryGlory.Data.Migrations
                     b.Property<bool>("IsCompleted")
                         .HasColumnType("bit");
 
-                    b.Property<DateTime?>("StartTime")
-                        .HasColumnType("datetime2");
-
                     b.Property<int?>("Status")
                         .HasColumnType("int");
-
-                    b.Property<string>("Title")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
@@ -257,18 +252,18 @@ namespace LorryGlory.Data.Migrations
                         new
                         {
                             Id = new Guid("9a2b0228-4d0d-4c23-8b49-01a698857709"),
-                            CreatedAt = new DateTime(2024, 11, 20, 15, 31, 28, 316, DateTimeKind.Local).AddTicks(1768),
+                            CreatedAt = new DateTime(2024, 11, 17, 1, 53, 55, 153, DateTimeKind.Local).AddTicks(3896),
                             Description = "Test delivery task",
-                            EndTime = new DateTime(2024, 11, 20, 17, 31, 28, 316, DateTimeKind.Local).AddTicks(1768),
+                            EndTime = new DateTime(2024, 11, 17, 3, 53, 55, 153, DateTimeKind.Local).AddTicks(3896),
                             FK_FileLink = new Guid("5d2b0228-4d0d-4c23-8b49-01a698857709"),
                             FK_JobId = new Guid("1a2b0228-4d0d-4c23-8b49-01a698857709"),
                             FK_StaffMemberId = "1STAFFM",
                             FK_TenantId = new Guid("1d2b0228-4d0d-4c23-8b49-01a698857709"),
                             IsCompleted = false,
-                            StartTime = new DateTime(2024, 11, 20, 15, 31, 28, 316, DateTimeKind.Local).AddTicks(1768),
+                            StartTime = new DateTime(2024, 11, 17, 1, 53, 55, 153, DateTimeKind.Local).AddTicks(3896),
                             Status = 666,
                             Title = "Delivery Task",
-                            UpdatedAt = new DateTime(2024, 11, 20, 15, 31, 28, 316, DateTimeKind.Local).AddTicks(1768)
+                            UpdatedAt = new DateTime(2024, 11, 17, 1, 53, 55, 153, DateTimeKind.Local).AddTicks(3896)
                         });
                 });
 
@@ -277,12 +272,6 @@ namespace LorryGlory.Data.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<TimeSpan?>("ActualEndTime")
-                        .HasColumnType("time");
-
-                    b.Property<TimeSpan?>("ActualStartTime")
-                        .HasColumnType("time");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
@@ -428,7 +417,7 @@ namespace LorryGlory.Data.Migrations
                         {
                             Id = "1STAFFM",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "ef2faa8a-e89b-4f18-a432-44e8f47ccfa1",
+                            ConcurrencyStamp = "c9f574e6-f863-47c7-8623-b9f052e323ba",
                             Email = "magda@m.m",
                             EmailConfirmed = false,
                             FK_TenantId = new Guid("1d2b0228-4d0d-4c23-8b49-01a698857709"),
@@ -439,7 +428,7 @@ namespace LorryGlory.Data.Migrations
                             PersonalNumber = "YYYYMMDD-0000",
                             PhoneNumberConfirmed = false,
                             PreferredLanguage = "PL",
-                            SecurityStamp = "f154ae02-283d-464f-990a-fc7bc5c3ee0e",
+                            SecurityStamp = "e59c16ef-71a0-42fa-a616-d7856662579c",
                             TwoFactorEnabled = false,
                             UserName = "magda@m.m"
                         });
