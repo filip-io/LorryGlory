@@ -19,19 +19,25 @@ namespace LorryGlory.Data.Services
 
         public event Action<Guid> OnTenantChanged;
 
-
-        public Guid[] GetTenants()
+        public void SetTenant(Guid? tenantId)
         {
-            // use repo return _context.Companies.Select(c => c.Id).ToArray();
-            throw new NotImplementedException();
-        }
-
-        public void SetTenant(Guid tenantId)
-        {
-            if (_currentTenantId != tenantId)
+            Console.WriteLine($"TenantService instance: {this.GetHashCode()}");
+            if (tenantId.HasValue)
             {
-                _currentTenantId = tenantId;
-                OnTenantChanged?.Invoke(tenantId);
+                if (_currentTenantId != tenantId.Value)
+                {
+                    Console.WriteLine("Before _currentTenantId: Tenant ID set to: " + _currentTenantId);
+                    _currentTenantId = tenantId.Value;
+                    Console.WriteLine("After _currentTenantId: Tenant ID set to: " + _currentTenantId);
+                    Console.WriteLine("After TenantId: Tenant ID set to: " + TenantId);
+                    OnTenantChanged?.Invoke(_currentTenantId);
+                }
+            }
+            else
+            {
+                _currentTenantId = Guid.Empty;
+                Console.WriteLine("Tenant ID reset to empty.");
+                OnTenantChanged?.Invoke(_currentTenantId);
             }
         }
 
@@ -40,5 +46,6 @@ namespace LorryGlory.Data.Services
             var user = _httpContextAccessor.HttpContext?.User;
             return user?.IsInRole("SuperAdmin") ?? false;
         }
+
     }
 }

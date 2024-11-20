@@ -11,6 +11,7 @@ using System.Text.Encodings.Web;
 using LorryGlory.Core.Models.DTOs;
 using LorryGlory.Data.Models;
 using LorryGlory.Data.Models.StaffModels;
+using LorryGlory.Data.Services.IServices;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.BearerToken;
 using Microsoft.AspNetCore.Builder;
@@ -113,10 +114,15 @@ public static class IdentityApiEndpointRouteBuilderExtensions
         });
 
         routeGroup.MapPost("/login", async Task<Results<Ok<AccessTokenResponse>, EmptyHttpResult, ProblemHttpResult>>
-            ([FromBody] LoginRequest login, [FromQuery] bool? useCookies, [FromQuery] bool? useSessionCookies, [FromServices] IServiceProvider sp) =>
+            ([FromBody] LoginRequest login, 
+            [FromQuery] bool? useCookies, 
+            [FromQuery] bool? useSessionCookies, 
+            UserManager<TUser> userManager, 
+            SignInManager<TUser> signInManager, 
+            ITenantService tenantService) =>
         {
-            var userManager = sp.GetRequiredService<UserManager<TUser>>();
-            var signInManager = sp.GetRequiredService<SignInManager<TUser>>();
+            //var userManager = sp.GetRequiredService<UserManager<TUser>>();
+            //var signInManager = sp.GetRequiredService<SignInManager<TUser>>();
 
             var useCookieScheme = (useCookies == true) || (useSessionCookies == true);
             var isPersistent = (useCookies == true) && (useSessionCookies != true);
@@ -155,6 +161,9 @@ public static class IdentityApiEndpointRouteBuilderExtensions
             {
                 identity.AddClaim(new Claim("TenantId", user.FK_TenantId.ToString()));
             }
+
+            tenantService.SetTenant(user.FK_TenantId);
+
             await signInManager.Context.SignInAsync(signInManager.AuthenticationScheme, currentPrincipal, new AuthenticationProperties
             {
                 IsPersistent = isPersistent
@@ -163,6 +172,15 @@ public static class IdentityApiEndpointRouteBuilderExtensions
             // The signInManager already produced the needed response in the form of a cookie or bearer token.
             return TypedResults.Empty;
         });
+
+        // Lorry Glory logout
+        routeGroup.MapPost("/logout", async (SignInManager<TUser> signInManager, ITenantService tenantService) =>
+        {
+            await signInManager.SignOutAsync();
+            tenantService.SetTenant(null);
+            return Results.Ok();
+        })
+        .RequireAuthorization();
 
         routeGroup.MapPost("/refresh", async Task<Results<Ok<AccessTokenResponse>, UnauthorizedHttpResult, SignInHttpResult, ChallengeHttpResult>>
             ([FromBody] RefreshRequest refreshRequest, [FromServices] IServiceProvider sp) =>

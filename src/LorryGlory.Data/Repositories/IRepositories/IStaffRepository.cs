@@ -7,7 +7,7 @@ namespace LorryGlory.Data.Repositories.IRepositories
         Task<IEnumerable<StaffMember?>> GetAllAsync();
         Task<StaffMember?> GetByIdAsync(Guid id);
         Task<StaffMember?> GetByEmailAsync(string email);
-        Task<StaffMember> AddAsync(StaffMember staffMember);
+        Task<StaffMember> CreateAsync(StaffMember staffMember);
         Task<StaffMember?> UpdateAsync(StaffMember staffMember);
         Task<StaffMember?> DeleteAsync(StaffMember staffMember);
 

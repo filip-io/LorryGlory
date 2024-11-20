@@ -44,7 +44,7 @@ namespace LorryGlory.Data.Repositories
         {
             throw new NotImplementedException();
         }
-        public async Task<StaffMember> AddAsync(StaffMember staffMember)
+        public async Task<StaffMember> CreateAsync(StaffMember staffMember)
         {
             throw new NotImplementedException();
         }

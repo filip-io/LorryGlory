@@ -4,12 +4,14 @@
     {
         Guid TenantId { get; }
 
-        void SetTenant(Guid tenantId);
+        void SetTenant(Guid? tenantId);
 
         Guid[] GetTenants();
 
         event Action<Guid> OnTenantChanged;
 
         bool IsSuperAdmin();
+
+        void AddTenant();
     }
 }
