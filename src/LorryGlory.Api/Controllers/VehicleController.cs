@@ -1,4 +1,5 @@
-﻿using LorryGlory.Api.Models;
+﻿using LorryGlory.Api.Helpers;
+using LorryGlory.Api.Models;
 using LorryGlory.Api.Models.DataTransferObjects;
 using LorryGlory.Api.Models.DataTransferObjects.VehicleDtos;
 using LorryGlory.Core.Models.ApiDtos;
@@ -14,59 +15,60 @@ namespace LorryGlory.Api.Controllers
     public class VehicleController : ControllerBase
     {
         private readonly IVehicleService _vehicleService;
+        private readonly ILogger<VehicleController> _logger;
 
-        public VehicleController(IVehicleService vehicleService)
+        public VehicleController(IVehicleService vehicleService, ILogger<VehicleController> logger)
         {
             _vehicleService = vehicleService;
+            _logger = logger;
         }
 
         [HttpGet("GetAll")]
-        public async Task<IActionResult> GetAllVehicles()
+        public async Task<ActionResult<ApiResponse<IEnumerable<GetAllVehiclesDto>>>> GetAllVehicles()
         {
             try
             {
                 var vehicles = await _vehicleService.GetAllAsync();
-                return Ok(vehicles);
+
+                return ResponseHelper.HandleSuccess(_logger, vehicles, "");
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return ResponseHelper.HandleException<IEnumerable<GetAllVehiclesDto>>(_logger, ex);
             }
         }
 
         [HttpGet("GetById/{id}")]
-        public async Task<IActionResult> GetById(Guid id)
+        public async Task<ActionResult<ApiResponse<VehicleDto>>> GetById(Guid id)
         {
             try
             {
                 var vehicle = await _vehicleService.GetByIdAsync(id);
-                if (vehicle == null) return NotFound();
+                if (vehicle == null) 
+                    return ResponseHelper.HandleNotFound<VehicleDto>(_logger, "No vehicle found.");
 
-                return Ok(vehicle);
+                return ResponseHelper.HandleSuccess(_logger, vehicle, "");
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return ResponseHelper.HandleException<VehicleDto>(_logger, ex);
             }
         }
 
         [HttpPost("GetTodaysVehiclesForDriver")]
-        public async Task<IActionResult> GetTodaysVehicles(GetTodaysVehiclesDto dto)
+        public async Task<ActionResult<ApiResponse<IEnumerable<TodaysVehiclesForDriver>>>> GetTodaysVehicles(GetTodaysVehiclesDto dto)
         {
             try
             {
                 var vehicles = await _vehicleService.GetAllByDriverIdAndDayAsync(dto.StaffId, dto.Day);
                 if (vehicles == null)
-                {
-                    return NotFound();
-                }
+                    return ResponseHelper.HandleNotFound<IEnumerable<TodaysVehiclesForDriver>>(_logger, "No vehicles found.");
 
-                return Ok(vehicles);
+                return ResponseHelper.HandleSuccess(_logger, vehicles, "");
             }
             catch (Exception ex)
             {
-                // Logging and better error message.
-                return BadRequest(ex.Message);
+                return ResponseHelper.HandleException<IEnumerable<TodaysVehiclesForDriver>>(_logger, ex);
             }
         }
 
@@ -123,8 +125,13 @@ namespace LorryGlory.Api.Controllers
         {
             try
             {
-                await _vehicleService.DeleteAsync(id);
+                var success = await _vehicleService.DeleteAsync(id);
+                if (success == false) return BadRequest("Failed to delete vehicle.");
                 return NoContent();
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
             }
             catch (Exception ex)
             {
@@ -133,27 +140,19 @@ namespace LorryGlory.Api.Controllers
         }
 
         [HttpPost("Search")]
-        public async Task<IActionResult> SearchVehicle([FromBody] LicensePlateSearchDto searchDto)
+        public async Task<ActionResult<ApiResponse<VehicleSearchDto>>> SearchVehicle([FromBody] LicensePlateSearchDto searchDto)
         {
             try
             {
                 var vehicle = await _vehicleService.GetByRegNoAsync(searchDto.RegNo);
-                if (vehicle == null) return NotFound($"No vehicle with license plate {searchDto.RegNo} found.");
+                if (vehicle == null) 
+                    return ResponseHelper.HandleNotFound<VehicleSearchDto>(_logger, $"No vehicle with license plate {searchDto.RegNo} found.");
 
-                var response = new ApiResponse<VehicleSearchDto>
-                {
-                    Success = true,
-                    Message = "",
-                    Data = vehicle,
-                    Errors = new List<string>()
-                };
-
-                return Ok(response);
+                return ResponseHelper.HandleSuccess(_logger, vehicle, "");
             }
             catch (Exception ex)
             {
-                // Logging and better error message.
-                return BadRequest(ex.Message);
+                return ResponseHelper.HandleException<VehicleSearchDto>(_logger, ex);
             }
         }
     }

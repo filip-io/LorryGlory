@@ -47,12 +47,13 @@ namespace LorryGlory.Core.Services
             }
         }
 
-        public async Task<VehicleDto> DeleteAsync(Guid id)
+        public async Task<bool> DeleteAsync(Guid id)
         {
-            var vehicle = await _vehicleRepository.GetByIdAsync(id, true);
-            var result = await _vehicleRepository.DeleteAsync(vehicle);
+            var vehicle = await _vehicleRepository.GetByIdAsync(id, false);
+            if (vehicle == null) throw new KeyNotFoundException($"Vehicle with id {id} not found.");
 
-            return result?.ToVehicleDto() ?? null;
+            var result = await _vehicleRepository.DeleteAsync(vehicle);
+            return true;
         }
 
         public async Task<IEnumerable<GetAllVehiclesDto>> GetAllAsync()

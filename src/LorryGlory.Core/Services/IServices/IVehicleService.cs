@@ -12,6 +12,6 @@ namespace LorryGlory.Core.Services.IServices
         Task<VehicleSearchDto> GetByRegNoAsync(string regNo);
         Task<VehicleDto> CreateAsync(CreateVehicleDto vehicleDto);
         Task<VehicleDto> UpdateAsync(UpdateVehicleDto vehicleDto, Guid id);
-        Task<VehicleDto> DeleteAsync(Guid id);
+        Task<bool> DeleteAsync(Guid id);
     }
 }
