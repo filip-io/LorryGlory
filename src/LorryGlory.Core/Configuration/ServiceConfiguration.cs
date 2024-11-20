@@ -45,6 +45,10 @@ public static class ServiceConfiguration
         // Staff
         serviceCollection.AddScoped<IStaffService, StaffService>();
         serviceCollection.AddScoped<IStaffRepository, StaffRepository>();
+
+        // Company 
+        serviceCollection.AddScoped<ICompanyService, CompanyService>();
+        serviceCollection.AddScoped<ICompanyRepository, CompanyRepository>();
     }
     
     public static void ConfigureScopes(this IServiceCollection serviceCollection)
