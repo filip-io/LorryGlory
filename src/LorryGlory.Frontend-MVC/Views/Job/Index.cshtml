@@ -1,0 +1,99 @@
+﻿@*
+    Todays mission view for the admin. Looking up all missions over different days and making new missions.
+    TODO list:
+    1a = Needs to connetct to endpoints
+*@
+
+@{
+}
+
+<div class="p-4 bg-gray-100">
+
+    <!-- Header -->
+    <div class="flex justify-center mb-4">
+        <h1 class="text-lg font-bold">Todays Mission</h1>
+    </div>
+
+    <!-- Back to Menu Button -->
+    <div class="flex items-center justify-between border-b border-gray-300 pb-2">
+        <button class="text-gray-600" aria-label="Back to menu">
+            <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 18a1 1 0 01-.707-.293l-7-7a1 1 0 010-1.414l7-7a1 1 0 011.414 1.414L4.414 10l6.293 6.293a1 1 0 01-.707 1.707z" clip-rule="evenodd" />
+            </svg>
+        </button>
+    </div>
+
+    <!-- Calendar Section -->
+    <div class="mt-4" x-data="{ today: new Date().toISOString().split('T')[0] }">
+        <label for="calendar" class="block text-gray-700 font-medium mb-2">Select a Date:</label>
+        <input type="date"
+               id="calendar"
+               name="calendar"
+               x-bind:value="today"
+               class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-blue-300" />
+    </div>
+
+    <!-- New job -->
+    <button class="mt-4 w-full bg-blue-600 text-white py-2 px-4 rounded-lg shadow-md">
+        <a asp-controller="TodaysMission" asp-action="TaskCreate">New job</a>
+    </button>
+
+    <!-- Dropdown Menus Section -->
+    <div class="mt-4 flex gap-4">
+        <!-- First Dropdown -->
+        <div class="w-1/2">
+            <label for="dropdown1" class="block text-gray-700 font-medium mb-2">Select Option 1:</label>
+            <select id="dropdown1"
+                    name="dropdown1"
+                    class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-blue-300">
+                <option value="option1">Option 1</option>
+                <option value="option2">Option 2</option>
+                <option value="option3">Option 3</option>
+            </select>
+        </div>
+
+        <!-- Second Dropdown -->
+        <div class="w-1/2">
+            <label for="dropdown2" class="block text-gray-700 font-medium mb-2">Select Option 2:</label>
+            <select id="dropdown2"
+                    name="dropdown2"
+                    class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-blue-300">
+                <option value="optionA">Option A</option>
+                <option value="optionB">Option B</option>
+                <option value="optionC">Option C</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Hardcode known missions for testing until endpoint -->
+    @{
+        // Mock data for testing
+        var missions = new List<dynamic>
+    {
+    new { Name = "Jarl Bjorn's Great Hall", StartTime = "07:30", EndTime = "11:30", Title = "Delivery to Stockholm"},
+    new { Name = "Another Mission", StartTime = "10:00", EndTime = "12:00", Title = "Delivery to Gothenburg"},
+    new { Name = "Mission 3", StartTime = "13:00", EndTime = "15:00", Title = "Delivery to Malmö"},
+    new { Name = "Mission 4", StartTime = "16:00", EndTime = "18:00", Title = "Delivery to Östersund"}
+    };
+    }
+
+    <!-- Mission List -->
+    <div class="mt-6">
+        @foreach (var mission in missions)
+        {
+            <div class="flex items-center justify-between border-b border-gray-300 py-3">
+                <div>
+                    <p class="font-semibold text-lg">@mission.Name</p>
+                    <p class="text-sm text-gray-600">@mission.StartTime - @mission.EndTime</p>
+                    <p class="text-gray-800">Title</p>
+                    <p class="text-gray-600 text-sm">@mission.Title</p>
+                </div>
+                <button class="text-blue-500 hover:text-blue-700">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+                    </svg>
+                </button>
+            </div>
+        }
+    </div>
+</div>

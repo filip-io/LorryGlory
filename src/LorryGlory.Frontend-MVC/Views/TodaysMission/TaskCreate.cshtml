@@ -1,0 +1,240 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "New Task";
+}
+@model LorryGlory_Frontend_MVC.ViewModels.Task.CreateTaskViewModel
+
+
+<div x-data="{ openTab: 1, totalPages: 5 }" class="p-6 bg-gray-50 min-h-screen flex flex-col items-center">
+
+    <!-- Header -->
+    <div class="text-center mb-6">
+        <h1 class="text-2xl font-bold text-gray-800">Today's Mission</h1>
+    </div>
+
+    <!-- Back to Menu Button -->
+    <div class="flex justify-start w-full max-w-3xl mb-6">
+        <button class="text-gray-600 hover:text-gray-800" aria-label="Back to menu">
+            <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 18a1 1 0 01-.707-.293l-7-7a1 1 0 010-1.414l7-7a1 1 0 011.414 1.414L4.414 10l6.293 6.293a1 1 0 01-.707 1.707z" clip-rule="evenodd" />
+            </svg>
+        </button>
+    </div>
+
+    <!-- Pagination -->
+    <div class="flex items-center space-x-4 mb-6">
+        <button :disabled="openTab === 1" @@click="openTab = 1" class="px-4 py-2 text-sm text-gray-700 hover:text-gray-800" aria-label="Go to first page"><<</button>
+        <button :disabled="openTab === 1" @@click="openTab = openTab - 1" class="px-4 py-2 text-sm text-gray-700 hover:text-gray-800" aria-label="Go one step left"><</button>
+        <span class="px-4 py-2 text-sm text-gray-700" aria-live="polite">Page <span x-text="openTab"></span> of <span x-text="totalPages"></span></span>
+        <button :disabled="openTab === totalPages" @@click="openTab = openTab + 1" class="px-4 py-2 text-sm text-gray-700 hover:text-gray-800" aria-label="Go one step right">></button>
+        <button :disabled="openTab === totalPages" @@click="openTab = totalPages" class="px-4 py-2 text-sm text-gray-700 hover:text-gray-800" aria-label="Go to last page">>></button>
+    </div>
+
+    <!-- Form -->
+    <form action="/JobTasks/Create" method="post" class="w-full max-w-3xl bg-white shadow-md rounded-lg p-6 space-y-6">
+
+        <!-- Mission Tab Content -->
+        <div x-show="openTab === 1" class="space-y-4">
+            <fieldset>
+                <legend class="text-lg font-semibold text-gray-900">Mission</legend>
+                <div class="space-y-2">
+                    <label class="block text-sm font-medium text-gray-700">Title</label>
+                    <input name="Title" value="Sample Title" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" />
+                </div>
+                <div class="space-y-2">
+                    <label class="block text-sm font-medium text-gray-700">Description</label>
+                    <textarea name="Description" rows="4" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">Sample description</textarea>
+                </div>
+                <div class="space-y-2">
+                    <label class="block text-sm font-medium text-gray-700">Status</label>
+                    <input name="Status" value="0" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" />
+                </div>
+                <div class="flex items-center space-x-3">
+                    <label class="text-sm font-medium text-gray-700">Is Completed?</label>
+                    <input name="IsCompleted" type="checkbox" class="h-5 w-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500" checked />
+                </div>
+                <!-- Button Container (same row, opposite corners) -->
+                <div class="flex space-x-4 mt-8">
+                    <!-- Next Button -->
+                    <button type="button"
+                            @@click="openTab = openTab + 1"
+                            class="flex-1 px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+                            aria-label="Next page">
+                        Next
+                    </button>
+
+                    <!-- Cancel Button -->
+                    <button type="button"
+                            @@click="Logic to cancel"
+                            class="flex-1 px-6 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
+                            aria-label="Cancel">
+                        Cancel
+                    </button>
+                </div>
+            </fieldset>
+        </div>
+
+        <!-- Contact Person Tab Content -->
+        <div x-show="openTab === 2" class="space-y-4">
+            <fieldset>
+                <legend class="text-lg font-semibold text-gray-900">Contact Person</legend>
+                <div class="space-y-2">
+                    <label class="block text-sm font-medium text-gray-700">Name</label>
+                    <input name="ContactPersonName" value="John Doe" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" />
+                </div>
+                <div class="space-y-2">
+                    <label class="block text-sm font-medium text-gray-700">Email</label>
+                    <input name="ContactPersonEmail" value="johndoe@example.com" type="email" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" />
+                </div>
+                <div class="space-y-2">
+                    <label class="block text-sm font-medium text-gray-700">Phone Number</label>
+                    <input name="ContactPersonPhoneNumber" value="123456789" type="tel" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" />
+                </div>
+                <!-- Button Container (same row, opposite corners) -->
+                <div class="flex space-x-4 mt-8">
+                    <!-- Next Button -->
+                    <button type="button"
+                            @@click="openTab = openTab + 1"
+                            class="flex-1 px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+                            aria-label="Next page">
+                        Next
+                    </button>
+
+                    <!-- Cancel Button -->
+                    <button type="button"
+                            @@click="Logic to cancel"
+                            class="flex-1 px-6 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
+                            aria-label="Cancel">
+                        Cancel
+                    </button>
+                </div>
+            </fieldset>
+        </div>
+
+        <!-- Pickup Address Tab Content -->
+        <div x-show="openTab === 3" class="space-y-4">
+            <fieldset x-data="{ stacked: window.innerWidth < 810 }"
+                      x-init="window.addEventListener('resize', () => { stacked = window.innerWidth < 810 })"
+                      class="space-y-4">
+                <legend class="text-lg font-semibold text-gray-900">Pickup Address</legend>
+                <div :class="stacked ? 'grid grid-cols-1 gap-4' : 'grid grid-cols-2 gap-4'">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Street</label>
+                        <input name="PickupStreet" value="123 Pickup Lane" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" />
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Postal Code</label>
+                        <input name="PickupPostalCode" value="12345" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" />
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">City</label>
+                        <input name="PickupCity" value="Pickuptown" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" />
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Country</label>
+                        <input name="PickupCountry" value="Pickupia" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" />
+                    </div>
+                </div>
+                <!-- Button Container (same row, opposite corners) -->
+                <div class="flex space-x-4 mt-8">
+                    <!-- Next Button -->
+                    <button type="button"
+                            @@click="openTab = openTab + 1"
+                            class="flex-1 px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+                            aria-label="Next page">
+                        Next
+                    </button>
+
+                    <!-- Cancel Button -->
+                    <button type="button"
+                            @@click="Logic to cancel"
+                            class="flex-1 px-6 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
+                            aria-label="Cancel">
+                        Cancel
+                    </button>
+                </div>
+            </fieldset>
+        </div>
+
+        <!-- Drop-off Address Tab Content -->
+        <div x-show="openTab === 4" class="space-y-4">
+            <fieldset class="space-y-4">
+                <legend class="text-lg font-semibold text-gray-900">Drop-off Address</legend>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Street</label>
+                        <input name="DropoffStreet" value="456 Drop-off Blvd" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" />
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Postal Code</label>
+                        <input name="DropoffPostalCode" value="67890" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" />
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">City</label>
+                        <input name="DropoffCity" value="Dropoffcity" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" />
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Country</label>
+                        <input name="DropoffCountry" value="Dropoffia" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" />
+                    </div>
+                </div>
+                <!-- Button Container (same row, opposite corners) -->
+                <div class="flex space-x-4 mt-8">
+                    <!-- Next Button -->
+                    <button type="button"
+                            @@click="openTab = openTab + 1"
+                            class="flex-1 px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+                            aria-label="Next page">
+                        Next
+                    </button>
+
+                    <!-- Cancel Button -->
+                    <button type="button"
+                            @@click="Logic to cancel"
+                            class="flex-1 px-6 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
+                            aria-label="Cancel">
+                        Cancel
+                    </button>
+                </div>
+            </fieldset>
+        </div>
+
+        <!-- Schedule Details Tab Content -->
+        <div x-show="openTab === 5" class="space-y-4">
+            <fieldset class="space-y-4">
+                <legend class="text-lg font-semibold text-gray-900">Schedule Details</legend>
+                <div class="space-y-2">
+                    <label class="block text-sm font-medium text-gray-700">Date</label>
+                    <input name="ScheduleDate" type="date" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" />
+                </div>
+                <div class="space-y-2">
+                    <label class="block text-sm font-medium text-gray-700">Time</label>
+                    <input name="ScheduleTime" type="time" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" />
+                </div>
+                <!-- Button Container (same row, opposite corners) -->
+                <div class="flex space-x-4 mt-8">
+                    <!-- Save button -->
+                    <button type="submit"
+                            class="flex-1 px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+                            aria-label="Save Changes">
+                        Save Changes
+                    </button>
+
+                    <!-- Cancel Button -->
+                    <button type="button"
+                            @@click="Logic to cancel"
+                            class="flex-1 px-6 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
+                            aria-label="Cancel">
+                        Cancel
+                    </button>
+                </div>
+            </fieldset>
+        </div>
+    </form>
+</div>
+
+
+
