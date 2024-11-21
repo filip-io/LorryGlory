@@ -1,4 +1,4 @@
-﻿using LorryGlory_Frontend_MVC.ViewModels.JobViewModels;
+﻿
 using Microsoft.AspNetCore.Mvc;
 
 namespace LorryGlory_Frontend_MVC.Controllers
@@ -13,7 +13,19 @@ namespace LorryGlory_Frontend_MVC.Controllers
         public IActionResult JobCreate()
         {
 
-            return View(new CreateJobViewModel());
+            return View();
+        }
+
+        public IActionResult JobRead()
+        {
+
+            return View();
+        }
+
+        public IActionResult TaskRead()
+        {
+
+            return View();
         }
     }
 }

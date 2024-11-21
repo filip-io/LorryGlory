@@ -1,0 +1,145 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+<div x-data="{ activeTab: 'Job' }" class="p-4 bg-gray-100">
+
+    <div class="flex justify-center mb-4">
+        <h1 class="text-lg font-bold">Job Title</h1>
+    </div>
+
+    <div class="flex items-center justify-between border-b border-gray-300 pb-2">
+        <button class="text-gray-600" aria-label="Back to menu">
+            <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 18a1 1 0 01-.707-.293l-7-7a1 1 0 010-1.414l7-7a1 1 0 011.414 1.414L4.414 10l6.293 6.293a1 1 0 01-.707 1.707z" clip-rule="evenodd" />
+            </svg>
+        </button>
+
+        <div class="flex space-x-4">
+            <button @@click="activeTab = 'Job'" :class="{'border-b-2 border-blue-500 text-gray-900': activeTab === 'Job', 'text-gray-500': activeTab !== 'Job'}" class="font-semibold px-4">
+                Job
+            </button>
+            <button @@click="activeTab = 'Task'" :class="{'border-b-2 border-blue-500 text-gray-900': activeTab === 'Task', 'text-gray-500': activeTab !== 'Task'}" class="font-semibold px-4">
+                Task
+            </button>
+        </div>
+
+        <div class="w-6"></div>
+    </div>
+
+    <div x-show="activeTab === 'Job'" class="space-y-4 mt-4">
+
+        <div class="bg-white p-4 rounded-lg shadow-md mb-4 flex items-center">
+            <!-- Left Section: Avatar and Contact Icons -->
+            <div class="text-center flex-shrink-0 mr-4">
+                <!-- Avatar Icon -->
+                <div class=" rounded-full h-16 w-16 flex items-center justify-center mb-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-full w-full p-2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                    </svg>
+                </div>
+
+                <div class="flex items-center space-x-4">
+                    <!-- Phone Icon -->
+                    <div class="flex items-center justify-center text-gray-500">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 0 0 2.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 0 1-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 0 0-1.091-.852H4.5A2.25 2.25 0 0 0 2.25 4.5v2.25Z" />
+                        </svg>
+                    </div>
+
+                    <!-- Message Icon -->
+                    <div class="flex items-center justify-center text-gray-500">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 0 1 .865-.501 48.172 48.172 0 0 0 3.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0 0 12 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018Z" />
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Section: Company Info -->
+            <div class="flex-grow">
+                <h2 class="font-semibold text-gray-800 text-lg mb-1">Company Name</h2>
+                <p class="text-gray-600 text-sm mb-1">Phone: <span class="font-medium">123-456-789</span></p>
+            </div>
+        </div>
+
+
+
+        <div class="bg-white p-4 rounded-lg shadow-md mb-4">
+            <h2 class="font-semibold text-gray-800 mb-2">Description</h2>
+            <div class="divide-y divide-gray-200 text-sm">
+                <div class="py-2 flex justify-between">
+                    <span>Description</span>
+                    <span class="font-medium"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white p-4 rounded-lg shadow-md mb-4">
+            <h2 class="font-semibold text-gray-800 mb-2">Customer</h2>
+            <div class="divide-y divide-gray-200 text-sm">
+                <div class="py-2 flex justify-between">
+                    <span>Estimated start time</span>
+                    <span class="font-medium"></span>
+                </div>
+                <div class="py-2 flex justify-between">
+                    <span>Estimated end time</span>
+                    <span class="font-medium"></span>
+                </div>
+                <div class="py-2 flex justify-between">
+                    <span>Contact Name</span>
+                    <span class="font-medium"></span>
+                </div>
+                <div class="py-2 flex justify-between">
+                    <span>Contact Number</span>
+                    <span class="font-medium"></span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div x-show="activeTab === 'Task'" class="space-y-4 mt-4">
+        <div class="p-4 bg-gray-100">
+
+            <!-- New job -->
+            <button class="mt-4 w-full bg-blue-600 text-white py-2 px-4 rounded-lg shadow-md">
+                <a asp-controller="TodaysMission" asp-action="TaskCreate">New Task</a>
+            </button>
+
+            <!-- Hardcode known missions for testing until endpoint -->
+            @{
+                // Mock data for testing
+                var missions = new List<dynamic>
+            {
+            new { Name = "Jarl Bjorn's Great Hall", StartTime = "07:30", EndTime = "11:30", Title = "Delivery to Stockholm"},
+            new { Name = "Another Mission", StartTime = "10:00", EndTime = "12:00", Title = "Delivery to Gothenburg"},
+            new { Name = "Mission 3", StartTime = "13:00", EndTime = "15:00", Title = "Delivery to Malmö"},
+            new { Name = "Mission 4", StartTime = "16:00", EndTime = "18:00", Title = "Delivery to Östersund"}
+            };
+            }
+
+            <!-- Mission List -->
+            <div class="mt-6">
+                @foreach (var mission in missions)
+                {
+                    <div class="flex items-center justify-between border-b border-gray-300 py-3">
+                        <div>
+                            <p class="font-semibold text-lg">@mission.Name</p>
+                            <p class="text-sm text-gray-600">@mission.StartTime - @mission.EndTime</p>
+                            <p class="text-gray-800">Title</p>
+                            <p class="text-gray-600 text-sm">@mission.Title</p>
+                        </div>
+                        <button class="text-blue-500 hover:text-blue-700">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+                            </svg>
+                        </button>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
