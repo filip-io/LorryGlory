@@ -37,7 +37,7 @@ namespace LorryGlory.Data.Repositories
                 .Include(j => j.JobTasks)
                 .Include(j => j.FileLink)
                 .Include(j => j.Company)
-                .FirstOrDefaultAsync();
+                .SingleOrDefaultAsync(j => j.Id == id);
         }
 
         public async Task<Job> CreateAsync(Job job)
@@ -55,7 +55,7 @@ namespace LorryGlory.Data.Repositories
                 .Include(j => j.JobTasks)
                 .Include(j => j.FileLink)
                 .Include(j => j.Company)
-                .FirstOrDefaultAsync();
+                .SingleOrDefaultAsync();
 
             if (existingJob == null)
             {
