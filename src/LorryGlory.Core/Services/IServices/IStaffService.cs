@@ -1,9 +1,4 @@
 ﻿using LorryGlory.Core.Models.DTOs;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LorryGlory.Core.Services.IServices
 {
@@ -11,8 +6,9 @@ namespace LorryGlory.Core.Services.IServices
     {
         Task<IEnumerable<StaffMemberDto>> GetAllAsync();
         Task<StaffMemberDto> GetByIdAsync(string id);
-        Task<StaffMemberDto> CreateAsync(StaffMemberDto staffMemberDto);
-        Task<StaffMemberDto> UpdateAsync(StaffMemberDto staffMemberDto);
+        Task<StaffMemberDto> GetByEmailAsync(string email);
+        Task<StaffMemberDto> CreateAsync(StaffMemberCreateDto staffMemberDto);
+        Task<StaffMemberDto> UpdateAsync(StaffMemberUpdateDto staffMemberDto);
         Task<StaffMemberDto> DeleteAsync(string id);
     }
 }

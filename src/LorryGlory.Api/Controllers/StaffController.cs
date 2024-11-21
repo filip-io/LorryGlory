@@ -53,5 +53,9 @@ namespace LorryGlory.Api.Controllers
             }
         }
 
+        // add staff member
+        // superadmin needs to set Admins tenantId
+        // admin's tenantId follows to staff members he creates
+
     }
 }
