@@ -38,7 +38,6 @@ namespace LorryGlory.Api.Controllers
                 {
                     Console.WriteLine(claim.Value);
                 }
-                return Ok(new { hello = "hello!" });
                 var staffMembers = await _staffService.GetAllAsync();
                 return ResponseHelper.HandleSuccess(_logger, staffMembers,
                     staffMembers.Any() ? "Staff members retrieved successfully" : "No staff members exist");
