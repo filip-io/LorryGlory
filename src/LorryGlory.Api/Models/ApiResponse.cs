@@ -14,16 +14,16 @@
         /// <summary>
         /// The data returned by the API
         /// </summary>
-        public T Data { get; set; }
+        public T? Data { get; set; }
 
         /// <summary>
         /// A message describing the result of the operation
         /// </summary>
-        public string Message { get; set; }
+        public string? Message { get; set; }
 
         /// <summary>
         /// Collection of error messages if the operation wasn't successful
         /// </summary>
-        public IEnumerable<string> Errors { get; set; }
+        public IEnumerable<string>? Errors { get; set; }
     }
 }

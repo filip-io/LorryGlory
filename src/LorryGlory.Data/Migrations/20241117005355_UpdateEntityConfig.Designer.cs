@@ -4,6 +4,7 @@ using LorryGlory.Data.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,13 +12,15 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LorryGlory.Data.Migrations
 {
     [DbContext(typeof(LorryGloryDbContext))]
-    partial class LorryGloryDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241117005355_UpdateEntityConfig")]
+    partial class UpdateEntityConfig
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.11")
+                .HasAnnotation("ProductVersion", "8.0.10")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -72,6 +75,15 @@ namespace LorryGlory.Data.Migrations
                     b.HasKey("TenantId");
 
                     b.ToTable("Companies");
+
+                    b.HasData(
+                        new
+                        {
+                            TenantId = new Guid("1d2b0228-4d0d-4c23-8b49-01a698857709"),
+                            CompanyName = "Lorry Glory AB",
+                            OrganizationNumber = "11-111",
+                            PhoneNumber = "0761"
+                        });
                 });
 
             modelBuilder.Entity("LorryGlory.Data.Models.FileLink", b =>
@@ -105,6 +117,17 @@ namespace LorryGlory.Data.Migrations
                         .IsUnique();
 
                     b.ToTable("FileLinks");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("5d2b0228-4d0d-4c23-8b49-01a698857709"),
+                            FK_TenantId = new Guid("1d2b0228-4d0d-4c23-8b49-01a698857709"),
+                            LinkedEntityId = new Guid("9a2b0228-4d0d-4c23-8b49-01a698857709"),
+                            LinkedEntityType = "JobTask",
+                            Name = "test-file.pdf",
+                            UriLink = "https://example.com/test-file.pdf"
+                        });
                 });
 
             modelBuilder.Entity("LorryGlory.Data.Models.JobModels.Job", b =>
@@ -120,10 +143,8 @@ namespace LorryGlory.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("EndTime")
-                        .HasColumnType("datetime2");
 
                     b.Property<TimeSpan?>("EstimatedTotalTime")
                         .HasColumnType("time");
@@ -140,14 +161,8 @@ namespace LorryGlory.Data.Migrations
                     b.Property<bool>("IsCompleted")
                         .HasColumnType("bit");
 
-                    b.Property<DateTime?>("StartTime")
-                        .HasColumnType("datetime2");
-
                     b.Property<int?>("Status")
                         .HasColumnType("int");
-
-                    b.Property<string>("Title")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
@@ -161,6 +176,16 @@ namespace LorryGlory.Data.Migrations
                     b.HasIndex("FK_TenantId");
 
                     b.ToTable("Jobs");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("1a2b0228-4d0d-4c23-8b49-01a698857709"),
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "Test Job",
+                            FK_TenantId = new Guid("1d2b0228-4d0d-4c23-8b49-01a698857709"),
+                            IsCompleted = false
+                        });
                 });
 
             modelBuilder.Entity("LorryGlory.Data.Models.JobModels.JobTask", b =>
@@ -222,6 +247,24 @@ namespace LorryGlory.Data.Migrations
                     b.HasIndex("FK_VehicleId");
 
                     b.ToTable("JobTasks");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("9a2b0228-4d0d-4c23-8b49-01a698857709"),
+                            CreatedAt = new DateTime(2024, 11, 17, 1, 53, 55, 153, DateTimeKind.Local).AddTicks(3896),
+                            Description = "Test delivery task",
+                            EndTime = new DateTime(2024, 11, 17, 3, 53, 55, 153, DateTimeKind.Local).AddTicks(3896),
+                            FK_FileLink = new Guid("5d2b0228-4d0d-4c23-8b49-01a698857709"),
+                            FK_JobId = new Guid("1a2b0228-4d0d-4c23-8b49-01a698857709"),
+                            FK_StaffMemberId = "1STAFFM",
+                            FK_TenantId = new Guid("1d2b0228-4d0d-4c23-8b49-01a698857709"),
+                            IsCompleted = false,
+                            StartTime = new DateTime(2024, 11, 17, 1, 53, 55, 153, DateTimeKind.Local).AddTicks(3896),
+                            Status = 666,
+                            Title = "Delivery Task",
+                            UpdatedAt = new DateTime(2024, 11, 17, 1, 53, 55, 153, DateTimeKind.Local).AddTicks(3896)
+                        });
                 });
 
             modelBuilder.Entity("LorryGlory.Data.Models.JobModels.JobTaskReport", b =>
@@ -229,12 +272,6 @@ namespace LorryGlory.Data.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<TimeSpan?>("ActualEndTime")
-                        .HasColumnType("time");
-
-                    b.Property<TimeSpan?>("ActualStartTime")
-                        .HasColumnType("time");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
@@ -302,7 +339,7 @@ namespace LorryGlory.Data.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<Guid?>("FK_TenantId")
+                    b.Property<Guid>("FK_TenantId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("FirstName")
@@ -374,6 +411,27 @@ namespace LorryGlory.Data.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "1STAFFM",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "c9f574e6-f863-47c7-8623-b9f052e323ba",
+                            Email = "magda@m.m",
+                            EmailConfirmed = false,
+                            FK_TenantId = new Guid("1d2b0228-4d0d-4c23-8b49-01a698857709"),
+                            FirstName = "Magda",
+                            JobTitle = 2,
+                            LastName = "Kubien",
+                            LockoutEnabled = false,
+                            PersonalNumber = "YYYYMMDD-0000",
+                            PhoneNumberConfirmed = false,
+                            PreferredLanguage = "PL",
+                            SecurityStamp = "e59c16ef-71a0-42fa-a616-d7856662579c",
+                            TwoFactorEnabled = false,
+                            UserName = "magda@m.m"
+                        });
                 });
 
             modelBuilder.Entity("LorryGlory.Data.Models.StaffModels.StaffRelation", b =>
@@ -815,6 +873,14 @@ namespace LorryGlory.Data.Migrations
 
                             b1.WithOwner()
                                 .HasForeignKey("JobTaskId");
+
+                            b1.HasData(
+                                new
+                                {
+                                    JobTaskId = new Guid("9a2b0228-4d0d-4c23-8b49-01a698857709"),
+                                    Email = "john@example.com",
+                                    Name = "John Doe"
+                                });
                         });
 
                     b.OwnsOne("LorryGlory.Data.Models.Address", "DeliveryAddress", b1 =>
@@ -844,6 +910,16 @@ namespace LorryGlory.Data.Migrations
 
                             b1.WithOwner()
                                 .HasForeignKey("JobTaskId");
+
+                            b1.HasData(
+                                new
+                                {
+                                    JobTaskId = new Guid("9a2b0228-4d0d-4c23-8b49-01a698857709"),
+                                    AddressCity = "Delivery City",
+                                    AddressCountry = "Sweden",
+                                    AddressStreet = "Delivery Street 2",
+                                    PostalCode = "67890"
+                                });
                         });
 
                     b.OwnsOne("LorryGlory.Data.Models.Address", "PickupAddress", b1 =>
@@ -873,6 +949,16 @@ namespace LorryGlory.Data.Migrations
 
                             b1.WithOwner()
                                 .HasForeignKey("JobTaskId");
+
+                            b1.HasData(
+                                new
+                                {
+                                    JobTaskId = new Guid("9a2b0228-4d0d-4c23-8b49-01a698857709"),
+                                    AddressCity = "Pickup City",
+                                    AddressCountry = "Sweden",
+                                    AddressStreet = "Pickup Street 1",
+                                    PostalCode = "12345"
+                                });
                         });
 
                     b.Navigation("Company");
@@ -943,7 +1029,8 @@ namespace LorryGlory.Data.Migrations
                     b.HasOne("LorryGlory.Data.Models.CompanyModels.Company", "Company")
                         .WithMany("StaffMembers")
                         .HasForeignKey("FK_TenantId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.OwnsOne("LorryGlory.Data.Models.Address", "Address", b1 =>
                         {
@@ -972,6 +1059,16 @@ namespace LorryGlory.Data.Migrations
 
                             b1.WithOwner()
                                 .HasForeignKey("StaffMemberId");
+
+                            b1.HasData(
+                                new
+                                {
+                                    StaffMemberId = "1STAFFM",
+                                    AddressCity = "Kato",
+                                    AddressCountry = "PL",
+                                    AddressStreet = "Vägen till ingenstans",
+                                    PostalCode = "44444"
+                                });
                         });
 
                     b.Navigation("Address")

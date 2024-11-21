@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace LorryGlory.Data.Repositories
 {
-    internal class VehicleRepository : IVehicleRepository
+    public class VehicleRepository : IVehicleRepository
     {
         public Task<Vehicle> AddAsync(Vehicle vehicle)
         {
