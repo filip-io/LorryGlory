@@ -37,7 +37,7 @@ namespace LorryGlory.Data.Repositories
                 .Include(j => j.JobTasks)
                 .Include(j => j.FileLink)
                 .Include(j => j.Company)
-                .FirstOrDefaultAsync();
+                .SingleOrDefaultAsync(j => j.Id == id);
         }
 
         public async Task<Job> CreateAsync(Job job)
@@ -49,13 +49,7 @@ namespace LorryGlory.Data.Repositories
 
         public async Task<Job?> UpdateAsync(Job job)
         {
-            var existingJob = await _context.Jobs
-                .Include(j => j.Client)
-                .Include(j => j.ContactPerson)
-                .Include(j => j.JobTasks)
-                .Include(j => j.FileLink)
-                .Include(j => j.Company)
-                .FirstOrDefaultAsync();
+            var existingJob = await GetByIdAsync(job.Id);
 
             if (existingJob == null)
             {

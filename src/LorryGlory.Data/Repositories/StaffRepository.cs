@@ -4,11 +4,6 @@ using LorryGlory.Data.Repositories.IRepositories;
 using LorryGlory.Data.Services.IServices;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LorryGlory.Data.Repositories
 {
@@ -23,39 +18,77 @@ namespace LorryGlory.Data.Repositories
             _tenantService = tenantService;
             _logger = logger;
         }
+
+        // Attention, StaffMembers are missing global query for login reasons!
         public async Task<IEnumerable<StaffMember?>> GetAllAsync()
         {
-            var staffQuery = _context.StaffMembers
-                .Include(s => s.Address)
-                .Include(s => s.JobTasks)
-                    .ThenInclude(jt => jt.JobTaskReport);
+            return await _context.StaffMembers
+                .Include(sm => sm.Address)
+                .Include(sm => sm.JobTasks)
+                .ToListAsync();
 
-            //_logger.LogDebug("Generated SQL: {Sql}", jobTasksQuery.ToQueryString());
-
-            return await staffQuery.ToListAsync();
         }
 
+        public async Task<IEnumerable<StaffMember?>> GetAllByTenantIdAsync()
+        {
+            return await _context.StaffMembers
+                .Include(sm => sm.Address)
+                .Include(sm => sm.JobTasks)
+                .Where(sm => sm.FK_TenantId == _tenantService.TenantId)
+                .ToListAsync();
+        }
+
+        public async Task<StaffMember?> GetByIdAsync(string id)
+        {
+            return await _context.StaffMembers
+               .Include(sm => sm.Address)
+               .Include(sm => sm.JobTasks)
+               .SingleOrDefaultAsync(sm => sm.Id == id);
+        }
         public async Task<StaffMember?> GetByEmailAsync(string email)
         {
-            throw new NotImplementedException();
+            return await _context.StaffMembers
+              .Include(sm => sm.Address)
+              .Include(sm => sm.JobTasks)
+              .SingleOrDefaultAsync(sm => sm.Email.ToUpper() == email.ToUpper());
         }
 
-        public async Task<StaffMember?> GetByIdAsync(Guid id)
-        {
-            throw new NotImplementedException();
-        }
         public async Task<StaffMember> CreateAsync(StaffMember staffMember)
         {
-            throw new NotImplementedException();
+            var result = await _context.StaffMembers.AddAsync(staffMember);
+            await _context.SaveChangesAsync();
+            return result.Entity;
         }
 
         public async Task<StaffMember?> UpdateAsync(StaffMember staffMember)
         {
-            throw new NotImplementedException();
+            var existingStaffMember = await GetByIdAsync(staffMember.Id);
+
+            if (existingStaffMember == null)
+            {
+                throw new KeyNotFoundException($"Staff member with ID {staffMember.Id} was not found");
+            }
+
+            existingStaffMember.JobTitle = staffMember.JobTitle;
+            existingStaffMember.FirstName = staffMember.FirstName;
+            existingStaffMember.LastName = staffMember.LastName;
+            existingStaffMember.PersonalNumber = staffMember.PersonalNumber;
+            existingStaffMember.PreferredLanguage = staffMember.PreferredLanguage;
+            existingStaffMember.Address = staffMember.Address;
+
+            if (staffMember.FK_TenantId != null)
+                existingStaffMember.FK_TenantId = staffMember.FK_TenantId;
+
+            _context.StaffMembers.Update(existingStaffMember);
+            await _context.SaveChangesAsync();
+
+            return existingStaffMember;
         }
         public async Task<StaffMember?> DeleteAsync(StaffMember staffMember)
         {
-            throw new NotImplementedException();
+            _context.StaffMembers.Remove(staffMember);
+            await _context.SaveChangesAsync();
+            return staffMember;
         }
 
 
