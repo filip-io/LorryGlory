@@ -4,6 +4,8 @@
     1a = Needs to connetct to endpoints
 *@
 
+@using LorryGlory_Frontend_MVC.ViewModels.Job
+@model List<ReadJobViewModel>
 @{
 }
 
@@ -66,7 +68,7 @@
         </div>
     </div> *@
 
-    <!-- Hardcode known missions for testing until endpoint -->
+@*     <!-- Hardcode known missions for testing until endpoint -->
     @{
         // Mock data for testing
         var missions = new List<dynamic>
@@ -76,25 +78,33 @@
     new { Name = "Mission 3", StartTime = "13:00", EndTime = "15:00", Title = "Delivery to Malmö"},
     new { Name = "Mission 4", StartTime = "16:00", EndTime = "18:00", Title = "Delivery to Östersund"}
     };
-    }
+    } *@
 
     <!-- Mission List -->
     <div class="mt-6">
-        @foreach (var mission in missions)
+        @if (Model == null || !Model.Any())
         {
-            <div class="flex items-center justify-between border-b border-gray-300 py-3">
-                <div>
-                    <p class="font-semibold text-lg">@mission.Name</p>
-                    <p class="text-sm text-gray-600">@mission.StartTime - @mission.EndTime</p>
-                    <p class="text-gray-800">Title</p>
-                    <p class="text-gray-600 text-sm">@mission.Title</p>
+            <p class="text-center text-gray-600">No missions available.</p>
+        }
+        else
+        {
+            @foreach (var job in Model)
+            {
+                <div class="flex items-center justify-between border-b border-gray-300 py-3">
+                    <div>
+                        <p class="font-semibold text-lg">@job.Client?.ClientName</p>
+                        <p class="text-sm text-gray-600">@job.StartTime - @job.EndTime</p>
+                        <p class="text-gray-800">Title</p>
+                        <p class="text-gray-600 text-sm">@job.Description</p>
+                    </div>
+                    <button class="text-blue-500 hover:text-blue-700">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+                        </svg>
+                    </button>
                 </div>
-                <button class="text-blue-500 hover:text-blue-700">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
-                    </svg>
-                </button>
-            </div>
+            }
         }
     </div>
+
 </div>

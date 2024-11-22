@@ -32,6 +32,7 @@ namespace LorryGlory.Core.Models.DTOs
         public Guid? FK_ClientId { get; set; }
         public ContactPersonCreateUpdateDto? ContactPerson { get; set; }
         public Guid? FK_FileLink { get; set; }
+        public Guid FK_TenantId { get; set; }
     }
 
     public class JobUpdateDto

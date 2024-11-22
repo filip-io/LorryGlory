@@ -1,4 +1,6 @@
-﻿namespace LorryGlory.Core.Models.DTOs
+﻿using LorryGlory.Data.Models;
+
+namespace LorryGlory.Core.Models.DTOs
 {
     public class CompanyDto
     {
@@ -23,7 +25,7 @@
         public string? PhoneNumber { get; set; }
 
         public AddressDto? Address { get; set; }
-        // public FileLink? FileLink { get; set; }
+        //public FileLink? FileLink { get; set; }
 
     }
 
