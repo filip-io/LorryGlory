@@ -22,11 +22,13 @@ namespace LorryGlory.Data.Repositories
         // Attention, StaffMembers are missing global query for login reasons!
         public async Task<IEnumerable<StaffMember?>> GetAllAsync()
         {
-            return await _context.StaffMembers
+            var result = await _context.StaffMembers
                 .Include(sm => sm.Address)
                 .Include(sm => sm.JobTasks)
                 .ToListAsync();
 
+            Console.WriteLine("--------------------------- " + _tenantService.TenantId);
+            return result;
         }
 
         public async Task<IEnumerable<StaffMember?>> GetAllByTenantIdAsync()

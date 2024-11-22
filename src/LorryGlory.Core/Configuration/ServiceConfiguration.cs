@@ -28,7 +28,7 @@ public static class ServiceConfiguration
         //});
 
         // Tenant
-        serviceCollection.AddSingleton<ITenantService, TenantService>();
+        serviceCollection.AddScoped<ITenantService, TenantService>();
 
         // Job
         serviceCollection.AddScoped<IJobService, JobService>();

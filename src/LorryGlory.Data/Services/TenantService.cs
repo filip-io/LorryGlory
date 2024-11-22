@@ -11,6 +11,10 @@ namespace LorryGlory.Data.Services
         public TenantService(IHttpContextAccessor httpContextAccessor)
         {
             _httpContextAccessor = httpContextAccessor;
+
+            //var user = _httpContextAccessor.HttpContext?.User;
+            //_currentTenantId = new Guid(user?.Claims?.SingleOrDefault(uc => uc.Type == "TenantId")?.Value 
+            //    ?? "71a1006f-b2bf-49e0-ad7d-4e7ac27adaf9");
         }
 
 
@@ -19,8 +23,12 @@ namespace LorryGlory.Data.Services
 
         public event Action<Guid> OnTenantChanged;
 
-        public void SetTenant(Guid? tenantId)
+        public void SetTenant()
         {
+            var user = _httpContextAccessor.HttpContext?.User;
+            var userTenantId = user?.Claims?.SingleOrDefault(uc => uc.Type == "TenantId")?.Value;
+            Guid? tenantId = userTenantId != null ? new Guid(userTenantId) : Guid.Empty;
+
             Console.WriteLine($"TenantService instance: {this.GetHashCode()}");
             if (tenantId.HasValue)
             {

@@ -98,7 +98,7 @@ public static class IdentityApiEndpointRouteBuilderExtensions
                 PersonalNumber = registration.PersonalNumber,
                 PreferredLanguage = registration.PreferredLanguage,
                 Address = address,
-                FK_TenantId = new Guid("1D2B0228-4D0D-4C23-8B49-01A698857709")
+                FK_TenantId = new Guid("2be4d4ae-e491-4dec-fcb9-08dd0adafc8f")
             };
             await userStore.SetUserNameAsync(user, email, CancellationToken.None);
             await emailStore.SetEmailAsync(user, email, CancellationToken.None);
@@ -162,7 +162,7 @@ public static class IdentityApiEndpointRouteBuilderExtensions
                 identity.AddClaim(new Claim("TenantId", user.FK_TenantId.ToString()));
             }
 
-            tenantService.SetTenant(user.FK_TenantId);
+            //tenantService.SetTenant(user.FK_TenantId);
 
             await signInManager.Context.SignInAsync(signInManager.AuthenticationScheme, currentPrincipal, new AuthenticationProperties
             {
@@ -177,7 +177,7 @@ public static class IdentityApiEndpointRouteBuilderExtensions
         routeGroup.MapPost("/logout", async (SignInManager<TUser> signInManager, ITenantService tenantService) =>
         {
             await signInManager.SignOutAsync();
-            tenantService.SetTenant(null);
+            //tenantService.SetTenant(null);
             return Results.Ok();
         })
         .RequireAuthorization();
