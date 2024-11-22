@@ -22,7 +22,6 @@ namespace LorryGlory.Api.Controllers
             _staffService = staffService;
             _logger = logger;
             _tenantService = tenantService;
-            _tenantService.SetTenant();
         }
 
         // GET /api/staff

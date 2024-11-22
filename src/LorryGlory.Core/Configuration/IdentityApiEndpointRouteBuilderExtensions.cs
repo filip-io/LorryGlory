@@ -98,7 +98,7 @@ public static class IdentityApiEndpointRouteBuilderExtensions
                 PersonalNumber = registration.PersonalNumber,
                 PreferredLanguage = registration.PreferredLanguage,
                 Address = address,
-                FK_TenantId = new Guid("2be4d4ae-e491-4dec-fcb9-08dd0adafc8f")
+                FK_TenantId = new Guid("06ece150-1990-4094-59d0-08dd0af79f79")
             };
             await userStore.SetUserNameAsync(user, email, CancellationToken.None);
             await emailStore.SetEmailAsync(user, email, CancellationToken.None);
