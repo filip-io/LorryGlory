@@ -1,10 +1,8 @@
 ﻿using LorryGlory.Api.Helpers;
 using LorryGlory.Api.Models;
 using LorryGlory.Core.Models.DTOs;
-using LorryGlory.Core.Services;
 using LorryGlory.Core.Services.IServices;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 

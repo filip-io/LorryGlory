@@ -63,7 +63,7 @@ public static class IdentityApiEndpointRouteBuilderExtensions
         // NOTE: We cannot inject UserManager<TUser> directly because the TUser generic parameter is currently unsupported by RDG.
         // https://github.com/dotnet/aspnetcore/issues/47338
         routeGroup.MapPost("/register", async Task<Results<Ok, ValidationProblem>>
-            ([FromBody] StaffMemberRegisterDto registration, HttpContext context, [FromServices] IServiceProvider sp) =>
+            ([FromBody] StaffMemberCreateDto staffMemberCreateDto, HttpContext context, [FromServices] IServiceProvider sp) =>
         {
             var userManager = sp.GetRequiredService<UserManager<TUser>>();
 
@@ -74,7 +74,7 @@ public static class IdentityApiEndpointRouteBuilderExtensions
 
             var userStore = sp.GetRequiredService<IUserStore<TUser>>();
             var emailStore = (IUserEmailStore<TUser>)userStore;
-            var email = registration.Email;
+            var email = staffMemberCreateDto.Email;
 
             if (string.IsNullOrEmpty(email) || !_emailAddressAttribute.IsValid(email))
             {
@@ -83,26 +83,26 @@ public static class IdentityApiEndpointRouteBuilderExtensions
 
             var address = new Address
             {
-                AddressStreet = registration.Address.AddressStreet,
-                PostalCode = registration.Address.PostalCode,
-                AddressCity = registration.Address.AddressCity,
-                AddressCountry = registration.Address.AddressCountry
+                AddressStreet = staffMemberCreateDto.Address.AddressStreet,
+                PostalCode = staffMemberCreateDto.Address.PostalCode,
+                AddressCity = staffMemberCreateDto.Address.AddressCity,
+                AddressCountry = staffMemberCreateDto.Address.AddressCountry
             };
 
             var user = new TUser
             {
-                Email = registration.Email,
-                FirstName = registration.FirstName,
-                LastName = registration.LastName,
-                JobTitle = registration.JobTitle,
-                PersonalNumber = registration.PersonalNumber,
-                PreferredLanguage = registration.PreferredLanguage,
+                Email = staffMemberCreateDto.Email,
+                FirstName = staffMemberCreateDto.FirstName,
+                LastName = staffMemberCreateDto.LastName,
+                JobTitle = staffMemberCreateDto.JobTitle,
+                PersonalNumber = staffMemberCreateDto.PersonalNumber,
+                PreferredLanguage = staffMemberCreateDto.PreferredLanguage,
                 Address = address,
-                FK_TenantId = new Guid("1D2B0228-4D0D-4C23-8B49-01A698857709")
+                FK_TenantId = new Guid("7e076647-7c1d-4e81-106d-08dd0a22576f")
             };
             await userStore.SetUserNameAsync(user, email, CancellationToken.None);
             await emailStore.SetEmailAsync(user, email, CancellationToken.None);
-            var result = await userManager.CreateAsync(user, registration.Password);
+            var result = await userManager.CreateAsync(user, staffMemberCreateDto.Password);
 
             if (!result.Succeeded)
             {
