@@ -4,11 +4,11 @@
     {
         Guid TenantId { get; }
 
-        void SetTenant(Guid? tenantId);
+        //void SetTenant();
 
         //Guid[] GetTenants();
 
-        event Action<Guid> OnTenantChanged;
+        //event Action<Guid> OnTenantChanged;
 
         bool IsSuperAdmin();
 

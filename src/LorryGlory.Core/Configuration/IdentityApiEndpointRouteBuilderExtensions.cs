@@ -162,7 +162,7 @@ public static class IdentityApiEndpointRouteBuilderExtensions
                 identity.AddClaim(new Claim("TenantId", user.FK_TenantId.ToString()));
             }
 
-            tenantService.SetTenant(user.FK_TenantId);
+            //tenantService.SetTenant(user.FK_TenantId);
 
             await signInManager.Context.SignInAsync(signInManager.AuthenticationScheme, currentPrincipal, new AuthenticationProperties
             {
@@ -177,7 +177,7 @@ public static class IdentityApiEndpointRouteBuilderExtensions
         routeGroup.MapPost("/logout", async (SignInManager<TUser> signInManager, ITenantService tenantService) =>
         {
             await signInManager.SignOutAsync();
-            tenantService.SetTenant(null);
+            //tenantService.SetTenant(null);
             return Results.Ok();
         })
         .RequireAuthorization();
