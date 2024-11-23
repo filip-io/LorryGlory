@@ -1,60 +1,104 @@
 ﻿@{
     ViewData["Title"] = "Login";
 }
+<div class="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-md mx-auto">
+        <!-- Logo Container -->
+        <div class="flex justify-center mb-8">
+            <div class="w-28 h-28 sm:w-32 sm:h-32 relative">
+                <img 
+                    src="~/images/LorryGlory.jpg" 
+                    alt="Lorry Glory" 
+                    class="w-full h-full object-cover rounded-full shadow-xl ring-4 ring-white"
+                />
+            </div>
+        </div>
 
-<div class="flex flex-col items-center justify-center min-h-screen bg-gray-100">
-
-    <!-- image, should it be bigger? -->
-    <div class="w-32 h-32 mb-4">
-        <img src="~/images/LorryGlory.jpg" alt="Lorry Glory" class="object-cover w-full h-full rounded-full shadow-lg" />
-    </div>
-    
-    <div class="w-full max-w-xs p-6 bg-white rounded-lg shadow-md">
-        <h2 class="mb-6 text-2xl font-bold text-gray-800">Log in</h2>
-
-        <form action="/login" method="post" class="space-y-4">
-
-            <div>
-                <input type="email"
-                       name="email"
-                       placeholder="Email address..."
-                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
-                       required />
-            </div> 
-
-            <div class="relative">
-                <input type="password"
-                       id="password"
-                       placeholder="Password"
-                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
-                       required />
-
-                <span class="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer"
-                      onclick="togglePasswordVisibility()">
-                    <!-- default, open eye, click to view password, turns into a crossed-over-eye, logic handled in site.js in wwwroot -->
-                    <svg id="eyeIcon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-gray-500">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                    </svg>
-                </span>
+        <!-- Login Form Card -->
+        <div class="bg-white rounded-xl shadow-lg p-6 sm:p-8 space-y-6">
+            <div class="text-center">
+                <h2 class="text-2xl sm:text-3xl font-bold text-gray-900">Welcome Back</h2>
+                <p class="mt-2 text-sm text-gray-600">Please sign in to continue</p>
             </div>
 
-            <div>
-                <button type="submit"
-                        class="w-full py-2 text-white bg-blue-500 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
-                    Continue
+            <form action="/login" method="post" class="space-y-5">
+                <!-- Email Field -->
+                <div class="space-y-2">
+                    <label for="email" class="block text-sm font-medium text-gray-700">Email address</label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" />
+                            </svg>
+                        </div>
+                        <input 
+                            id="email"
+                            type="email" 
+                            name="email" 
+                            required
+                            class="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+                            placeholder="Enter your email"
+                        />
+                    </div>
+                </div>
+
+                <!-- Password Field -->
+                <div class="space-y-2">
+                    <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                            </svg>
+                        </div>
+                        <input 
+                            id="password"
+                            type="password" 
+                            name="password" 
+                            required
+                            class="block w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+                            placeholder="Enter your password"
+                        />
+                        <button 
+                            type="button"
+                            onclick="togglePasswordVisibility()"
+                            class="absolute inset-y-0 right-0 pr-3 flex items-center"
+                        >
+                            <svg id="eyeIcon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-gray-400 hover:text-gray-600">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Remember Me & Forgot Password -->
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center">
+                        <input 
+                            id="remember-me"
+                            name="remember-me"
+                            type="checkbox"
+                            class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                        />
+                        <label for="remember-me" class="ml-2 block text-sm text-gray-700">
+                            Remember me
+                        </label>
+                    </div>
+                    <a href="/forgot-password" class="text-sm font-medium text-blue-600 hover:text-blue-500">
+                        Forgot password?
+                    </a>
+                </div>
+
+                <!-- Submit Button -->
+                <button 
+                    type="submit"
+                    class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200"
+                >
+                    Sign in
                 </button>
-            </div>
-
-            <!-- remember needs to be configed - fix link to forget password -->
-            <div class="flex items-center justify-between mt-4">
-                <label class="flex items-center text-gray-600">
-                    <input type="checkbox" class="mr-2 border-gray-300 rounded focus:ring-blue-500">
-                    Remember me
-                </label>
-                <a href="#" class="text-sm text-blue-500 hover:text-blue-600">Did you forget your password?</a>
-            </div>
-        </form>
+            </form>
+        </div>
     </div>
 </div>
 
