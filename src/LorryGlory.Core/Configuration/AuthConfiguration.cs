@@ -19,6 +19,10 @@ namespace LorryGlory.Core.Configuration
                 {
                     policy.RequireRole("Admin", "SuperAdmin");
                 })
+                .AddPolicy("StrictAdminPolicy", policy =>
+                {
+                    policy.RequireRole("Admin");
+                })
                 .AddPolicy("UserPolicy", policy =>
                 {
                     policy.RequireAuthenticatedUser();

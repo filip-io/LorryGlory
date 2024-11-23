@@ -7,7 +7,7 @@
         public string LastName { get; set; }
         public string Email { get; set; }
         public Guid FK_TenantId { get; set; }
-        public ICollection<string>? Roles { get; set; }
+        public ICollection<string>? Roles { get; set; } = new List<string>();
     }
     public class StaffMemberAddRoleNameDto
     {

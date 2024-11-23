@@ -25,21 +25,25 @@ namespace LorryGlory.Api.Controllers
         }
 
         // GET /api/staff
-        //[Authorize(Policy ="SuperAdminPolicy")]
+        [Authorize(Policy ="AdminPolicy")]
         [HttpGet]
         public async Task<ActionResult<ApiResponse<IEnumerable<StaffMemberDto>>>> GetAllStaffMembersAsync()
         {
             try
             {
-                Console.WriteLine($"StaffController TenantService instance: {_tenantService.GetHashCode()}");
-                Console.WriteLine("hallo från try! tenant: " + _tenantService.TenantId);
-                //Console.WriteLine("my tenant is " + User.FindFirst("TenantId"));
+                //Console.WriteLine($"StaffController TenantService instance: {_tenantService.GetHashCode()}");
+                Console.WriteLine("hallo från try to get staff! tenant: " + _tenantService.TenantId);
+                Console.WriteLine("my tenant is " + User.FindFirst("TenantId"));
                 foreach (var claim in User.Claims)
                 {
-                    Console.WriteLine(claim.Value);
+                    Console.WriteLine($"Claim {claim.Type}: {claim.Value}");
                 }
                 var staffMembers = await _staffService.GetAllAsync();
-                return ResponseHelper.HandleSuccess(_logger, staffMembers,
+                var result = User.IsInRole("SuperAdmin") ? 
+                    staffMembers 
+                    : 
+                    staffMembers.Where(sm => sm.FK_TenantId == _tenantService.TenantId);
+                return ResponseHelper.HandleSuccess(_logger, result,
                     staffMembers.Any() ? "Staff members retrieved successfully" : "No staff members exist");
             }
             catch (KeyNotFoundException ex)

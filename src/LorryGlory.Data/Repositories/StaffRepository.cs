@@ -25,20 +25,21 @@ namespace LorryGlory.Data.Repositories
             var result = await _context.StaffMembers
                 .Include(sm => sm.Address)
                 .Include(sm => sm.JobTasks)
+                .Include(sm => sm.Company)
                 .ToListAsync();
-
+            
             Console.WriteLine("--------------------------- " + _tenantService.TenantId + " <- StaffRepository --------------------");
             return result;
         }
 
-        public async Task<IEnumerable<StaffMember?>> GetAllByTenantIdAsync()
-        {
-            return await _context.StaffMembers
-                .Include(sm => sm.Address)
-                .Include(sm => sm.JobTasks)
-                .Where(sm => sm.FK_TenantId == _tenantService.TenantId)
-                .ToListAsync();
-        }
+        //public async Task<IEnumerable<StaffMember?>> GetAllByTenantIdAsync()
+        //{
+        //    return await _context.StaffMembers
+        //        .Include(sm => sm.Address)
+        //        .Include(sm => sm.JobTasks)
+        //        .Where(sm => sm.FK_TenantId == _tenantService.TenantId)
+        //        .ToListAsync();
+        //}
 
         public async Task<StaffMember?> GetByIdAsync(string id)
         {
