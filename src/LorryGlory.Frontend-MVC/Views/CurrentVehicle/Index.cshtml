@@ -42,12 +42,24 @@
 
     <div x-show="activeTab === 'vehicle'" class="space-y-4 mt-4">
 
-        <div class="bg-white p-4 rounded-lg shadow-md">
-            <div class="flex items-center justify-between">
-                <h2 class="border p-2 rounded w-1/2 text-center">@Model.RegNo</h2>
-                <span class="text-red-600 text-sm">⚠ Need to implement check, from where?</span> <!-- 1a -->
+        <div class="flex flex-col items-center space-y-4 w-full">
+            <div class="flex items-center border-2 border-black rounded-lg bg-white shadow-md w-full max-w-md mx-auto">
+                <div class="w-14 h-full flex-shrink-0">
+                    <img src="/images/regnskylt.jpg" alt="Country Code" class="w-full h-full object-cover rounded-l-lg">
+                </div>
+
+                <div class="flex-1 flex items-center justify-center text-black font-bold text-2xl uppercase tracking-widest">
+                    @Model.RegNo
+                </div>
+            </div>
+
+            <div class="text-center">
+                <p class="text-red-600 font-semibold text-sm">warning</p>
             </div>
         </div>
+
+
+
         <div class="p-4 bg-gray-100">
 
             <div class="bg-white p-4 rounded-lg shadow-md mb-4">
