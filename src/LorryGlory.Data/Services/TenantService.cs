@@ -6,7 +6,7 @@ namespace LorryGlory.Data.Services
 {
     public class TenantService : ITenantService
     {
-
+         
         private readonly IHttpContextAccessor _httpContextAccessor;
         public TenantService(IHttpContextAccessor httpContextAccessor)
         {
