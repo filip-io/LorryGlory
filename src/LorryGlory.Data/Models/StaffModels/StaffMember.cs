@@ -10,8 +10,6 @@ namespace LorryGlory.Data.Models.StaffModels
     [Index(nameof(Email), IsUnique = true)]
     public class StaffMember : IdentityUser
     {
-        // Id, Email, PhoneNumber from IdentityUser
-        // List of roles from IdentityRole
         public JobTitle JobTitle { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }

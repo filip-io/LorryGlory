@@ -24,8 +24,8 @@ namespace LorryGlory.Data.Data.Seeding
         public static void SeedData(this ModelBuilder modelBuilder)
         {
             SeedCompanies(modelBuilder);
-            //SeedVehicles(modelBuilder);
-            //SeedVehicleProblems(modelBuilder);
+            SeedVehicles(modelBuilder);
+            SeedVehicleProblems(modelBuilder);
             SeedFileLinks(modelBuilder);
             SeedStaffMembers(modelBuilder);
             SeedJobs(modelBuilder);
@@ -52,7 +52,7 @@ namespace LorryGlory.Data.Data.Seeding
                 new
                 {
                     VehicleId = VehicleId,
-                    Status = Status.I_Trafik,  // Updated to match enum
+                    Status = "I Trafik",  // Updated to match enum
                     FirstRegistered = DateOnly.FromDateTime(DateTime.Parse("2020-01-01"))
                 }
             );
@@ -74,10 +74,10 @@ namespace LorryGlory.Data.Data.Seeding
                     PowerHp = 450,
                     PowerKw = 335,
                     CylinderVolume = 13000,
-                    Fuel = FuelType.Diesel,     // Using enum
-                    Transmission = TransmissionType.Manuell,  // Using enum
+                    Fuel = "Diesel",     // Using enum
+                    Transmission = "Manuell",  // Using enum
                     FourWheelDrive = true,
-                    Chassi = ChassiType.Lastbil,  // Using enum
+                    Chassi = "Lastbil",  // Using enum
                     Length = 16500,  // mm
                     Width = 2550,    // mm
                     Height = 4000,   // mm
@@ -94,7 +94,7 @@ namespace LorryGlory.Data.Data.Seeding
                     AxleWidth1 = 3600,
                     AxleWidth2 = 1350,
                     AxleWidth3 = 0,
-                    FK_Category_Id = 1
+                    Category = "M1"
                 }
             );
 

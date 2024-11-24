@@ -64,7 +64,7 @@ namespace LorryGlory.Data.Repositories
                     .Include(jt => jt.Company)
                     .Where(jt => jt.Id == id);
 
-            return await jobTask.FirstOrDefaultAsync();
+            return await jobTask.SingleOrDefaultAsync();
         }
 
         public async Task<JobTask> CreateAsync(JobTask jobTask)
@@ -83,7 +83,7 @@ namespace LorryGlory.Data.Repositories
                 .Include(jt => jt.FileLink)
                 .Include(jt => jt.JobTaskReport)
                 .Include(jt => jt.Company)
-                .FirstOrDefaultAsync();
+                .SingleOrDefaultAsync();
 
             if (existingTask == null)
             {
@@ -120,7 +120,7 @@ namespace LorryGlory.Data.Repositories
         public async Task<JobTask> DeleteAsync(JobTask jobTask)
         {
             /* DbUpdateConcurrencyException can be thrown on .SaveChangesAsync() 
-               but will be catched and handled in the controller */
+               but will be caught and handled in the controller */
             _context.JobTasks.Remove(jobTask);
             await _context.SaveChangesAsync(); 
             return jobTask;

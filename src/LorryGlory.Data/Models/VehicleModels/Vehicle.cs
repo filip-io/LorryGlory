@@ -16,8 +16,8 @@ namespace LorryGlory.Data.Models.VehicleModels
         public string Make { get; set; }
         public string Model { get; set; }
         public string Color { get; set; }
-        public string Type { get; set; } // Is equal to code from VehicleType
-        public string TypeClass { get; set; } // See vehicle type class at biluppgifters api docs, if we want to implement class for this.
+        public string? Type { get; set; } // Is equal to code from VehicleType
+        public string? TypeClass { get; set; } // See vehicle type class at biluppgifters api docs, if we want to implement class for this.
         public int VehicleYear { get; set; }
         public int ModelYear { get; set; }
         public string? StolenStatus { get; set; }
@@ -30,8 +30,8 @@ namespace LorryGlory.Data.Models.VehicleModels
         public ICollection<VehicleProblem>? VehicleProblems { get; set; }
 
         [ForeignKey("Company")]
-        public Guid FK_TenantId { get; set; }
-        public Company Company { get; set; }
+        public Guid? FK_TenantId { get; set; }
+        public Company? Company { get; set; }
     }
     public class VehicleStatus
     {
@@ -43,7 +43,6 @@ namespace LorryGlory.Data.Models.VehicleModels
         public DateOnly LatestInspection { get; set; }
         public DateOnly InspectionValidUntil { get; set; }
         public int Meter { get; set; } // mätarställning - parsa siffran, kommer som "xxx mil", räkna om till km
-
     }
     public class TechnicalData
     {
@@ -73,17 +72,17 @@ namespace LorryGlory.Data.Models.VehicleModels
         public int AxleWidth1 { get; set; } // Distance between axle 1 - 2
         public int AxleWidth2 { get; set; } // Distance between axle 2 - 3
         public int AxleWidth3 { get; set; } // Distance between axle 3 - 4
-        public int FK_Category_Id { get; set; }
-        public string Category { get; set; }
+        //public int FK_Category_Id { get; set; }
+        public string Category { get; set; } // Used to be VehicleCategoryEu
     }
     public class EcoDetails
     {
         [StringLength(maximumLength: 3)]
         public string EuroClass { get; set; }
     }
-    public class VehicleCategoryEu
-    {
-        public string Code { get; set; }
-        public string Type { get; set; }
-    }
+    //public class VehicleCategoryEu
+    //{
+    //    public string Code { get; set; }
+    //    public string Type { get; set; }
+    //}
 }

@@ -10,10 +10,10 @@
     4a = Need to implement proper check for BK class calculated from distance of axels and show proper data.
 *@
 @{
-    Layout = "_Layout";
-    ViewData["Title"] = "Current Vehicle";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Todays Task";
 }
-@model LorryGlory_Frontend_MVC.ViewModels.VehicleViewModel
+@model LorryGlory_Frontend_MVC.Models.JobTasks.TodaysJobTaskViewModel;
 
 <div x-data="{ activeTab: 'vehicle' }" class="p-4 bg-gray-100">
 
@@ -49,7 +49,7 @@
                 </div>
 
                 <div class="flex-1 flex items-center justify-center text-black font-bold text-2xl uppercase tracking-widest">
-                    @Model.RegNo
+                    @Model.Vehicle.RegNo
                 </div>
             </div>
 
@@ -78,16 +78,16 @@
                 <div class="divide-y divide-gray-200 text-sm">
                     <div class="py-2 flex justify-between">
                         <span>Curb Weight</span>
-                        <span class="font-medium">@Model.TechnicalData.KerbWeight KG</span>
+                        <span class="font-medium">@Model.Vehicle.TechnicalData.KerbWeight KG</span>
                     </div>
                     <div class="py-2 flex justify-between">
                         <span>Max Load Weight</span>
-                        <span class="font-medium">@Model.TechnicalData.LoadWeight KG</span>
+                        <span class="font-medium">@Model.Vehicle.TechnicalData.LoadWeight KG</span>
                     </div>
                     <!-- 2a -->
                     <div class="py-2 flex justify-between">
                         <span class="text-red-600">Total Weight</span>
-                        <span class="font-medium">@Model.TechnicalData.TotalWeight KG</span>
+                        <span class="font-medium">@Model.Vehicle.TechnicalData.TotalWeight KG</span>
                     </div>
                     <!-- 3a -->
                     <div class="py-2 flex justify-between">
@@ -96,11 +96,11 @@
                     </div>
                     <div class="py-2 flex justify-between">
                         <span>Height</span>
-                        <span class="font-medium">@Model.TechnicalData.Height MM</span>
+                        <span class="font-medium">@Model.Vehicle.TechnicalData.Height MM</span>
                     </div>
                     <div class="py-2 flex justify-between">
                         <span>Length</span>
-                        <span class="font-medium">@Model.TechnicalData.Length MM</span>
+                        <span class="font-medium">@Model.Vehicle.TechnicalData.Length MM</span>
                     </div>
                     <div class="py-2 flex justify-between">
                         <span class="text-red-600">Axle Pressure(IMP)</span>
@@ -108,7 +108,7 @@
                     </div>
                     <div class="py-2 flex justify-between">
                         <span>Emission Class</span>
-                        <span class="font-medium">@Model.Eco.EuroClass</span>
+                        <span class="font-medium">@Model.Vehicle.Eco.EuroClass</span>
                     </div>
                 </div>
             </div>
@@ -165,7 +165,7 @@
 
             <div class="flex space-x-4">
                 <button class="flex-1 bg-red-600 text-white py-2 px-4 rounded-lg shadow-md hover:bg-red-700">
-                    Report a Problem
+                    Report Problem
                 </button>
                 <button class="flex-1 bg-blue-600 text-white py-2 px-4 rounded-lg shadow-md hover:bg-blue-700">
                     Change Vehicle
@@ -181,15 +181,38 @@
 
     <div x-show="activeTab === 'task'" class="space-y-4 mt-4">
         <div class="bg-white p-4 rounded-lg shadow-md">
-            <h2 class="font-semibold text-gray-800 mb-2">Task Information</h2>
+            <h2 class="font-semibold text-gray-800 mb-2">@Model.Title</h2>
             <div class="text-sm space-y-2">
-                <div>Date: <span class="font-medium">17/10 - 2014</span></div>
-                <div>Time Start → End: <span class="font-medium">07:30 - 11:30</span></div>
-                <div>Pick-up Address: <span class="font-medium">Sveavägen 110</span></div>
-                <div>Drop-off Address: <span class="font-medium">Storgatan 30</span></div>
-                <div>Postal Code: <span class="font-medium">145 78</span></div>
-                <div>Contact: <span class="font-medium">070 - 123 45 67</span></div>
-                <div>Description: <span class="font-medium">Pick up from the backyard...</span></div>
+                <div><span class="font-medium">@DateOnly.FromDateTime(Model.StartTime)</span></div>
+                <div>Start: <span class="font-medium">@Model.StartTime.TimeOfDay</span></div>
+                <div>End: <span class="font-medium">@Model.EndTime.TimeOfDay</span></div>
+                <div>Contact: <span class="font-medium">@Model.ContactPerson.Name, @Model.ContactPerson.PhoneNumber</span></div>
+                <div><span class="font-medium">@Model.Description</span></div>
+            </div>
+        </div>
+        <div class="bg-white p-4 rounded-lg shadow-md">
+            <h3 class="font-semibold text-gray-800 mb-2">Pickup Address</h3>
+            <div class="text-sm space-y-2">
+                <div><span class="font-medium">@Model.PickupAddress.AddressStreet</span></div>
+                <div><span class="font-medium">@Model.PickupAddress.PostalCode</span></div>
+                <div><span class="font-medium">@Model.PickupAddress.AddressCity</span></div>
+                <div><span class="font-medium">@Model.PickupAddress.AddressCountry</span></div>
+            </div>
+        </div>
+        <div class="bg-white p-4 rounded-lg shadow-md">
+            <h3 class="font-semibold text-gray-800 mb-2">Delivery Address</h3>
+            <div class="text-sm space-y-2">
+                <div><span class="font-medium">@Model.DeliveryAddress.AddressStreet</span></div>
+                <div><span class="font-medium">@Model.DeliveryAddress.PostalCode</span></div>
+                <div><span class="font-medium">@Model.DeliveryAddress.AddressCity</span></div>
+                <div><span class="font-medium">@Model.DeliveryAddress.AddressCountry</span></div>
+            </div>
+        </div>
+        <div class="bg-white p-4 rounded-lg shadow-md">
+            <h3 class="font-semibold text-gray-800 mb-2">Client</h3>
+            <div class="text-sm space-y-2">
+                <div><span class="font-medium">@Model.ContactPerson.Name</span></div>
+                <div><span class="font-medium">@Model.ContactPerson.PhoneNumber</span></div>
             </div>
         </div>
         <div class="bg-white p-4 rounded-lg shadow-md">
@@ -206,7 +229,7 @@
             </div>
             <div class="mt-2">
                 <label class="text-sm">Notes</label>
-                <textarea class="w-full p-2 border rounded" placeholder="Message to office or customer..."></textarea>
+                <textarea class="w-full p-2 border rounded" placeholder="Message to office..."></textarea>
             </div>
             <div class="mt-2">
                 <label class="text-sm">Attach Image (delivery, receipt)</label>
@@ -218,7 +241,7 @@
                 </button>
             </div>
             <button class="mt-4 w-full bg-blue-600 text-white py-2 px-4 rounded-lg shadow-md hover:bg-blue-700">
-                Task Complete
+                Complete Task
             </button>
         </div>
     </div>
