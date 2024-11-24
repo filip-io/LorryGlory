@@ -24,8 +24,8 @@ namespace LorryGlory.Data.Data.Seeding
         public static void SeedData(this ModelBuilder modelBuilder)
         {
             SeedCompanies(modelBuilder);
-            SeedVehicles(modelBuilder);
-            SeedVehicleProblems(modelBuilder);
+            //SeedVehicles(modelBuilder);
+            //SeedVehicleProblems(modelBuilder);
             SeedFileLinks(modelBuilder);
             SeedStaffMembers(modelBuilder);
             SeedJobs(modelBuilder);
@@ -249,7 +249,7 @@ namespace LorryGlory.Data.Data.Seeding
                     EndTime = now.AddHours(2),
                     FK_StaffMemberId = "1STAFFM",
                     FK_JobId = JobId,
-                    FK_VehicleId = VehicleId,
+                    //FK_VehicleId = VehicleId,
                     FK_FileLink = FileLinkId,
                     CreatedAt = now,
                     UpdatedAt = now,

@@ -1,29 +1,32 @@
 ﻿using LorryGlory.Data.Services.IServices;
+using Microsoft.AspNetCore.Http;
 
 namespace LorryGlory.Data.Services
 {
     public class TenantService : ITenantService
     {
+         
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        private Guid _currentTenantId;
-        public Guid TenantId => _currentTenantId;
-
-        public event Action<Guid> OnTenantChanged;
-
-
-        public Guid[] GetTenants()
+        public TenantService(IHttpContextAccessor httpContextAccessor)
         {
-            // use repo return _context.Companies.Select(c => c.Id).ToArray();
-            throw new NotImplementedException();
+            _httpContextAccessor = httpContextAccessor;
         }
 
-        public void SetTenant(Guid tenantId)
+        public Guid TenantId
         {
-            if (_currentTenantId != tenantId)
+            get
             {
-                _currentTenantId = tenantId;
-                OnTenantChanged?.Invoke(tenantId);
+                var user = _httpContextAccessor.HttpContext?.User;
+                var userTenantId = user?.Claims?.SingleOrDefault(uc => uc.Type == "TenantId")?.Value;
+                return !string.IsNullOrEmpty(userTenantId) ? new Guid(userTenantId) : Guid.Empty;
             }
+        }
+
+        public bool IsSuperAdmin()
+        {
+            var user = _httpContextAccessor.HttpContext?.User;
+            return user?.IsInRole("SuperAdmin") ?? false;
         }
     }
 }

@@ -1,10 +1,13 @@
-﻿using LorryGlory.Core.Configuration;
+﻿using LorryGlory.Api.Helpers;
+using LorryGlory.Core.Configuration;
+using LorryGlory.Data.Models.StaffModels;
+using Microsoft.EntityFrameworkCore;
 
 namespace LorryGlory.Api
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +22,12 @@ namespace LorryGlory.Api
             // instead of adding them all here in Program.cs.
             builder.Services.ConfigureDatabase(connectionString);
             builder.Services.ConfigureScopes();
+            
+            builder.Services.ConfigureAuthorization();
+            builder.Services.ConfigureIdentity();
+            builder.Services.ConfigureCookies();
+
+            builder.Services.AddHttpContextAccessor();
 
             builder.Services.AddHttpClient();
 
@@ -26,7 +35,12 @@ namespace LorryGlory.Api
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
+            // AutoMapper
+            builder.Services.AddAutoMapper(typeof(Program));
+
             var app = builder.Build();
+            
+            app.MapGroup("auth/").MapCustomIdentityApi<StaffMember>();
 
             // Configure the HTTP request pipeline
             if (app.Environment.IsDevelopment())
@@ -34,16 +48,22 @@ namespace LorryGlory.Api
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+            await RoleHelper.EnsureRoles(app.Services);
+            await RoleHelper.EnsureSuperAdminAccount(app.Services);
 
             app.UseHttpsRedirection();
 
             app.UseRouting();
 
+            app.UseCookiePolicy();
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapControllers();
 
             app.Run();
         }
+
+       
     }
 }

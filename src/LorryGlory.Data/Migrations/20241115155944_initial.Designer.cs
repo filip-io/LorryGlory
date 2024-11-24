@@ -12,8 +12,13 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LorryGlory.Data.Migrations
 {
     [DbContext(typeof(LorryGloryDbContext))]
+<<<<<<<< HEAD:src/LorryGlory.Data/Migrations/20241117144656_UpdateVehicle3.Designer.cs
     [Migration("20241117144656_UpdateVehicle3")]
     partial class UpdateVehicle3
+========
+    [Migration("20241115155944_initial")]
+    partial class initial
+>>>>>>>> main:src/LorryGlory.Data/Migrations/20241115155944_initial.Designer.cs
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -254,19 +259,31 @@ namespace LorryGlory.Data.Migrations
                         new
                         {
                             Id = new Guid("9a2b0228-4d0d-4c23-8b49-01a698857709"),
+<<<<<<<< HEAD:src/LorryGlory.Data/Migrations/20241117144656_UpdateVehicle3.Designer.cs
                             CreatedAt = new DateTime(2024, 11, 17, 15, 46, 56, 229, DateTimeKind.Local).AddTicks(8564),
                             Description = "Test delivery task",
                             EndTime = new DateTime(2024, 11, 17, 17, 46, 56, 229, DateTimeKind.Local).AddTicks(8564),
+========
+                            CreatedAt = new DateTime(2024, 11, 15, 16, 59, 43, 983, DateTimeKind.Local).AddTicks(5553),
+                            Description = "Test delivery task",
+                            EndTime = new DateTime(2024, 11, 15, 18, 59, 43, 983, DateTimeKind.Local).AddTicks(5553),
+>>>>>>>> main:src/LorryGlory.Data/Migrations/20241115155944_initial.Designer.cs
                             FK_FileLink = new Guid("5d2b0228-4d0d-4c23-8b49-01a698857709"),
                             FK_JobId = new Guid("1a2b0228-4d0d-4c23-8b49-01a698857709"),
                             FK_StaffMemberId = "1STAFFM",
                             FK_TenantId = new Guid("1d2b0228-4d0d-4c23-8b49-01a698857709"),
-                            FK_VehicleId = new Guid("3d2b0228-4d0d-4c23-8b49-01a698857709"),
                             IsCompleted = false,
+<<<<<<<< HEAD:src/LorryGlory.Data/Migrations/20241117144656_UpdateVehicle3.Designer.cs
                             StartTime = new DateTime(2024, 11, 17, 15, 46, 56, 229, DateTimeKind.Local).AddTicks(8564),
                             Status = 666,
                             Title = "Delivery Task",
                             UpdatedAt = new DateTime(2024, 11, 17, 15, 46, 56, 229, DateTimeKind.Local).AddTicks(8564)
+========
+                            StartTime = new DateTime(2024, 11, 15, 16, 59, 43, 983, DateTimeKind.Local).AddTicks(5553),
+                            Status = 666,
+                            Title = "Delivery Task",
+                            UpdatedAt = new DateTime(2024, 11, 15, 16, 59, 43, 983, DateTimeKind.Local).AddTicks(5553)
+>>>>>>>> main:src/LorryGlory.Data/Migrations/20241115155944_initial.Designer.cs
                         });
                 });
 
@@ -420,7 +437,11 @@ namespace LorryGlory.Data.Migrations
                         {
                             Id = "1STAFFM",
                             AccessFailedCount = 0,
+<<<<<<<< HEAD:src/LorryGlory.Data/Migrations/20241117144656_UpdateVehicle3.Designer.cs
                             ConcurrencyStamp = "b8cd87bf-b671-466e-9e06-bff159186bc8",
+========
+                            ConcurrencyStamp = "5af874b3-e06e-41d1-99cf-d8369b0bf339",
+>>>>>>>> main:src/LorryGlory.Data/Migrations/20241115155944_initial.Designer.cs
                             Email = "magda@m.m",
                             EmailConfirmed = false,
                             FK_TenantId = new Guid("1d2b0228-4d0d-4c23-8b49-01a698857709"),
@@ -431,7 +452,11 @@ namespace LorryGlory.Data.Migrations
                             PersonalNumber = "YYYYMMDD-0000",
                             PhoneNumberConfirmed = false,
                             PreferredLanguage = "PL",
+<<<<<<<< HEAD:src/LorryGlory.Data/Migrations/20241117144656_UpdateVehicle3.Designer.cs
                             SecurityStamp = "bd36c4ff-e1a4-4533-80c2-0c701da852ad",
+========
+                            SecurityStamp = "aaba4e3c-bdb1-4c67-be63-23bb1fc66a94",
+>>>>>>>> main:src/LorryGlory.Data/Migrations/20241115155944_initial.Designer.cs
                             TwoFactorEnabled = false,
                             UserName = "magda@m.m"
                         });
@@ -516,25 +541,13 @@ namespace LorryGlory.Data.Migrations
 
                     b.HasIndex("RegNo")
                         .IsUnique();
+<<<<<<<< HEAD:src/LorryGlory.Data/Migrations/20241117144656_UpdateVehicle3.Designer.cs
 
                     b.ToTable("Vehicles");
+========
+>>>>>>>> main:src/LorryGlory.Data/Migrations/20241115155944_initial.Designer.cs
 
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("3d2b0228-4d0d-4c23-8b49-01a698857709"),
-                            Color = "RED",
-                            FK_TenantId = new Guid("1d2b0228-4d0d-4c23-8b49-01a698857709"),
-                            Make = "Scania",
-                            Model = "R450",
-                            ModelYear = 2020,
-                            RegNo = "ABC123",
-                            StolenStatus = "NOT_STOLEN",
-                            Type = "DRAGBIL",
-                            TypeClass = "LASTBIL",
-                            VehicleYear = 2020,
-                            Vin = "YS2R4X20009176429"
-                        });
+                    b.ToTable("Vehicles");
                 });
 
             modelBuilder.Entity("LorryGlory.Data.Models.VehicleModels.VehicleProblem", b =>
@@ -572,18 +585,6 @@ namespace LorryGlory.Data.Migrations
                     b.HasIndex("FK_VehicleId");
 
                     b.ToTable("VehicleProblems");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("6d2b0228-4d0d-4c23-8b49-01a698857709"),
-                            Description = "Front brake pads showing significant wear",
-                            FK_FileLink = new Guid("5d2b0228-4d0d-4c23-8b49-01a698857709"),
-                            FK_TenantId = new Guid("1d2b0228-4d0d-4c23-8b49-01a698857709"),
-                            FK_VehicleId = new Guid("3d2b0228-4d0d-4c23-8b49-01a698857709"),
-                            SeverityLevel = 2,
-                            Title = "Brake System Warning"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -882,7 +883,8 @@ namespace LorryGlory.Data.Migrations
 
                     b.HasOne("LorryGlory.Data.Models.VehicleModels.Vehicle", "Vehicle")
                         .WithMany()
-                        .HasForeignKey("FK_VehicleId");
+                        .HasForeignKey("FK_VehicleId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.OwnsOne("LorryGlory.Data.Models.ContactPerson", "ContactPerson", b1 =>
                         {
@@ -1159,13 +1161,6 @@ namespace LorryGlory.Data.Migrations
 
                             b1.WithOwner()
                                 .HasForeignKey("VehicleId");
-
-                            b1.HasData(
-                                new
-                                {
-                                    VehicleId = new Guid("3d2b0228-4d0d-4c23-8b49-01a698857709"),
-                                    EuroClass = "6"
-                                });
                         });
 
                     b.OwnsOne("LorryGlory.Data.Models.VehicleModels.Inspection", "Inspection", b1 =>
@@ -1188,15 +1183,6 @@ namespace LorryGlory.Data.Migrations
 
                             b1.WithOwner()
                                 .HasForeignKey("VehicleId");
-
-                            b1.HasData(
-                                new
-                                {
-                                    VehicleId = new Guid("3d2b0228-4d0d-4c23-8b49-01a698857709"),
-                                    InspectionValidUntil = new DateOnly(2024, 1, 1),
-                                    LatestInspection = new DateOnly(2023, 1, 1),
-                                    Meter = 150000
-                                });
                         });
 
                     b.OwnsOne("LorryGlory.Data.Models.VehicleModels.TechnicalData", "TechnicalData", b1 =>
@@ -1288,6 +1274,7 @@ namespace LorryGlory.Data.Migrations
 
                             b1.WithOwner()
                                 .HasForeignKey("VehicleId");
+<<<<<<<< HEAD:src/LorryGlory.Data/Migrations/20241117144656_UpdateVehicle3.Designer.cs
 
                             b1.HasData(
                                 new
@@ -1318,6 +1305,8 @@ namespace LorryGlory.Data.Migrations
                                     UnbrakedTrailerWeight = 750,
                                     Width = 2550
                                 });
+========
+>>>>>>>> main:src/LorryGlory.Data/Migrations/20241115155944_initial.Designer.cs
                         });
 
                     b.OwnsOne("LorryGlory.Data.Models.VehicleModels.VehicleStatus", "Status", b1 =>
@@ -1338,6 +1327,7 @@ namespace LorryGlory.Data.Migrations
 
                             b1.WithOwner()
                                 .HasForeignKey("VehicleId");
+<<<<<<<< HEAD:src/LorryGlory.Data/Migrations/20241117144656_UpdateVehicle3.Designer.cs
 
                             b1.HasData(
                                 new
@@ -1346,6 +1336,8 @@ namespace LorryGlory.Data.Migrations
                                     FirstRegistered = new DateOnly(2020, 1, 1),
                                     Status = "I Trafik"
                                 });
+========
+>>>>>>>> main:src/LorryGlory.Data/Migrations/20241115155944_initial.Designer.cs
                         });
 
                     b.Navigation("Company");

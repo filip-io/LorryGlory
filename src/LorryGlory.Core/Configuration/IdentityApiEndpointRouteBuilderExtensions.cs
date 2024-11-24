@@ -62,8 +62,66 @@ public static class IdentityApiEndpointRouteBuilderExtensions
 
         // NOTE: We cannot inject UserManager<TUser> directly because the TUser generic parameter is currently unsupported by RDG.
         // https://github.com/dotnet/aspnetcore/issues/47338
-        routeGroup.MapPost("/register", async Task<Results<Ok, ValidationProblem>>
-            ([FromBody] StaffMemberRegisterDto registration, HttpContext context, [FromServices] IServiceProvider sp) =>
+        routeGroup.MapPost("/register-by-superadmin", async Task<Results<Ok, ValidationProblem>>
+            ([FromBody] StaffMemberCreateDto staffMemberCreateDto, 
+            HttpContext context, 
+            [FromServices] IServiceProvider sp,
+            ITenantService tenantService) =>
+        {
+            var userManager = sp.GetRequiredService<UserManager<TUser>>();
+            
+            if (!userManager.SupportsUserEmail)
+            {
+                throw new NotSupportedException($"{nameof(MapCustomIdentityApi)} requires a user store with email support.");
+            }
+
+            var userStore = sp.GetRequiredService<IUserStore<TUser>>();
+            var emailStore = (IUserEmailStore<TUser>)userStore;
+            var email = staffMemberCreateDto.Email;
+
+            if (string.IsNullOrEmpty(email) || !_emailAddressAttribute.IsValid(email))
+            {
+                return CreateValidationProblem(IdentityResult.Failed(userManager.ErrorDescriber.InvalidEmail(email)));
+            }
+
+            var address = new Address
+            {
+                AddressStreet = staffMemberCreateDto.Address.AddressStreet,
+                PostalCode = staffMemberCreateDto.Address.PostalCode,
+                AddressCity = staffMemberCreateDto.Address.AddressCity,
+                AddressCountry = staffMemberCreateDto.Address.AddressCountry
+            };
+
+            var user = new TUser
+            {
+                Email = staffMemberCreateDto.Email,
+                FirstName = staffMemberCreateDto.FirstName,
+                LastName = staffMemberCreateDto.LastName,
+                JobTitle = staffMemberCreateDto.JobTitle,
+                PersonalNumber = staffMemberCreateDto.PersonalNumber,
+                PreferredLanguage = staffMemberCreateDto.PreferredLanguage,
+                Address = address,
+                FK_TenantId = staffMemberCreateDto.FK_TenantId
+            };
+            await userStore.SetUserNameAsync(user, email, CancellationToken.None);
+            await emailStore.SetEmailAsync(user, email, CancellationToken.None);
+            var result = await userManager.CreateAsync(user, staffMemberCreateDto.Password);
+
+            if (!result.Succeeded)
+            {
+                return CreateValidationProblem(result);
+            }
+
+            await SendConfirmationEmailAsync(user, userManager, context, email);
+            return TypedResults.Ok();
+        })
+            .RequireAuthorization("SuperAdminPolicy");
+
+        routeGroup.MapPost("/register-by-admin", async Task<Results<Ok, ValidationProblem>>
+           ([FromBody] StaffMemberCreateWithKnownTenantDto staffMemberCreateDto,
+           HttpContext context,
+           [FromServices] IServiceProvider sp,
+           ITenantService tenantService) =>
         {
             var userManager = sp.GetRequiredService<UserManager<TUser>>();
 
@@ -74,7 +132,7 @@ public static class IdentityApiEndpointRouteBuilderExtensions
 
             var userStore = sp.GetRequiredService<IUserStore<TUser>>();
             var emailStore = (IUserEmailStore<TUser>)userStore;
-            var email = registration.Email;
+            var email = staffMemberCreateDto.Email;
 
             if (string.IsNullOrEmpty(email) || !_emailAddressAttribute.IsValid(email))
             {
@@ -83,26 +141,26 @@ public static class IdentityApiEndpointRouteBuilderExtensions
 
             var address = new Address
             {
-                AddressStreet = registration.Address.AddressStreet,
-                PostalCode = registration.Address.PostalCode,
-                AddressCity = registration.Address.AddressCity,
-                AddressCountry = registration.Address.AddressCountry
+                AddressStreet = staffMemberCreateDto.Address.AddressStreet,
+                PostalCode = staffMemberCreateDto.Address.PostalCode,
+                AddressCity = staffMemberCreateDto.Address.AddressCity,
+                AddressCountry = staffMemberCreateDto.Address.AddressCountry
             };
 
             var user = new TUser
             {
-                Email = registration.Email,
-                FirstName = registration.FirstName,
-                LastName = registration.LastName,
-                JobTitle = registration.JobTitle,
-                PersonalNumber = registration.PersonalNumber,
-                PreferredLanguage = registration.PreferredLanguage,
+                Email = staffMemberCreateDto.Email,
+                FirstName = staffMemberCreateDto.FirstName,
+                LastName = staffMemberCreateDto.LastName,
+                JobTitle = staffMemberCreateDto.JobTitle,
+                PersonalNumber = staffMemberCreateDto.PersonalNumber,
+                PreferredLanguage = staffMemberCreateDto.PreferredLanguage,
                 Address = address,
-                FK_TenantId = new Guid("1D2B0228-4D0D-4C23-8B49-01A698857709")
+                FK_TenantId = tenantService.TenantId
             };
             await userStore.SetUserNameAsync(user, email, CancellationToken.None);
             await emailStore.SetEmailAsync(user, email, CancellationToken.None);
-            var result = await userManager.CreateAsync(user, registration.Password);
+            var result = await userManager.CreateAsync(user, staffMemberCreateDto.Password);
 
             if (!result.Succeeded)
             {
@@ -111,14 +169,15 @@ public static class IdentityApiEndpointRouteBuilderExtensions
 
             await SendConfirmationEmailAsync(user, userManager, context, email);
             return TypedResults.Ok();
-        });
+        })
+           .RequireAuthorization("StrictAdminPolicy");
 
         routeGroup.MapPost("/login", async Task<Results<Ok<AccessTokenResponse>, EmptyHttpResult, ProblemHttpResult>>
-            ([FromBody] LoginRequest login, 
-            [FromQuery] bool? useCookies, 
-            [FromQuery] bool? useSessionCookies, 
-            UserManager<TUser> userManager, 
-            SignInManager<TUser> signInManager, 
+            ([FromBody] LoginRequest login,
+            [FromQuery] bool? useCookies,
+            [FromQuery] bool? useSessionCookies,
+            UserManager<TUser> userManager,
+            SignInManager<TUser> signInManager,
             ITenantService tenantService) =>
         {
             //var userManager = sp.GetRequiredService<UserManager<TUser>>();

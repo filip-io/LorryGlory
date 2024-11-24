@@ -10,9 +10,13 @@ namespace LorryGlory.Data.Models.JobModels
     {
         [Key]
         public Guid Id { get; set; }
+        public string? Title { get; set; }
+        public string? Description { get; set; }
+        public DateTime? StartTime { get; set; }
+        public DateTime? EndTime { get; set; }
         public JobStatus? Status { get; set; }
         public bool IsCompleted { get; set; }
-        public string Description { get; set; }
+
 
         public TimeSpan? EstimatedTotalTime { get; set; }
         public TimeSpan? ActualTotalTime { get; set; }

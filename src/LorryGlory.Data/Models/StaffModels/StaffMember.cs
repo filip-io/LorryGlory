@@ -10,8 +10,6 @@ namespace LorryGlory.Data.Models.StaffModels
     [Index(nameof(Email), IsUnique = true)]
     public class StaffMember : IdentityUser
     {
-        // Id, Email, PhoneNumber from IdentityUser
-        // List of roles from IdentityRole
         public JobTitle JobTitle { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
@@ -24,7 +22,7 @@ namespace LorryGlory.Data.Models.StaffModels
         public ICollection<JobTaskReport>? JobTaskReports { get; set; }
 
         [ForeignKey("Company")]
-        public Guid FK_TenantId { get; set; }
+        public Guid? FK_TenantId { get; set; }
         public Company Company { get; set; }
 
     }

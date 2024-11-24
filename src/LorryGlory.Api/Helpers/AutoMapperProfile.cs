@@ -5,6 +5,7 @@ using LorryGlory.Data.Models.CompanyModels;
 using LorryGlory.Data.Models.JobModels;
 using LorryGlory.Data.Models.StaffModels;
 using LorryGlory.Data.Models.VehicleModels;
+using Microsoft.AspNetCore.Identity;
 
 namespace LorryGlory.Api.Helpers
 {
@@ -18,10 +19,16 @@ namespace LorryGlory.Api.Helpers
             CreateMap<Company, CompanyCreateDto>().ReverseMap();
             CreateMap<Company, CompanyUpdateDto>().ReverseMap();
 
+            // IdentityRoles mappings
+            CreateMap<IdentityRole, IdentityRoleDto>().ReverseMap();
+            CreateMap<IdentityRole, IdentityRoleCreateDto>().ReverseMap();
+            CreateMap<IdentityRole, IdentityRoleUpdateDto>().ReverseMap();
+
             // StaffMember mappings
             CreateMap<StaffMember, StaffMemberDto>().ReverseMap();
             CreateMap<StaffMember, StaffMemberCreateDto>().ReverseMap();
             CreateMap<StaffMember, StaffMemberUpdateDto>().ReverseMap();
+            CreateMap<StaffMember, StaffMemberRolesDto>().ReverseMap();
 
             // JobTask mappings
             CreateMap<JobTask, JobTaskDto>()

@@ -6,7 +6,11 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace LorryGlory.Data.Migrations
 {
     /// <inheritdoc />
+<<<<<<<< HEAD:src/LorryGlory.Data/Migrations/20241117144656_UpdateVehicle3.cs
     public partial class UpdateVehicle3 : Migration
+========
+    public partial class initial : Migration
+>>>>>>>> main:src/LorryGlory.Data/Migrations/20241115155944_initial.cs
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -196,6 +200,10 @@ namespace LorryGlory.Data.Migrations
                     TechnicalData_AxleWidth1 = table.Column<int>(type: "int", nullable: true),
                     TechnicalData_AxleWidth2 = table.Column<int>(type: "int", nullable: true),
                     TechnicalData_AxleWidth3 = table.Column<int>(type: "int", nullable: true),
+<<<<<<<< HEAD:src/LorryGlory.Data/Migrations/20241117144656_UpdateVehicle3.cs
+========
+                    TechnicalData_FK_Category_Id = table.Column<int>(type: "int", nullable: true),
+>>>>>>>> main:src/LorryGlory.Data/Migrations/20241115155944_initial.cs
                     TechnicalData_Category = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Eco_EuroClass = table.Column<string>(type: "nvarchar(3)", maxLength: 3, nullable: true),
                     FK_TenantId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
@@ -462,7 +470,8 @@ namespace LorryGlory.Data.Migrations
                         name: "FK_JobTasks_Vehicles_FK_VehicleId",
                         column: x => x.FK_VehicleId,
                         principalTable: "Vehicles",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
                 });
 
             migrationBuilder.CreateTable(
@@ -528,7 +537,11 @@ namespace LorryGlory.Data.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "FK_TenantId", "FirstName", "JobTitle", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PersonalNumber", "PhoneNumber", "PhoneNumberConfirmed", "PreferredLanguage", "SecurityStamp", "TwoFactorEnabled", "UserName", "Address_AddressCity", "Address_AddressCountry", "Address_AddressStreet", "Address_PostalCode" },
+<<<<<<<< HEAD:src/LorryGlory.Data/Migrations/20241117144656_UpdateVehicle3.cs
                 values: new object[] { "1STAFFM", 0, "b8cd87bf-b671-466e-9e06-bff159186bc8", "magda@m.m", false, new Guid("1d2b0228-4d0d-4c23-8b49-01a698857709"), "Magda", 2, "Kubien", false, null, null, null, null, "YYYYMMDD-0000", null, false, "PL", "bd36c4ff-e1a4-4533-80c2-0c701da852ad", false, "magda@m.m", "Kato", "PL", "Vägen till ingenstans", "44444" });
+========
+                values: new object[] { "1STAFFM", 0, "5af874b3-e06e-41d1-99cf-d8369b0bf339", "magda@m.m", false, new Guid("1d2b0228-4d0d-4c23-8b49-01a698857709"), "Magda", 2, "Kubien", false, null, null, null, null, "YYYYMMDD-0000", null, false, "PL", "aaba4e3c-bdb1-4c67-be63-23bb1fc66a94", false, "magda@m.m", "Kato", "PL", "Vägen till ingenstans", "44444" });
+>>>>>>>> main:src/LorryGlory.Data/Migrations/20241115155944_initial.cs
 
             migrationBuilder.InsertData(
                 table: "FileLinks",
@@ -539,21 +552,28 @@ namespace LorryGlory.Data.Migrations
                 table: "Jobs",
                 columns: new[] { "Id", "ActualTotalTime", "CreatedAt", "Description", "EstimatedTotalTime", "FK_ClientId", "FK_FileLink", "FK_TenantId", "IsCompleted", "Status", "UpdatedAt" },
                 values: new object[] { new Guid("1a2b0228-4d0d-4c23-8b49-01a698857709"), null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Test Job", null, null, null, new Guid("1d2b0228-4d0d-4c23-8b49-01a698857709"), false, null, null });
+<<<<<<<< HEAD:src/LorryGlory.Data/Migrations/20241117144656_UpdateVehicle3.cs
 
             migrationBuilder.InsertData(
                 table: "Vehicles",
                 columns: new[] { "Id", "Eco_EuroClass", "Inspection_InspectionValidUntil", "Inspection_LatestInspection", "Inspection_Meter", "TechnicalData_AxleWidth1", "TechnicalData_AxleWidth2", "TechnicalData_AxleWidth3", "TechnicalData_CarriageWeight", "TechnicalData_Category", "TechnicalData_Chassi", "TechnicalData_CylinderVolume", "TechnicalData_FourWheelDrive", "TechnicalData_Fuel", "TechnicalData_Height", "TechnicalData_KerbWeight", "TechnicalData_Length", "TechnicalData_LoadWeight", "TechnicalData_PowerHp", "TechnicalData_PowerKw", "TechnicalData_TireBack", "TechnicalData_TireFront", "TechnicalData_TotalWeight", "TechnicalData_TrailerWeight", "TechnicalData_TrailerWeightB", "TechnicalData_TrailerWeightBe", "TechnicalData_Transmission", "TechnicalData_UnbrakedTrailerWeight", "TechnicalData_Width", "Color", "FK_TenantId", "Make", "Model", "ModelYear", "RegNo", "StolenStatus", "Type", "TypeClass", "VehicleYear", "Vin", "Status_FirstRegistered", "Status_Status" },
                 values: new object[] { new Guid("3d2b0228-4d0d-4c23-8b49-01a698857709"), "6", new DateOnly(2024, 1, 1), new DateOnly(2023, 1, 1), 150000, 3600, 1350, 0, 40000, "M1", "Lastbil", 13000, true, "Diesel", 4000, 7500, 16500, 32500, 450, 335, "315/80R22.5", "315/80R22.5", 40000, 36000, 3500, 3500, "Manuell", 750, 2550, "RED", new Guid("1d2b0228-4d0d-4c23-8b49-01a698857709"), "Scania", "R450", 2020, "ABC123", "NOT_STOLEN", "DRAGBIL", "LASTBIL", 2020, "YS2R4X20009176429", new DateOnly(2020, 1, 1), "I Trafik" });
+========
+>>>>>>>> main:src/LorryGlory.Data/Migrations/20241115155944_initial.cs
 
             migrationBuilder.InsertData(
                 table: "JobTasks",
                 columns: new[] { "Id", "CreatedAt", "Description", "EndTime", "FK_FileLink", "FK_JobId", "FK_StaffMemberId", "FK_TenantId", "FK_VehicleId", "IsCompleted", "StartTime", "Status", "Title", "UpdatedAt", "ContactPerson_Email", "ContactPerson_Name", "ContactPerson_PhoneNumber", "DeliveryAddress_AddressCity", "DeliveryAddress_AddressCountry", "DeliveryAddress_AddressStreet", "DeliveryAddress_PostalCode", "PickupAddress_AddressCity", "PickupAddress_AddressCountry", "PickupAddress_AddressStreet", "PickupAddress_PostalCode" },
+<<<<<<<< HEAD:src/LorryGlory.Data/Migrations/20241117144656_UpdateVehicle3.cs
                 values: new object[] { new Guid("9a2b0228-4d0d-4c23-8b49-01a698857709"), new DateTime(2024, 11, 17, 15, 46, 56, 229, DateTimeKind.Local).AddTicks(8564), "Test delivery task", new DateTime(2024, 11, 17, 17, 46, 56, 229, DateTimeKind.Local).AddTicks(8564), new Guid("5d2b0228-4d0d-4c23-8b49-01a698857709"), new Guid("1a2b0228-4d0d-4c23-8b49-01a698857709"), "1STAFFM", new Guid("1d2b0228-4d0d-4c23-8b49-01a698857709"), new Guid("3d2b0228-4d0d-4c23-8b49-01a698857709"), false, new DateTime(2024, 11, 17, 15, 46, 56, 229, DateTimeKind.Local).AddTicks(8564), 666, "Delivery Task", new DateTime(2024, 11, 17, 15, 46, 56, 229, DateTimeKind.Local).AddTicks(8564), "john@example.com", "John Doe", null, "Delivery City", "Sweden", "Delivery Street 2", "67890", "Pickup City", "Sweden", "Pickup Street 1", "12345" });
 
             migrationBuilder.InsertData(
                 table: "VehicleProblems",
                 columns: new[] { "Id", "Description", "FK_FileLink", "FK_TenantId", "FK_VehicleId", "SeverityLevel", "Title" },
                 values: new object[] { new Guid("6d2b0228-4d0d-4c23-8b49-01a698857709"), "Front brake pads showing significant wear", new Guid("5d2b0228-4d0d-4c23-8b49-01a698857709"), new Guid("1d2b0228-4d0d-4c23-8b49-01a698857709"), new Guid("3d2b0228-4d0d-4c23-8b49-01a698857709"), 2, "Brake System Warning" });
+========
+                values: new object[] { new Guid("9a2b0228-4d0d-4c23-8b49-01a698857709"), new DateTime(2024, 11, 15, 16, 59, 43, 983, DateTimeKind.Local).AddTicks(5553), "Test delivery task", new DateTime(2024, 11, 15, 18, 59, 43, 983, DateTimeKind.Local).AddTicks(5553), new Guid("5d2b0228-4d0d-4c23-8b49-01a698857709"), new Guid("1a2b0228-4d0d-4c23-8b49-01a698857709"), "1STAFFM", new Guid("1d2b0228-4d0d-4c23-8b49-01a698857709"), null, false, new DateTime(2024, 11, 15, 16, 59, 43, 983, DateTimeKind.Local).AddTicks(5553), 666, "Delivery Task", new DateTime(2024, 11, 15, 16, 59, 43, 983, DateTimeKind.Local).AddTicks(5553), "john@example.com", "John Doe", null, "Delivery City", "Sweden", "Delivery Street 2", "67890", "Pickup City", "Sweden", "Pickup Street 1", "12345" });
+>>>>>>>> main:src/LorryGlory.Data/Migrations/20241115155944_initial.cs
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
