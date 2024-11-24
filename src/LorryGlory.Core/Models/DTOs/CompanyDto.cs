@@ -1,4 +1,6 @@
-﻿namespace LorryGlory.Core.Models.DTOs
+﻿using LorryGlory.Core.Models.DTOs.VehicleDtos;
+
+namespace LorryGlory.Core.Models.DTOs
 {
     public class CompanyDto
     {
@@ -13,7 +15,7 @@
         public ICollection<ClientDto>? Clients { get; set; }
         public ICollection<JobDto>? Jobs { get; set; }
         public ICollection<StaffMemberDto>? StaffMembers { get; set; }
-        public ICollection<VehicleDto>? Vehicles { get; set; }
+        public ICollection<GetAllVehiclesDto>? Vehicles { get; set; }
     }
 
     public class CompanyCreateDto

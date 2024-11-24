@@ -1,14 +1,6 @@
-﻿using LorryGlory.Data.Models.VehicleModels;
-using LorryGlory.Data.Models.VehicleModels.Enums;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Text.Json.Serialization;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace LorryGlory.Core.Models.DTOs
+namespace LorryGlory.Core.Models.DTOs.VehicleDtos
 {
     public class VehicleSearchDto
     {
@@ -17,12 +9,13 @@ namespace LorryGlory.Core.Models.DTOs
         public string Make { get; set; }
         public string Model { get; set; }
         public string Color { get; set; }
-        public string Type { get; set; } // Is equal to code from VehicleType
-        public string TypeClass { get; set; } // See vehicle type class at biluppgifters api docs, if we want to implement class for this.
+        public string Type { get; set; }
+        public string TypeClass { get; set; }
         public int VehicleYear { get; set; }
         public int ModelYear { get; set; }
         public string? StolenStatus { get; set; }
 
+        // The following for properties could be replaced with VehicleDetailsDtos.X, instead of being their own classes.
         public VehicleSearchStatus? Status { get; set; }
         public VehicleSearchInspection? Inspection { get; set; }
         public VehicleSearchTechnicalData? TechnicalData { get; set; }
@@ -39,20 +32,19 @@ namespace LorryGlory.Core.Models.DTOs
     {
         public DateOnly LatestInspection { get; set; }
         public DateOnly InspectionValidUntil { get; set; }
-        public int Meter { get; set; } // mätarställning - parsa siffran, kommer som "xxx mil", räkna om till km
+        public int Meter { get; set; } // mil
     }
 
     public class VehicleSearchTechnicalData
     {
-        public int PowerHp { get; set; } // Make array or store as three separate props?
-        public int PowerKw { get; set; } // Make array or store as three separate props?
+        public int PowerHp { get; set; }
+        public int PowerKw { get; set; }
         public int CylinderVolume { get; set; }
         public string Fuel { get; set; }
         public string Transmission { get; set; }
         public bool FourWheelDrive { get; set; }
         public string Chassi { get; set; }
 
-        // TODO: Move length, width, height to base object?
         public int Length { get; set; } // In mm
         public int Width { get; set; } // In mm
         public int Height { get; set; } // In mm
@@ -79,11 +71,5 @@ namespace LorryGlory.Core.Models.DTOs
     {
         [StringLength(maximumLength: 3)]
         public string EuroClass { get; set; }
-    }
-
-    public class VehicleSearchCategoryEu
-    {
-        public string Code { get; set; }
-        public string Type { get; set; }
     }
 }

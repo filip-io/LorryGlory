@@ -7,6 +7,8 @@ using LorryGlory.Data.Repositories;
 using LorryGlory.Data.Repositories.IRepositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using LorryGlory.Data.Repositories.IRepositories;
+using LorryGlory.Data.Repositories;
 
 
 namespace LorryGlory.Core.Configuration;
@@ -27,6 +29,11 @@ public static class ServiceConfiguration
         //    });
         //});
 
+        
+    }
+
+    public static void ConfigureScopes(this IServiceCollection serviceCollection)
+    {
         // Tenant
         serviceCollection.AddScoped<ITenantService, TenantService>();
 
@@ -53,11 +60,6 @@ public static class ServiceConfiguration
         // Identity Roles
         serviceCollection.AddScoped<IRoleService, RoleService>();
         serviceCollection.AddScoped<IStaffRolesService, StaffRolesService>();
-    }
-
-    public static void ConfigureScopes(this IServiceCollection serviceCollection)
-    {
-
     }
 
 }

@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using LorryGlory.Core.Models.DTOs;
+using LorryGlory.Core.Models.DTOs.VehicleDtos;
+using LorryGlory.Core.Models.DTOs.VehicleDtos.VehicleDetailsDtos;
 using LorryGlory.Data.Models;
 using LorryGlory.Data.Models.CompanyModels;
 using LorryGlory.Data.Models.JobModels;
@@ -51,9 +53,15 @@ namespace LorryGlory.Api.Helpers
 
             // Related entities
             CreateMap<Job, JobDto>().ReverseMap();
-            CreateMap<Vehicle, VehicleDto>().ReverseMap();
+            CreateMap<Vehicle, GetAllVehiclesDto>().ReverseMap();
             CreateMap<FileLink, FileLinkDto>().ReverseMap();
             CreateMap<JobTaskReport, JobTaskReportDto>().ReverseMap();
+
+            // Vehicle mappings
+            CreateMap<VehicleStatus, VehicleStatusDto>().ReverseMap();
+            CreateMap<Inspection, InspectionDto>().ReverseMap();
+            CreateMap<TechnicalData, TechnicalDataDto>().ReverseMap();
+            CreateMap<EcoDetails, EcoDetailsDto>().ReverseMap();
         }
     }
 }
