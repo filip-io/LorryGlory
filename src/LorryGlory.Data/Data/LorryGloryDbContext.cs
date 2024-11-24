@@ -288,7 +288,7 @@ namespace LorryGlory.Data.Data
             {
 
                 // Query filter here would not allow login
-                // entity.HasQueryFilter(e => _tenantService.IsSuperAdmin() || e.FK_TenantId == _tenantService.TenantId);
+                //entity.HasQueryFilter(e => _tenantService.IsSuperAdmin() || e.FK_TenantId == _tenantService.TenantId);
 
                 // Value objects
                 entity.OwnsOne(e => e.Address);

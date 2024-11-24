@@ -28,7 +28,7 @@ public static class ServiceConfiguration
         //});
 
         // Tenant
-        serviceCollection.AddSingleton<ITenantService, TenantService>();
+        serviceCollection.AddScoped<ITenantService, TenantService>();
 
         // Job
         serviceCollection.AddScoped<IJobService, JobService>();
@@ -41,7 +41,7 @@ public static class ServiceConfiguration
         // Vehicle
         serviceCollection.AddScoped<IVehicleService, VehicleService>();
         serviceCollection.AddScoped<IVehicleRepository, VehicleRepository>();
-        
+
         // Staff
         serviceCollection.AddScoped<IStaffService, StaffService>();
         serviceCollection.AddScoped<IStaffRepository, StaffRepository>();
@@ -49,8 +49,12 @@ public static class ServiceConfiguration
         // Company 
         serviceCollection.AddScoped<ICompanyService, CompanyService>();
         serviceCollection.AddScoped<ICompanyRepository, CompanyRepository>();
+
+        // Identity Roles
+        serviceCollection.AddScoped<IRoleService, RoleService>();
+        serviceCollection.AddScoped<IStaffRolesService, StaffRolesService>();
     }
-    
+
     public static void ConfigureScopes(this IServiceCollection serviceCollection)
     {
 
