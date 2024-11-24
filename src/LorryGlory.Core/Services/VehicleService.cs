@@ -13,11 +13,11 @@ namespace LorryGlory.Core.Services
     {
         private readonly HttpClient _httpClient;
         private readonly string _mockApiUrl = "https://lorryglorymockapiapi20241113130521.azurewebsites.net/api/vehicle/search";
-        private readonly ITaskRepository _taskRepository;
+        private readonly IJobTaskRepository _taskRepository;
         private readonly IVehicleRepository _vehicleRepository;
         private readonly ITenantService _tenantService;
 
-        public VehicleService(HttpClient client, ITaskRepository taskRepo, IVehicleRepository vehicleRepo, ITenantService tenantService)
+        public VehicleService(HttpClient client, IJobTaskRepository taskRepo, IVehicleRepository vehicleRepo, ITenantService tenantService)
         {
             _httpClient = client;
             _taskRepository = taskRepo;

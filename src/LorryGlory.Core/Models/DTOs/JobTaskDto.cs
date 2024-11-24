@@ -1,4 +1,5 @@
 ﻿using LorryGlory.Core.Models.DTOs;
+using LorryGlory.Core.Models.DTOs.VehicleDtos;
 using LorryGlory.Data.Models.CompanyModels;
 using LorryGlory.Data.Models.JobModels.Enums;
 using System.ComponentModel.DataAnnotations;

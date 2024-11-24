@@ -1,4 +1,6 @@
-﻿namespace LorryGlory.Core.Mappings
+﻿using LorryGlory.Core.Models.DTOs.VehicleDtos;
+
+namespace LorryGlory.Core.Mappings
 {
     internal static class GenericMapper
     {

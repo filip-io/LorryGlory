@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using LorryGlory.Core.Models.DTOs;
+using LorryGlory.Core.Models.DTOs.VehicleDtos;
 using LorryGlory.Data.Models;
 using LorryGlory.Data.Models.CompanyModels;
 using LorryGlory.Data.Models.JobModels;

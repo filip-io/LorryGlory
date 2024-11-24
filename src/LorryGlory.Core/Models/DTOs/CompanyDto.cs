@@ -1,4 +1,6 @@
-﻿namespace LorryGlory.Core.Models.DTOs
+﻿using LorryGlory.Core.Models.DTOs.VehicleDtos;
+
+namespace LorryGlory.Core.Models.DTOs
 {
     public class CompanyDto
     {
