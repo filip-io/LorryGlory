@@ -35,7 +35,7 @@ namespace LorryGlory.Core.Models.DTOs
         public Guid FK_JobId { get; set; }
 
         // Vehicle Info (optional)
-        public VehicleDto? Vehicle { get; set; }
+        public GetAllVehiclesDto? Vehicle { get; set; }
 
         // File Link (optional)
         public FileLinkDto? FileLink { get; set; }

@@ -53,7 +53,7 @@ namespace LorryGlory.Data.Data
 
 
             // Populate seed data
-            //modelBuilder.SeedData();
+            modelBuilder.SeedData();
         }
 
         private void ConfigureCompany(ModelBuilder modelBuilder)

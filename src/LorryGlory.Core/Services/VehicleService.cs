@@ -72,16 +72,16 @@ namespace LorryGlory.Core.Services
 
             var vehicles = tasks.Select(t => new TodaysVehiclesForDriver
             {
-                Id = t.Vehicle.Id.ToString(),
-                RegNo = t.Vehicle.RegNo,
-                Make = t.Vehicle.Make,
-                Model = t.Vehicle.Model,
-                Color = t.Vehicle.Color,
-                Type = t.Vehicle.Type,
-                Status = t.Vehicle.Status.Status,
+                Id = t.Vehicle?.Id.ToString(),
+                RegNo = t.Vehicle?.RegNo,
+                Make = t.Vehicle?.Make,
+                Model = t.Vehicle?.Model,
+                Color = t.Vehicle?.Color,
+                Type = t.Vehicle?.Type,
+                Status = t.Vehicle?.Status.Status,
                 StartTime = t.StartTime,
                 EndTime = t.EndTime
-            });
+            } ?? null);
 
             return vehicles;
         }
