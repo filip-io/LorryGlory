@@ -1,6 +1,8 @@
 ﻿@*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
+@using LorryGlory_Frontend_MVC.ViewModels.Job
+@model ReadJobViewModel
 @{
 }
 
@@ -60,86 +62,156 @@
 
             <!-- Right Section: Company Info -->
             <div class="flex-grow">
-                <h2 class="font-semibold text-gray-800 text-lg mb-1">Company Name</h2>
-                <p class="text-gray-600 text-sm mb-1">Phone: <span class="font-medium">123-456-789</span></p>
+                <span class="font-medium">
+                    @if (Model != null && !string.IsNullOrEmpty(Model.Client?.ClientName))
+                    {
+                        <span class="text-muted" style="font-size: 0.9em;">@Model.Client?.ClientName</span>
+                    }
+                    else
+                    {
+                        <span class="text-muted" style="font-size: 0.9em;">Not found</span>
+                    }
+                </span>
+                <span class="font-medium">
+                    @if (Model != null && !string.IsNullOrEmpty(Model.Client?.PersonalNumber))
+                    {
+                        <span class="text-muted" style="font-size: 0.9em;">@Model.Client?.PersonalNumber</span>
+                    }
+                    else
+                    {
+                        <span class="text-muted" style="font-size: 0.9em;">Not found</span>
+                    }
+                </span>
             </div>
         </div>
-
-
 
         <div class="bg-white p-4 rounded-lg shadow-md mb-4">
             <h2 class="font-semibold text-gray-800 mb-2">Description</h2>
             <div class="divide-y divide-gray-200 text-sm">
                 <div class="py-2 flex justify-between">
-                    <span>Description</span>
-                    <span class="font-medium"></span>
+                    <span class="font-medium">
+                        @if (Model != null && !string.IsNullOrEmpty(Model.Description))
+                        {
+                            <span class="text-muted" style="font-size: 0.9em;">@Model.Description</span>
+                        }
+                        else
+                        {
+                            <span class="text-muted" style="font-size: 0.9em;">Not found</span>
+                        }
+                    </span>
                 </div>
             </div>
         </div>
+
 
         <div class="bg-white p-4 rounded-lg shadow-md mb-4">
             <h2 class="font-semibold text-gray-800 mb-2">Customer</h2>
             <div class="divide-y divide-gray-200 text-sm">
                 <div class="py-2 flex justify-between">
                     <span>Estimated start time</span>
-                    <span class="font-medium"></span>
+                    <span class="font-medium">
+                        @if (Model != null && Model.StartTime.HasValue)
+                        {
+                            <span class="text-muted" style="font-size: 0.9em;">
+                                @Model.StartTime.Value.ToString("yyyy-MM-dd HH:mm:ss")  <!-- Adjust format as needed -->
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="text-muted" style="font-size: 0.9em;">Not found</span>
+                        }
+                    </span>
                 </div>
                 <div class="py-2 flex justify-between">
                     <span>Estimated end time</span>
-                    <span class="font-medium"></span>
+                    <span class="font-medium">
+                        @if (Model != null && Model.EndTime.HasValue)
+                        {
+                            <span class="text-muted" style="font-size: 0.9em;">
+                                @Model.EndTime.Value.ToString("yyyy-MM-dd HH:mm:ss")  <!-- Adjust format as needed -->
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="text-muted" style="font-size: 0.9em;">Not found</span>
+                        }
+                    </span>
                 </div>
                 <div class="py-2 flex justify-between">
                     <span>Contact Name</span>
-                    <span class="font-medium"></span>
+                    <span class="font-medium">
+                        @if (Model != null && !string.IsNullOrEmpty(Model.ContactPerson?.Name))
+                        {
+                            <span class="text-muted" style="font-size: 0.9em;">@Model.ContactPerson?.Name</span>
+                        }
+                        else
+                        {
+                            <span class="text-muted" style="font-size: 0.9em;">Not found</span>
+                        }
+                    </span>
                 </div>
                 <div class="py-2 flex justify-between">
                     <span>Contact Number</span>
-                    <span class="font-medium"></span>
+                    <span class="font-medium">
+                        @if (Model != null && !string.IsNullOrEmpty(Model.ContactPerson?.PhoneNumber))
+                        {
+                            <span class="text-muted" style="font-size: 0.9em;">@Model.ContactPerson?.PhoneNumber</span>
+                        }
+                        else
+                        {
+                            <span class="text-muted" style="font-size: 0.9em;">Not found</span>
+                        }
+                    </span>
                 </div>
             </div>
         </div>
-
     </div>
-
     <div x-show="activeTab === 'Task'" class="space-y-4 mt-4">
-        <div class="p-4 bg-gray-100">
 
-            <!-- New job -->
+        <!-- New Task -->
+        @if (Model != null && Model.Id != Guid.Empty)
+        {
             <button class="mt-4 w-full bg-blue-600 text-white py-2 px-4 rounded-lg shadow-md">
-                <a asp-controller="TodaysMission" asp-action="TaskCreate">New Task</a>
+                <a asp-controller="Job" asp-action="TaskCreate" asp-route-JobId="@Model.Id">New taks</a>
             </button>
+        }
+        else
+        {
+            <button class="mt-4 w-full bg-gray-400 text-white py-2 px-4 rounded-lg shadow-md" disabled>
+                New Task
+            </button>
+        }
+@*         <a asp-controller="Job" asp-action="JobRead" asp-route-id="@job.Id" class="btn btn-warning btn-sm me-2">Arrow</a> *@
 
-            <!-- Hardcode known missions for testing until endpoint -->
-            @{
-                // Mock data for testing
-                var missions = new List<dynamic>
+        <!-- Mission List -->
+        <div class="mt-6">
+            @if (Model?.JobTasks == null || !Model.JobTasks.Any())
             {
-            new { Name = "Jarl Bjorn's Great Hall", StartTime = "07:30", EndTime = "11:30", Title = "Delivery to Stockholm"},
-            new { Name = "Another Mission", StartTime = "10:00", EndTime = "12:00", Title = "Delivery to Gothenburg"},
-            new { Name = "Mission 3", StartTime = "13:00", EndTime = "15:00", Title = "Delivery to Malmö"},
-            new { Name = "Mission 4", StartTime = "16:00", EndTime = "18:00", Title = "Delivery to Östersund"}
-            };
+                <p class="text-center text-gray-600">No missions available.</p>
             }
-
-            <!-- Mission List -->
-            <div class="mt-6">
-                @foreach (var mission in missions)
+            else
+            {
+                @foreach (var jobTask in Model.JobTasks)
                 {
                     <div class="flex items-center justify-between border-b border-gray-300 py-3">
                         <div>
-                            <p class="font-semibold text-lg">@mission.Name</p>
-                            <p class="text-sm text-gray-600">@mission.StartTime - @mission.EndTime</p>
+                            <p class="font-semibold text-lg">@jobTask.Title</p>
+                            <p class="text-sm text-gray-600">@jobTask.StartTime - @jobTask.EndTime</p>
                             <p class="text-gray-800">Title</p>
-                            <p class="text-gray-600 text-sm">@mission.Title</p>
+                            <p class="text-gray-600 text-sm">@jobTask.Title</p>
                         </div>
-                        <button class="text-blue-500 hover:text-blue-700">
+                        <!-- Button with Arrow -->
+                        <button class="text-blue-500 hover:text-blue-700 me-2">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
                             </svg>
                         </button>
+
+                        <!-- Link with Text and Button Styling -->
+                        <a asp-controller="Job" asp-action="JobRead" asp-route-id="@jobTask.Id" class="btn btn-warning btn-sm me-2">Arrow</a>
                     </div>
                 }
-            </div>
+            }
         </div>
     </div>
 </div>

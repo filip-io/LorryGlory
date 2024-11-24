@@ -98,7 +98,7 @@ public class JobTaskCreateDto
 
     public string? FK_StaffMemberId { get; set; }
 
-    public Guid JobId { get; set; }
+    //public Guid JobId { get; set; }
 
     [Required]
     public Guid FK_JobId { get; set; }

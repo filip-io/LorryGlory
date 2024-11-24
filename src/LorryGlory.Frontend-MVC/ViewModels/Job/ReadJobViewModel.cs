@@ -16,7 +16,7 @@
         public ICollection<JobTaskReadViewModel>? JobTasks { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
-        public Guid FK_TenantId { get; set; }
+        //public Guid FK_TenantId { get; set; }
         public string CompanyName { get; set; }
     }
 

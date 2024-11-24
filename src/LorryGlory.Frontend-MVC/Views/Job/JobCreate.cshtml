@@ -1,13 +1,16 @@
 ﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+    1a. Add a dropdown menu onto Client when a get all Client endpoint is created. With that users dont have to write in a Guid.
+    2a. FK_TenantId should be added automaticly after logging in. 
 *@
+@using LorryGlory_Frontend_MVC.ViewModels.Job
+@model CreateJobViewModel
 @{
     Layout = "_Layout";
     ViewData["Title"] = "New Job";
 }
 
 
-<div x-data="{ openTab: 1, totalPages: 5 }" class="p-6 bg-gray-50 min-h-screen flex flex-col items-center">
+<div x-data="{ openTab: 1, totalPages: 2 }" class="p-6 bg-gray-50 min-h-screen flex flex-col items-center">
 
     <!-- Header -->
     <div class="text-center mb-6">
@@ -33,44 +36,51 @@
     </div>
 
     <!-- Form -->
-    <form action="/JobTasks/Create" method="post" class="w-full max-w-3xl bg-white shadow-md rounded-lg p-6 space-y-6">
+    <form asp-controller="Job" asp-action="JobCreate" method="post" class="w-full max-w-3xl bg-white shadow-md rounded-lg p-6 space-y-6">
 
         <!-- Mission Tab Content -->
         <div x-show="openTab === 1" class="space-y-4">
             <fieldset>
-                <legend class="text-lg font-semibold text-gray-900">Mission</legend>
+                <legend class="text-lg font-semibold text-gray-900">Client</legend>
+                <!--  1a. Client field -->
                 <div class="space-y-2">
-                    <label class="block text-sm font-medium text-gray-700">Title</label>
-                    <input name="Title" value="Sample Title" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" />
+                    <label asp-for="FK_Clientid" class="block text-sm font-medium text-gray-700 mb-2">ClientId Guid</label>
+                    <input asp-for="FK_Clientid" type="text" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" />
+                    <span asp-validation-for="FK_Clientid" class="text-red-500 text-sm mt-1"></span>
+                </div>
+                <!--  2a. TenantId field -->
+                <div class="space-y-2">
+                    <label asp-for="FK_TenantId" class="block text-sm font-medium text-gray-700 mb-2">TenantId Guid</label>
+                    <input asp-for="FK_TenantId" type="text" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" />
+                    <span asp-validation-for="FK_TenantId" class="text-red-500 text-sm mt-1"></span>
                 </div>
                 <div class="space-y-2">
-                    <label class="block text-sm font-medium text-gray-700">Description</label>
-                    <textarea name="Description" rows="4" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">Sample description</textarea>
+                    <label asp-for="ContactPerson.Name" class="block text-sm font-medium text-gray-700 mb-2">Contact Name</label>
+                    <input asp-for="ContactPerson.Name" type="text" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" />
+                    <span asp-validation-for="ContactPerson.Name" class="text-red-500 text-sm mt-1"></span>
                 </div>
                 <div class="space-y-2">
-                    <label class="block text-sm font-medium text-gray-700">Status</label>
-                    <input name="Status" value="0" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" />
+                    <label asp-for="ContactPerson.PhoneNumber" class="block text-sm font-medium text-gray-700 mb-2">Contact Number</label>
+                    <input asp-for="ContactPerson.PhoneNumber" type="text" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" />
+                    <span asp-validation-for="ContactPerson.PhoneNumber" class="text-red-500 text-sm mt-1"></span>
                 </div>
-                <div class="flex items-center space-x-3">
-                    <label class="text-sm font-medium text-gray-700">Is Completed?</label>
-                    <input name="IsCompleted" type="checkbox" class="h-5 w-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500" checked />
-                </div>
+
                 <!-- Button Container (same row, opposite corners) -->
                 <div class="flex space-x-4 mt-8">
-                    <!-- Next Button -->
-                    <button type="button"
-                            @@click="openTab = openTab + 1"
-                            class="flex-1 px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
-                            aria-label="Next page">
-                        Next
-                    </button>
-
                     <!-- Cancel Button -->
                     <button type="button"
                             @@click="Logic to cancel"
                             class="flex-1 px-6 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
                             aria-label="Cancel">
                         Cancel
+                    </button>
+
+                    <!-- Next Button -->
+                    <button type="button"
+                            @@click="openTab = openTab + 1"
+                            class="flex-1 px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+                            aria-label="Next page">
+                        Next
                     </button>
                 </div>
             </fieldset>
@@ -79,29 +89,29 @@
         <!-- Contact Person Tab Content -->
         <div x-show="openTab === 2" class="space-y-4">
             <fieldset>
-                <legend class="text-lg font-semibold text-gray-900">Contact Person</legend>
+                <legend class="text-lg font-semibold text-gray-900">Job information</legend>
                 <div class="space-y-2">
-                    <label class="block text-sm font-medium text-gray-700">Name</label>
-                    <input name="ContactPersonName" value="John Doe" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" />
+                    <label asp-for="Title" class="block text-sm font-medium text-gray-700 mb-2">Title</label>
+                    <input asp-for="Title" type="text" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" />
+                    <span asp-validation-for="Title" class="text-red-500 text-sm mt-1"></span>
                 </div>
                 <div class="space-y-2">
-                    <label class="block text-sm font-medium text-gray-700">Email</label>
-                    <input name="ContactPersonEmail" value="johndoe@example.com" type="email" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" />
+                    <label asp-for="Description" class="block text-sm font-medium text-gray-700 mb-2">Description</label>
+                    <textarea asp-for="Description" rows="4" class="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"></textarea>
+                    <span asp-validation-for="Description" class="text-red-500 text-sm mt-1"></span>
                 </div>
                 <div class="space-y-2">
-                    <label class="block text-sm font-medium text-gray-700">Phone Number</label>
-                    <input name="ContactPersonPhoneNumber" value="123456789" type="tel" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" />
+                    <label asp-for="StartTime" class="block text-sm font-medium text-gray-700 mb-2">Start Time</label>
+                    <input asp-for="StartTime" type="datetime-local" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" />
+                    <span asp-validation-for="StartTime" class="text-red-500 text-sm mt-1"></span>
+                </div>
+                <div class="space-y-2">
+                    <label asp-for="EndTime" class="block text-sm font-medium text-gray-700 mb-2">End Time</label>
+                    <input asp-for="EndTime" type="datetime-local" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" />
+                    <span asp-validation-for="EndTime" class="text-red-500 text-sm mt-1"></span>
                 </div>
                 <!-- Button Container (same row, opposite corners) -->
                 <div class="flex space-x-4 mt-8">
-                    <!-- Next Button -->
-                    <button type="button"
-                            @@click="openTab = openTab + 1"
-                            class="flex-1 px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
-                            aria-label="Next page">
-                        Next
-                    </button>
-
                     <!-- Cancel Button -->
                     <button type="button"
                             @@click="Logic to cancel"
@@ -109,125 +119,12 @@
                             aria-label="Cancel">
                         Cancel
                     </button>
-                </div>
-            </fieldset>
-        </div>
 
-        <!-- Pickup Address Tab Content -->
-        <div x-show="openTab === 3" class="space-y-4">
-            <fieldset x-data="{ stacked: window.innerWidth < 810 }"
-                      x-init="window.addEventListener('resize', () => { stacked = window.innerWidth < 810 })"
-                      class="space-y-4">
-                <legend class="text-lg font-semibold text-gray-900">Pickup Address</legend>
-                <div :class="stacked ? 'grid grid-cols-1 gap-4' : 'grid grid-cols-2 gap-4'">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700">Street</label>
-                        <input name="PickupStreet" value="123 Pickup Lane" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" />
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700">Postal Code</label>
-                        <input name="PickupPostalCode" value="12345" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" />
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700">City</label>
-                        <input name="PickupCity" value="Pickuptown" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" />
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700">Country</label>
-                        <input name="PickupCountry" value="Pickupia" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" />
-                    </div>
-                </div>
-                <!-- Button Container (same row, opposite corners) -->
-                <div class="flex space-x-4 mt-8">
-                    <!-- Next Button -->
-                    <button type="button"
-                            @@click="openTab = openTab + 1"
-                            class="flex-1 px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
-                            aria-label="Next page">
-                        Next
-                    </button>
-
-                    <!-- Cancel Button -->
-                    <button type="button"
-                            @@click="Logic to cancel"
-                            class="flex-1 px-6 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
-                            aria-label="Cancel">
-                        Cancel
-                    </button>
-                </div>
-            </fieldset>
-        </div>
-
-        <!-- Drop-off Address Tab Content -->
-        <div x-show="openTab === 4" class="space-y-4">
-            <fieldset class="space-y-4">
-                <legend class="text-lg font-semibold text-gray-900">Drop-off Address</legend>
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700">Street</label>
-                        <input name="DropoffStreet" value="456 Drop-off Blvd" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" />
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700">Postal Code</label>
-                        <input name="DropoffPostalCode" value="67890" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" />
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700">City</label>
-                        <input name="DropoffCity" value="Dropoffcity" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" />
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700">Country</label>
-                        <input name="DropoffCountry" value="Dropoffia" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" />
-                    </div>
-                </div>
-                <!-- Button Container (same row, opposite corners) -->
-                <div class="flex space-x-4 mt-8">
-                    <!-- Next Button -->
-                    <button type="button"
-                            @@click="openTab = openTab + 1"
-                            class="flex-1 px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
-                            aria-label="Next page">
-                        Next
-                    </button>
-
-                    <!-- Cancel Button -->
-                    <button type="button"
-                            @@click="Logic to cancel"
-                            class="flex-1 px-6 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
-                            aria-label="Cancel">
-                        Cancel
-                    </button>
-                </div>
-            </fieldset>
-        </div>
-
-        <!-- Schedule Details Tab Content -->
-        <div x-show="openTab === 5" class="space-y-4">
-            <fieldset class="space-y-4">
-                <legend class="text-lg font-semibold text-gray-900">Schedule Details</legend>
-                <div class="space-y-2">
-                    <label class="block text-sm font-medium text-gray-700">Date</label>
-                    <input name="ScheduleDate" type="date" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" />
-                </div>
-                <div class="space-y-2">
-                    <label class="block text-sm font-medium text-gray-700">Time</label>
-                    <input name="ScheduleTime" type="time" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" />
-                </div>
-                <!-- Button Container (same row, opposite corners) -->
-                <div class="flex space-x-4 mt-8">
                     <!-- Save button -->
                     <button type="submit"
                             class="flex-1 px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
                             aria-label="Save Changes">
                         Save
-                    </button>
-
-                    <!-- Cancel Button -->
-                    <button type="button"
-                            @@click="Logic to cancel"
-                            class="flex-1 px-6 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
-                            aria-label="Cancel">
-                        Cancel
                     </button>
                 </div>
             </fieldset>
