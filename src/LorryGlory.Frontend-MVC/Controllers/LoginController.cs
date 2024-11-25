@@ -28,48 +28,5 @@ namespace LorryGlory_Frontend_MVC.Controllers
             return View();
         }
 
-        public async Task<IActionResult> Login()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Login(LoginViewModel loginView)
-        {
-            try
-            {
-                var response = await _client.PostAsJsonAsync("users/login", loginView);
-                if (!response.IsSuccessStatusCode)
-                    return View(loginView);
-
-                var json = await response.Content.ReadAsStringAsync();
-                var user = JsonConvert.DeserializeObject<LoginViewModel>(json);
-                if (user == null)
-                    return BadRequest("User does not exist.");
-
-                var cookies = response.Headers.GetValues("Set-Cookie");
-                foreach (var cookie in cookies)
-                {
-                    Response.Headers.Append("Set-Cookie", cookie);
-                }
-
-                var claims = new List<Claim>
-                {
-                    new Claim(ClaimTypes.Email, user.Email),
-                    new Claim(ClaimTypes.Name, user.Password)
-                };
-
-                var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-                var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
-
-                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal);
-
-                return RedirectToAction("Index", "Admin");
-            }
-            catch (Exception ex)
-            {
-                return View(loginView);
-            }
-        }
     }
 }

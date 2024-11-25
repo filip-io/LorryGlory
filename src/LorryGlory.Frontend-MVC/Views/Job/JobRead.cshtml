@@ -8,16 +8,27 @@
 
 <div x-data="{ activeTab: 'Job' }" class="p-4 bg-gray-100">
 
+    <!-- Title -->
     <div class="flex justify-center mb-4">
-        <h1 class="text-lg font-bold">Job Title</h1>
+        <h1 class="text-lg font-bold">
+            @if (Model != null && !string.IsNullOrEmpty(Model.Title))
+            {
+                <span class="text-lg" style="font-size: 0.9em;">@Model.Title</span>
+            }
+            else
+            {
+                <span class="text-lg" style="font-size: 0.9em;">Not found</span>
+            }
+        </h1>
     </div>
 
+    <!-- Back to Menu Button -->
     <div class="flex items-center justify-between border-b border-gray-300 pb-2">
-        <button class="text-gray-600" aria-label="Back to menu">
-            <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 20 20">
+        <a asp-controller="Job" asp-action="Index" class="flex items-center space-x-2">
+            <svg class="h-6 w-6 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
                 <path fill-rule="evenodd" d="M10 18a1 1 0 01-.707-.293l-7-7a1 1 0 010-1.414l7-7a1 1 0 011.414 1.414L4.414 10l6.293 6.293a1 1 0 01-.707 1.707z" clip-rule="evenodd" />
             </svg>
-        </button>
+        </a>
 
         <div class="flex space-x-4">
             <button @@click="activeTab = 'Job'" :class="{'border-b-2 border-blue-500 text-gray-900': activeTab === 'Job', 'text-gray-500': activeTab !== 'Job'}" class="font-semibold px-4">
@@ -45,11 +56,23 @@
 
                 <div class="flex items-center space-x-4">
                     <!-- Phone Icon -->
-                    <div class="flex items-center justify-center text-gray-500">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 0 0 2.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 0 1-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 0 0-1.091-.852H4.5A2.25 2.25 0 0 0 2.25 4.5v2.25Z" />
-                        </svg>
-                    </div>
+                    @if (Model?.Client != null && !string.IsNullOrEmpty(Model.Client.PersonalNumber))
+                    {
+                        <a href="tel:@Model.Client.PersonalNumber" class="flex items-center justify-center text-gray-500">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 0 0 2.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 0 1-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 0 0-1.091-.852H4.5A2.25 2.25 0 0 0 2.25 4.5v2.25Z" />
+                            </svg>
+                        </a>
+                    }
+                    else
+                    {
+                        <div class="flex items-center justify-center text-gray-500">
+                            <!-- Fallback content if no phone number -->
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 0 0 2.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 0 1-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c-.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 0 0-1.091-.852H4.5A2.25 2.25 0 0 0 2.25 4.5v2.25Z" />
+                            </svg>
+                        </div>
+                    }
 
                     <!-- Message Icon -->
                     <div class="flex items-center justify-center text-gray-500">
@@ -61,30 +84,31 @@
             </div>
 
             <!-- Right Section: Company Info -->
-            <div class="flex-grow">
-                <span class="font-medium">
+            <div class="flex flex-col">
+                <span class="font-semibold">
                     @if (Model != null && !string.IsNullOrEmpty(Model.Client?.ClientName))
                     {
-                        <span class="text-muted" style="font-size: 0.9em;">@Model.Client?.ClientName</span>
+                        @Model.Client?.ClientName
                     }
                     else
                     {
-                        <span class="text-muted" style="font-size: 0.9em;">Not found</span>
+                        <span>Not found</span>
                     }
                 </span>
-                <span class="font-medium">
+                <span class="font-semibold mb-4">
                     @if (Model != null && !string.IsNullOrEmpty(Model.Client?.PersonalNumber))
                     {
-                        <span class="text-muted" style="font-size: 0.9em;">@Model.Client?.PersonalNumber</span>
+                        @Model.Client?.PersonalNumber
                     }
                     else
                     {
-                        <span class="text-muted" style="font-size: 0.9em;">Not found</span>
+                        <span>Not found</span>
                     }
                 </span>
             </div>
         </div>
 
+        <!-- Description -->
         <div class="bg-white p-4 rounded-lg shadow-md mb-4">
             <h2 class="font-semibold text-gray-800 mb-2">Description</h2>
             <div class="divide-y divide-gray-200 text-sm">
@@ -92,76 +116,96 @@
                     <span class="font-medium">
                         @if (Model != null && !string.IsNullOrEmpty(Model.Description))
                         {
-                            <span class="text-muted" style="font-size: 0.9em;">@Model.Description</span>
+                            @Model.Description
                         }
                         else
                         {
-                            <span class="text-muted" style="font-size: 0.9em;">Not found</span>
+                            <span>Not found</span>
                         }
                     </span>
                 </div>
             </div>
         </div>
 
-
+        <!-- Task Information -->
         <div class="bg-white p-4 rounded-lg shadow-md mb-4">
-            <h2 class="font-semibold text-gray-800 mb-2">Customer</h2>
+            <h2 class="font-semibold text-gray-800 mb-2">Task Information</h2>
             <div class="divide-y divide-gray-200 text-sm">
-                <div class="py-2 flex justify-between">
-                    <span>Estimated start time</span>
-                    <span class="font-medium">
+                <div class="py-2 flex flex-col">
+                    <span class="text-sm text-gray-500">Estimated start time</span>
+                    <span class="font-semibold">
                         @if (Model != null && Model.StartTime.HasValue)
                         {
-                            <span class="text-muted" style="font-size: 0.9em;">
-                                @Model.StartTime.Value.ToString("yyyy-MM-dd HH:mm:ss")  <!-- Adjust format as needed -->
-                            </span>
+                            @Model.StartTime.Value.ToString("yyyy-MM-dd ' / ' HH:mm:ss")
                         }
                         else
                         {
-                            <span class="text-muted" style="font-size: 0.9em;">Not found</span>
+                            <span>Not found</span>
                         }
                     </span>
                 </div>
-                <div class="py-2 flex justify-between">
-                    <span>Estimated end time</span>
-                    <span class="font-medium">
+                <div class="py-2 flex flex-col">
+                    <span class="text-sm text-gray-500">Estimated end time</span>
+                    <span class="font-semibold">
                         @if (Model != null && Model.EndTime.HasValue)
                         {
-                            <span class="text-muted" style="font-size: 0.9em;">
-                                @Model.EndTime.Value.ToString("yyyy-MM-dd HH:mm:ss")  <!-- Adjust format as needed -->
-                            </span>
+                            @Model.EndTime.Value.ToString("yyyy-MM-dd ' / ' HH:mm:ss")
                         }
                         else
                         {
-                            <span class="text-muted" style="font-size: 0.9em;">Not found</span>
+                            <span>Not found</span>
                         }
                     </span>
                 </div>
-                <div class="py-2 flex justify-between">
-                    <span>Contact Name</span>
-                    <span class="font-medium">
+                <div class="py-2 flex flex-col">
+                    <span class="text-sm text-gray-500">Contact Name</span>
+                    <span class="font-semibold">
                         @if (Model != null && !string.IsNullOrEmpty(Model.ContactPerson?.Name))
                         {
-                            <span class="text-muted" style="font-size: 0.9em;">@Model.ContactPerson?.Name</span>
+                            @Model.ContactPerson?.Name
                         }
                         else
                         {
-                            <span class="text-muted" style="font-size: 0.9em;">Not found</span>
+                            <span>Not found</span>
                         }
                     </span>
                 </div>
                 <div class="py-2 flex justify-between">
-                    <span>Contact Number</span>
-                    <span class="font-medium">
-                        @if (Model != null && !string.IsNullOrEmpty(Model.ContactPerson?.PhoneNumber))
+                    <!-- Left Section: Contact Info -->
+                    <div class="py-2 flex flex-col">
+                        <span class="text-sm text-gray-500">Contact Number</span>
+                        <span class="font-semibold">
+                            @if (Model != null && !string.IsNullOrEmpty(Model.ContactPerson?.PhoneNumber))
+                            {
+                                @Model.ContactPerson?.PhoneNumber
+                            }
+                            else
+                            {
+                                <span>Not found</span>
+                            }
+                        </span>
+                    </div>
+
+                    <!-- Right Section: Phone Icon or Fallback -->
+                    <div class="flex items-center justify-center">
+                        @if (Model?.ContactPerson != null && !string.IsNullOrEmpty(Model.ContactPerson.PhoneNumber))
                         {
-                            <span class="text-muted" style="font-size: 0.9em;">@Model.ContactPerson?.PhoneNumber</span>
+                            <a href="tel:@Model.ContactPerson.PhoneNumber" class="flex items-center justify-center text-gray-500">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 0 0 2.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 0 1-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 0 0-1.091-.852H4.5A2.25 2.25 0 0 0 2.25 4.5v2.25Z" />
+                                </svg>
+                            </a>
                         }
                         else
                         {
-                            <span class="text-muted" style="font-size: 0.9em;">Not found</span>
+                            <!-- Fallback content if no phone number -->
+                            <div class="flex items-center justify-center text-gray-500">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 0 0 2.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 0 1-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c-.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 0 0-1.091-.852H4.5A2.25 2.25 0 0 0 2.25 4.5v2.25Z" />
+                                </svg>
+                            </div>
                         }
-                    </span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -171,17 +215,17 @@
         <!-- New Task -->
         @if (Model != null && Model.Id != Guid.Empty)
         {
-            <button class="mt-4 w-full bg-blue-600 text-white py-2 px-4 rounded-lg shadow-md">
-                <a asp-controller="Job" asp-action="TaskCreate" asp-route-JobId="@Model.Id">New taks</a>
-            </button>
+            <a asp-controller="Job" asp-action="TaskCreate" asp-route-JobId="@Model.Id"
+               class="mt-4 w-full bg-blue-600 text-white py-2 px-4 rounded-lg shadow-md block text-center hover:bg-blue-700">
+                New job
+            </a>
         }
         else
         {
-            <button class="mt-4 w-full bg-gray-400 text-white py-2 px-4 rounded-lg shadow-md" disabled>
+            <button class="mt-4 w-full bg-gray-600 text-white py-2 px-4 rounded-lg shadow-md cursor-not-allowed" disabled>
                 New Task
             </button>
         }
-@*         <a asp-controller="Job" asp-action="JobRead" asp-route-id="@job.Id" class="btn btn-warning btn-sm me-2">Arrow</a> *@
 
         <!-- Mission List -->
         <div class="mt-6">
@@ -196,19 +240,15 @@
                     <div class="flex items-center justify-between border-b border-gray-300 py-3">
                         <div>
                             <p class="font-semibold text-lg">@jobTask.Title</p>
-                            <p class="text-sm text-gray-600">@jobTask.StartTime - @jobTask.EndTime</p>
-                            <p class="text-gray-800">Title</p>
-                            <p class="text-gray-600 text-sm">@jobTask.Title</p>
+                            <p class="font-medium">Start date @jobTask.StartTime?.ToString("yyyy-MM-dd ' / ' HH:mm:ss")</p>
+                            <p class="font-medium">End date @jobTask.EndTime?.ToString("yyyy-MM-dd ' / ' HH:mm:ss")</p>
                         </div>
                         <!-- Button with Arrow -->
-                        <button class="text-blue-500 hover:text-blue-700 me-2">
+                        <a asp-controller="Job" asp-action="TaskRead" asp-route-id="@jobTask.Id" class="text-blue-500 hover:text-blue-700 me-2">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
                             </svg>
-                        </button>
-
-                        <!-- Link with Text and Button Styling -->
-                        <a asp-controller="Job" asp-action="JobRead" asp-route-id="@jobTask.Id" class="btn btn-warning btn-sm me-2">Arrow</a>
+                        </a>
                     </div>
                 }
             }

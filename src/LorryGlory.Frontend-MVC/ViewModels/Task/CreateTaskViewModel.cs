@@ -42,6 +42,16 @@ namespace LorryGlory_Frontend_MVC.ViewModels.Task
         public Guid? FK_VehicleId { get; set; }
 
         public Guid? FK_FileLink { get; set; }
+        public JobTaskStatus Status { get; set; } = JobTaskStatus.NotStarted;
+    }
+
+    public enum JobTaskStatus
+    {
+        NotStarted = 0,
+        InProgress = 1,
+        Finished = 2,
+        OnHold = 3,
+        Cancelled = 4
     }
 
     public class ContactPersonViewModel

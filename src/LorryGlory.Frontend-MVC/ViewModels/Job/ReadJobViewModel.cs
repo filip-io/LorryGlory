@@ -3,7 +3,7 @@
     public class ReadJobViewModel
     {
         public Guid Id { get; set; }
-        //public JobStatus? Status { get; set; }
+        public JobStatus? Status { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
         public bool IsCompleted { get; set; }
@@ -27,10 +27,6 @@
         public string? OrganizationNumber { get; set; }
         public string? PersonalNumber { get; set; }
         public string PhoneNumber { get; set; }
-        //public AddressReadViewModel Address { get; set; }
-        //public ICollection<ReadJobViewModel>? Jobs { get; set; } // Summarized Job info
-        //public Guid FK_TenantId { get; set; }
-        //public string CompanyName { get; set; }
     }
 
     public class AddressReadViewModel
@@ -64,7 +60,6 @@
         public Guid Id { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
-        //public JobTaskStatus Status { get; set; }
         public bool IsCompleted { get; set; }
         public AddressReadViewModel PickupAddress { get; set; }
         public AddressReadViewModel DeliveryAddress { get; set; }

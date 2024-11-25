@@ -120,10 +120,42 @@ namespace LorryGlory_Frontend_MVC.Controllers
             return View(job);  // Single job
         }
 
-        public IActionResult TaskRead()
+        public async Task<IActionResult> TaskReadAsync(Guid Id)
         {
+            Console.WriteLine($"Received Id: {Id}");
 
-            return View();
+            ViewData["Title"] = "Admin Task View";
+
+            ReadTaskViewModel task = null;
+
+            try
+            {
+                var response = await _client.GetAsync($"{baseUri}api/tasks/{Id}");
+                if (response.IsSuccessStatusCode)
+                {
+                    var json = await response.Content.ReadAsStringAsync();
+                    var apiResponse = JsonConvert.DeserializeObject<TaskApiResponse>(json);
+
+                    if (apiResponse != null && apiResponse.Success)
+                    {
+                        task = apiResponse.Data;
+                    }
+                    else
+                    {
+                        ViewData["ErrorMessage"] = "No data found for the job.";
+                    }
+                }
+                else
+                {
+                    ViewData["ErrorMessage"] = "Failed to fetch job data.";
+                }
+            }
+            catch (HttpRequestException ex)
+            {
+                ViewData["ErrorMessage"] = "Unable to connect to the data server. Please try again later.";
+            }
+
+            return View(task);
         }
 
         public IActionResult TaskCreate(Guid jobId)
@@ -141,7 +173,7 @@ namespace LorryGlory_Frontend_MVC.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> TaskCreate(ReadTaskViewModel res)
+        public async Task<IActionResult> TaskCreate(CreateTaskViewModel res, Guid jobId)
         {
             if (!ModelState.IsValid)
             {
@@ -153,23 +185,8 @@ namespace LorryGlory_Frontend_MVC.Controllers
 
             var response = await _client.PostAsync($"{baseUri}api/tasks", content);
 
-            return RedirectToAction("JobRead");
+            // Redirect to the JobRead action, passing the jobId
+            return RedirectToAction("JobRead", "Job", new { id = jobId });
         }
-
-        //[HttpPost]
-        //public async Task<IActionResult> JobCreate(CreateJobViewModel res)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return View(res);
-        //    }
-        //    var json = JsonConvert.SerializeObject(res);
-
-        //    var content = new StringContent(json, Encoding.UTF8, "application/json");
-
-        //    var response = await _client.PostAsync($"{baseUri}api/jobs", content);
-
-        //    return RedirectToAction("Index");
-        //}
     }
 }

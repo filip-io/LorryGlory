@@ -15,29 +15,40 @@
         <h1 class="text-2xl font-bold text-gray-800">New Task</h1>
     </div>
 
-    <!-- Back to Menu Button -->
+    <!-- Line -->
     <div class="flex justify-start w-full max-w-3xl mb-6">
-        <button class="text-gray-600 hover:text-gray-800" aria-label="Back to menu">
-            <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd" d="M10 18a1 1 0 01-.707-.293l-7-7a1 1 0 010-1.414l7-7a1 1 0 011.414 1.414L4.414 10l6.293 6.293a1 1 0 01-.707 1.707z" clip-rule="evenodd" />
-            </svg>
-        </button>
     </div>
 
     <!-- Pagination -->
-    <div class="flex items-center space-x-4 mb-6">
+    <div class="flex items-center justify-between mb-6 space-x-4 sm:flex-col sm:items-center sm:space-y-2 sm:space-x-0">
+        <!-- First Page Button -->
         <button :disabled="openTab === 1" @@click="openTab = 1" class="px-4 py-2 text-sm text-gray-700 hover:text-gray-800" aria-label="Go to first page"><<</button>
+
+        <!-- Previous Page Button -->
         <button :disabled="openTab === 1" @@click="openTab = openTab - 1" class="px-4 py-2 text-sm text-gray-700 hover:text-gray-800" aria-label="Go one step left"><</button>
-        <span class="px-4 py-2 text-sm text-gray-700" aria-live="polite">Page <span x-text="openTab"></span> of <span x-text="totalPages"></span></span>
+
+        <!-- Page Info -->
+        <div class="flex flex-col items-center text-sm text-gray-700">
+            <span class="block">Page</span>
+            <div class="flex items-center space-x-3">
+                <span class="" x-text="openTab"></span>
+                <span class="">of</span>
+                <span class="" x-text="totalPages"></span>
+            </div>
+        </div>
+
+        <!-- Next Page Button -->
         <button :disabled="openTab === totalPages" @@click="openTab = openTab + 1" class="px-4 py-2 text-sm text-gray-700 hover:text-gray-800" aria-label="Go one step right">></button>
+
+        <!-- Last Page Button -->
         <button :disabled="openTab === totalPages" @@click="openTab = totalPages" class="px-4 py-2 text-sm text-gray-700 hover:text-gray-800" aria-label="Go to last page">>></button>
     </div>
 
     <!-- Form -->
-    <form asp-controller="Job" asp-action="TaskCreate" method="post" class="w-full max-w-3xl bg-white shadow-md rounded-lg p-6 space-y-6">
+    <form asp-controller="Job" asp-action="TaskCreate" asp-route-JobId="@ViewData["JobId"]" method="post" class="w-full max-w-3xl bg-white shadow-md rounded-lg p-6 space-y-6">
 
         <!-- Hidden JobID Field -->
-@*         <input type="hidden" name="JobId" value="@ViewData["JobId"]" /> *@
+        <input type="hidden" name="JobId" value="@ViewData["JobId"]" />
 
         <!-- Mission Tab Content -->
         <div x-show="openTab === 1" class="space-y-4">
@@ -73,12 +84,11 @@
                 <!-- Button Container (same row, opposite corners) -->
                 <div class="flex space-x-4 mt-8">
                     <!-- Cancel Button -->
-                    <button type="button"
-                            @@click="Logic to cancel"
-                            class="flex-1 px-6 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
-                            aria-label="Cancel">
+                    <a asp-controller="Job" asp-action="JobRead" asp-route-Id="@ViewData["JobId"]"
+                       class="flex-1 px-6 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 text-center block"
+                       aria-label="Cancel">
                         Cancel
-                    </button>
+                    </a>
 
                     <!-- Next Button -->
                     <button type="button"
@@ -121,12 +131,11 @@
                 <!-- Button Container (same row, opposite corners) -->
                 <div class="flex space-x-4 mt-8">
                     <!-- Cancel Button -->
-                    <button type="button"
-                            @@click="Logic to cancel"
-                            class="flex-1 px-6 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
-                            aria-label="Cancel">
+                    <a asp-controller="Job" asp-action="JobRead" asp-route-Id="@ViewData["JobId"]"
+                       class="flex-1 px-6 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 text-center block"
+                       aria-label="Cancel">
                         Cancel
-                    </button>
+                    </a>
 
                     <!-- Next Button -->
                     <button type="button"
@@ -169,12 +178,11 @@
                 <!-- Button Container (same row, opposite corners) -->
                 <div class="flex space-x-4 mt-8">
                     <!-- Cancel Button -->
-                    <button type="button"
-                            @@click="Logic to cancel"
-                            class="flex-1 px-6 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
-                            aria-label="Cancel">
+                    <a asp-controller="Job" asp-action="JobRead" asp-route-Id="@ViewData["JobId"]"
+                       class="flex-1 px-6 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 text-center block"
+                       aria-label="Cancel">
                         Cancel
-                    </button>
+                    </a>
 
                     <!-- Next Button -->
                     <button type="button"
@@ -214,12 +222,11 @@
                 <!-- Button Container (same row, opposite corners) -->
                 <div class="flex space-x-4 mt-8">
                     <!-- Cancel Button -->
-                    <button type="button"
-                            @@click="Logic to cancel"
-                            class="flex-1 px-6 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
-                            aria-label="Cancel">
+                    <a asp-controller="Job" asp-action="JobRead" asp-route-Id="@ViewData["JobId"]"
+                       class="flex-1 px-6 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 text-center block"
+                       aria-label="Cancel">
                         Cancel
-                    </button>
+                    </a>
 
                     <!-- Save button -->
                     <button type="submit"
