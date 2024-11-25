@@ -67,13 +67,13 @@ namespace LorryGlory_Frontend_MVC.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> JobCreate(CreateJobViewModel res)
+        public async Task<IActionResult> JobCreate(CreateJobViewModel job)
         {
             if (!ModelState.IsValid)
             {
-                return View(res);
+                return View(job);
             }
-            var json = JsonConvert.SerializeObject(res);
+            var json = JsonConvert.SerializeObject(job);
 
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
@@ -82,6 +82,7 @@ namespace LorryGlory_Frontend_MVC.Controllers
             return RedirectToAction("Index");
         }
 
+        // TODO Change from Id to id
         public async Task<IActionResult> JobRead(Guid Id)
         {
             Console.WriteLine($"Received Id: {Id}");
@@ -120,7 +121,7 @@ namespace LorryGlory_Frontend_MVC.Controllers
             return View(job);  // Single job
         }
 
-        public async Task<IActionResult> TaskReadAsync(Guid Id)
+        public async Task<IActionResult> TaskRead(Guid Id)
         {
             Console.WriteLine($"Received Id: {Id}");
 
@@ -173,19 +174,84 @@ namespace LorryGlory_Frontend_MVC.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> TaskCreate(CreateTaskViewModel res, Guid jobId)
+        public async Task<IActionResult> TaskCreate(CreateTaskViewModel task, Guid jobId)
         {
             if (!ModelState.IsValid)
             {
-                return View(res);
+                return View(task);
             }
-            var json = JsonConvert.SerializeObject(res);
+            var json = JsonConvert.SerializeObject(task);
 
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
             var response = await _client.PostAsync($"{baseUri}api/tasks", content);
 
             // Redirect to the JobRead action, passing the jobId
+            return RedirectToAction("JobRead", "Job", new { id = jobId });
+        }
+
+        public async Task<IActionResult> TaskEdit(Guid id)
+        {
+            Console.WriteLine($"Received Id: {id}");
+
+            ViewData["Title"] = "Edit Task View";
+
+            EditTaskViewModel task = null;
+
+            try
+            {
+                var response = await _client.GetAsync($"{baseUri}api/tasks/{id}");
+                if (response.IsSuccessStatusCode)
+                {
+                    var json = await response.Content.ReadAsStringAsync();
+                    var apiResponse = JsonConvert.DeserializeObject<EditTaskApiResponse>(json);
+
+                    if (apiResponse != null && apiResponse.Success)
+                    {
+                        task = apiResponse.Data;
+                    }
+                    else
+                    {
+                        ViewData["ErrorMessage"] = "No data found for the job.";
+                    }
+                }
+                else
+                {
+                    ViewData["ErrorMessage"] = "Failed to fetch job data.";
+                }
+            }
+            catch (HttpRequestException ex)
+            {
+                ViewData["ErrorMessage"] = "Unable to connect to the data server. Please try again later.";
+            }
+
+            return View(task);
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> TaskEdit(EditTaskViewModel task)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(task);
+            }
+            var json = JsonConvert.SerializeObject(task);
+
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var response = await _client.PutAsync($"{baseUri}api/tasks/{task.Id}", content);
+
+            return RedirectToAction("TaskRead", "Job", new { id = task.Id });
+        }
+
+        //{task.Id}
+
+        [HttpPost]
+        public async Task<IActionResult> TaskDelete(Guid id, Guid jobId)
+        {
+            var response = await _client.DeleteAsync($"{baseUri}api/tasks/{id}");
+
             return RedirectToAction("JobRead", "Job", new { id = jobId });
         }
     }

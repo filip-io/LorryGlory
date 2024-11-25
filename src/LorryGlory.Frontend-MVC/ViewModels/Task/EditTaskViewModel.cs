@@ -2,8 +2,11 @@
 
 namespace LorryGlory_Frontend_MVC.ViewModels.Task
 {
-    public class CreateTaskViewModel
+    public class EditTaskViewModel
     {
+        [Required]
+        public Guid Id { get; set; }
+
         [Required]
         [StringLength(100, MinimumLength = 3)]
         public string Title { get; set; }
@@ -11,17 +14,17 @@ namespace LorryGlory_Frontend_MVC.ViewModels.Task
         [StringLength(500)]
         public string? Description { get; set; }
 
-        public JobTaskStatus Status { get; set; } = JobTaskStatus.NotStarted;
+        public JobTaskStatus Status { get; set; }
 
-        public bool IsCompleted { get; set; } = false;
+        public bool IsCompleted { get; set; }
 
-        public ContactPersonViewModel? ContactPerson { get; set; }
-
-        [Required]
-        public AddressCreateUpdateViewModel PickupAddress { get; set; }
+        public ContactPersonUpdateView? ContactPerson { get; set; }
 
         [Required]
-        public AddressCreateUpdateViewModel DeliveryAddress { get; set; }
+        public AddressUpdateView PickupAddress { get; set; }
+
+        [Required]
+        public AddressUpdateView DeliveryAddress { get; set; }
 
         [Required]
         public DateTime StartTime { get; set; }
@@ -29,38 +32,29 @@ namespace LorryGlory_Frontend_MVC.ViewModels.Task
         [Required]
         public DateTime EndTime { get; set; }
 
-        public DateTime CreatedAt { get; set; } = DateTime.Now;
-        public DateTime UpdatedAt { get; set; } = DateTime.Now;
-
         public string? FK_StaffMemberId { get; set; }
-
-        public Guid JobId { get; set; }
-
-        [Required]
-        public Guid FK_JobId { get; set; }
 
         public Guid? FK_VehicleId { get; set; }
 
         public Guid? FK_FileLink { get; set; }
     }
 
-    public enum JobTaskStatus
+    public class ContactPersonUpdateView
     {
-        NotStarted = 0,
-        InProgress = 1,
-        Finished = 2,
-        OnHold = 3,
-        Cancelled = 4
-    }
-
-    public class ContactPersonViewModel
-    {
+        [Required]
+        [StringLength(100, MinimumLength = 2)]
         public string Name { get; set; }
+
+        [EmailAddress]
+        [StringLength(255)]
         public string? Email { get; set; }
+
+        [Phone]
+        [StringLength(20)]
         public string? PhoneNumber { get; set; }
     }
 
-    public class AddressCreateUpdateViewModel
+    public class AddressUpdateView
     {
         [Required]
         [StringLength(100)]

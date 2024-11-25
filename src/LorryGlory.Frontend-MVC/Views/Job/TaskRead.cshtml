@@ -1,6 +1,5 @@
 ﻿@*
     TODO
-    1a. Status 
 *@
 @using LorryGlory_Frontend_MVC.ViewModels.Task
 @model ReadTaskViewModel
@@ -22,30 +21,49 @@
             }
         </h1>
     </div>
-    
+
     <!-- Back to Menu Button -->
     <div class="flex items-center justify-between border-b border-gray-300 pb-2">
-        <a href="javascript:void(0);" onclick="window.history.back();" class="flex items-center space-x-2">
+        <a asp-controller="Job" asp-action="JobRead" asp-route-id="@Model.FK_JobId" class="flex items-center space-x-2">
             <svg class="h-6 w-6 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
                 <path fill-rule="evenodd" d="M10 18a1 1 0 01-.707-.293l-7-7a1 1 0 010-1.414l7-7a1 1 0 011.414 1.414L4.414 10l6.293 6.293a1 1 0 01-.707 1.707z" clip-rule="evenodd" />
             </svg>
         </a>
+        <div class="w-6"></div>
     </div>
 
+    <div class="flex flex-col items-center justify-center mt-3">
+        <!-- Status -->
+        <div class="text-center mb-4">
+            <span class="text-lg font-bold">
+                @if (Model != null && Model.Status.HasValue)
+                {
+                    <h1>Status - @(Model.Status?.ToString())</h1>
+                }
+                else
+                {
+                    <span>Not found</span>
+                }
+            </span>
+        </div>
 
-    <div class="flex justify-center mb-4 mt-4">
-        <span class="text-lg font-bold">
-            @if (Model != null && Model.Status.HasValue)
-            {
-                <h1 class="">
-                    Status - @(Model.Status?.ToString())
-                </h1>
-            }
-            else
-            {
-                <span>Not found</span>
-            }
-        </span>
+        <!-- Edit and Delete -->
+        <div class="flex space-x-2">
+            <form method="get" asp-controller="Job" asp-action="TaskEdit" class="inline">
+                <input type="hidden" name="id" value="@Model?.Id" />
+                <input type="hidden" name="jobId" value="@Model?.FK_JobId" />
+                <button type="submit" class="px-4 py-2 bg-yellow-500 text-white text-sm font-semibold rounded hover:bg-yellow-600">
+                    Edit
+                </button>
+            </form>
+            <form method="post" asp-controller="Job" asp-action="TaskDelete" class="inline">
+                <input type="hidden" name="id" value="@Model?.Id" />
+                <input type="hidden" name="jobId" value="@Model?.FK_JobId" />
+                <button type="submit" class="px-4 py-2 bg-red-500 text-white text-sm font-semibold rounded hover:bg-red-600">
+                    Delete
+                </button>
+            </form>
+        </div>
     </div>
 
     <div class="space-y-4 mt-4">

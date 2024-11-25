@@ -7,4 +7,10 @@ namespace LorryGlory_Frontend_MVC.ViewModels.ApiResponses
         public bool Success { get; set; }
         public ReadTaskViewModel Data { get; set; }
     }
+
+    public class EditTaskApiResponse
+    {
+        public bool Success { get; set; }
+        public EditTaskViewModel Data { get; set; }
+    }
 }
