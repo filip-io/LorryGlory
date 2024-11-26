@@ -25,9 +25,7 @@ namespace LorryGlory.Api
             // instead of adding them all here in Program.cs.
             builder.Services.ConfigureDatabase(connectionString);
             builder.Services.ConfigureScopes();
-         
-
-           
+                    
             builder.Services.ConfigureIdentity();
             builder.Services.ConfigureCookies();
             builder.Services.AddAuthentication(options =>
@@ -66,7 +64,7 @@ namespace LorryGlory.Api
             {
                 options.AddPolicy("FrontendMVC", builder =>
                 {
-                    builder.WithOrigins("https://localhost:7172")
+                    builder.WithOrigins("https://localhost:7172", "https://localhost:7036")
                            .AllowAnyMethod()
                            .AllowAnyHeader()
                            .AllowCredentials();

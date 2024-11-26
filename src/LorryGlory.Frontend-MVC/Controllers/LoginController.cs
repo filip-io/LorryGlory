@@ -1,11 +1,11 @@
 ﻿using LorryGlory_Frontend_MVC.Models;
+using LorryGlory_Frontend_MVC.ViewModels;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 using System.Security.Claims;
-using System.Security.Cryptography;
 using System.Text.Json;
 
 namespace LorryGlory_Frontend_MVC.Controllers
@@ -27,9 +27,8 @@ namespace LorryGlory_Frontend_MVC.Controllers
             _logger = logger;
             var handler = new HttpClientHandler
             {
-                UseCookies = true, // Använd cookies
-                CookieContainer = new CookieContainer(), // Skapa en behållare för cookies
-                AllowAutoRedirect = false // Valfritt, styr om omdirigeringar hanteras
+                UseCookies = true,
+                CookieContainer = new CookieContainer()
             };
 
             _httpClient = new HttpClient(handler)
@@ -41,10 +40,7 @@ namespace LorryGlory_Frontend_MVC.Controllers
         {
             return View();
         }
-        public class TokenResponseVM
-        {
-            public string Token { get; set; }
-        }
+
         [HttpPost]
         public async Task<IActionResult> Index(LoginRequestDto login)
         {
@@ -63,9 +59,8 @@ namespace LorryGlory_Frontend_MVC.Controllers
                         Response.Headers.Append("Set-Cookie", cookie);
                     }
 
-
                     var json = await response.Content.ReadAsStringAsync();
-                    var token = JsonSerializer.Deserialize<TokenResponseVM>(json, _options);
+                    var token = JsonSerializer.Deserialize<TokenResponseViewModel>(json, _options);
                     if (string.IsNullOrEmpty(token.Token))
                     {
                         _logger.LogInformation($"No token obtained at time {DateTime.Now}.");
@@ -77,15 +72,14 @@ namespace LorryGlory_Frontend_MVC.Controllers
                     };
 
                     // JWT token is a string consisting of 3 parts: Header(algorithm & token type), Payload(claims) and Signature(to check nobody modified payload).
-                var handler = new JwtSecurityTokenHandler();
+                    var handler = new JwtSecurityTokenHandler();
                     var jwtToken = handler.ReadJwtToken(token.Token);
 
                     // get claims and put them to ClaimsIdentity (one role/inlog) and ClaimsPrincipal (one user/entity)
                     var claims = jwtToken.Claims.ToList();
                     foreach (var claim in claims)
                     {
-
-                        Console.WriteLine("claim: " + claim);
+                        Console.WriteLine($"claim! issuer: {claim.Issuer}, type: {claim.Type}, value: {claim.Value}");
                     }
 
                     var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
@@ -107,8 +101,22 @@ namespace LorryGlory_Frontend_MVC.Controllers
                         Expires = jwtToken.ValidTo
                     });
 
-                    return RedirectToAction("Index", "Menu");
-                    //return View();
+                    // get claims from user!
+                    var email = User.Identity?.Name;
+                    ViewData["Email"] = email;
+                    var roles = User.Claims
+                        .Where(c => c.Type == ClaimTypes.Role)
+                        .Select(c => c.Value);
+                    foreach(var r in roles) Console.WriteLine("Role " + r);
+                    var isAdmin = User.IsInRole("Admin");
+                    if (roles.Contains("Admin"))
+                    {
+                        TempData["UserWelcome"] = $"Welcome {email}! You are the BOSS.";
+                        return RedirectToAction("Privacy", "Home");
+                    }
+                    TempData["UserWelcome"] = $"Welcome {email}! You are small and unimportant as most of us.";
+                    return RedirectToAction("Index", "Home");
+
                 }
                 else
                 {
