@@ -1,5 +1,5 @@
-﻿using LorryGlory_Frontend_MVC.Models.JobTasks;
-using LorryGlory_Frontend_MVC.ViewModels;
+﻿using LorryGlory_Frontend_MVC.Models;
+using LorryGlory_Frontend_MVC.Models.JobTasks;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
@@ -27,16 +27,5 @@ namespace LorryGlory_Frontend_MVC.Controllers
 
             return View(responseData.Data[0]);
         }
-    }
-
-    internal class ResponseModel<T>
-    {
-        public bool Success { get; set; }
-
-        public T Data { get; set; }
-
-        public string? Message { get; set; }
-
-        public IEnumerable<string>? Errors { get; set; }
     }
 }
