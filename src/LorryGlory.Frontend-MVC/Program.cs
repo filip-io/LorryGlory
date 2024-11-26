@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using System.Net;
 using System.Net.Http;
@@ -14,21 +16,25 @@ namespace LorryGlory_Frontend_MVC
             builder.Services.AddControllersWithViews();
             builder.Services.AddHttpClient();
 
-
-            builder.Services.AddAuthentication(options =>
+            builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+            .AddCookie(options =>
             {
-                options.DefaultAuthenticateScheme = IdentityConstants.ApplicationScheme;
-                options.DefaultChallengeScheme = IdentityConstants.ApplicationScheme;
-            })
-                .AddCookie("Identity.Application", options =>
-                {
-                    options.Cookie.Name = "LorryGloryApp";
-                    options.LoginPath = "/login";
-                    options.LogoutPath = "/logout";
-                    options.Cookie.HttpOnly = true;
-                    options.Cookie.SameSite = SameSiteMode.None;
-                    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-                });
+                options.LoginPath = "/Login";
+            });
+            //builder.Services.AddAuthentication(options =>
+            //{
+            //    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            //    options.DefaultChallengeScheme = JwtBearerDefaults;
+            //})
+            //    .AddCookie("Identity.Application", options =>
+            //    {
+            //        options.Cookie.Name = "LorryGloryFRONTENDForFaaan";
+            //        options.LoginPath = "/login";
+            //        options.LogoutPath = "/logout";
+            //        options.Cookie.HttpOnly = true;
+            //        options.Cookie.SameSite = SameSiteMode.None;
+            //        options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+            //    });
             builder.Services.AddAuthorization();
 
             var app = builder.Build();
