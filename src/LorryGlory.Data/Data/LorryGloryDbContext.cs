@@ -53,7 +53,7 @@ namespace LorryGlory.Data.Data
 
 
             // Populate seed data
-            //modelBuilder.SeedData();
+            modelBuilder.SeedData();
         }
 
         private void ConfigureCompany(ModelBuilder modelBuilder)
@@ -288,7 +288,7 @@ namespace LorryGlory.Data.Data
             {
 
                 // Query filter here would not allow login
-                // entity.HasQueryFilter(e => _tenantService.IsSuperAdmin() || e.FK_TenantId == _tenantService.TenantId);
+                //entity.HasQueryFilter(e => _tenantService.IsSuperAdmin() || e.FK_TenantId == _tenantService.TenantId);
 
                 // Value objects
                 entity.OwnsOne(e => e.Address);
@@ -330,10 +330,10 @@ namespace LorryGlory.Data.Data
                 entity.OwnsOne(e => e.Eco);
 
                 // Company relationship
-                entity.HasOne(e => e.Company)
-                    .WithMany(c => c.Vehicles)
-                    .HasForeignKey(e => e.FK_TenantId)
-                    .OnDelete(DeleteBehavior.Restrict);
+                //entity.HasOne(e => e.Company)
+                //    .WithMany(c => c.Vehicles)
+                //    .HasForeignKey(e => e.FK_TenantId)
+                //    .OnDelete(DeleteBehavior.Restrict);
             });
         }
 
