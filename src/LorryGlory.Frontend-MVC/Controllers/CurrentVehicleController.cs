@@ -1,4 +1,5 @@
-﻿using LorryGlory_Frontend_MVC.ViewModels;
+﻿
+using LorryGlory_Frontend_MVC.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
@@ -18,11 +19,19 @@ namespace LorryGlory_Frontend_MVC.Controllers
             var response = await _httpClient.GetStringAsync("https://localhost:7055/api/VehicleAndStaff/vehicle");
             var vehicleViewModel = JsonConvert.DeserializeObject<VehicleViewModel>(response);
 
-            if (vehicleViewModel.TechnicalData != null)
+            CalculateBkTable(vehicleViewModel.TechnicalData);
+
+            return View(vehicleViewModel);
+        }
+
+
+        private void CalculateBkTable(TechnicalDataViewModel techData)
+        {
+            if (techData != null)
             {
-                var totalAxleDistance = (vehicleViewModel.TechnicalData.AxleWidth1 +
-                                         vehicleViewModel.TechnicalData.AxleWidth2 +
-                                         vehicleViewModel.TechnicalData.AxleWidth3) / 1000.0;
+                var totalAxleDistance = (techData.AxleWidth1 +
+                                         techData.AxleWidth2 +
+                                         techData.AxleWidth3) / 1000.0;
 
                 var bk1Table = new[]
                 {
@@ -291,9 +300,6 @@ namespace LorryGlory_Frontend_MVC.Controllers
                 ViewBag.BK3Table = new List<object>();
                 ViewBag.BK4Table = new List<object>();
             }
-
-            return View(vehicleViewModel);
         }
-
     }
 }
