@@ -2,9 +2,20 @@
 <html lang="en">
 
     <head>
+        <!-- Start cookieyes banner -->
+        <script id="cookieyes" type="text/javascript" src="https://cdn-cookieyes.com/client_data/742e83ded28a1d9089b546d3/script.js"></script> <!-- End cookieyes banner -->
+        <!-- Google tag (gtag.js) -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-E671H88ZNZ"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+
+            gtag('config', 'G-E671H88ZNZ');
+        </script>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>@ViewData["Title"] - LorryGlory</title>
+        <title>LorryGlory - @ViewData["Title"]</title>
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
         <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
         <link rel="stylesheet" href="~/LorryGlory_Frontend_MVC.styles.css" asp-append-version="true" />
@@ -62,7 +73,7 @@
                                         Login</a>
                                     <a asp-controller="Menu" asp-action="Index" class="block w-full max-w-xs px-4 py-2 text-lg text-white bg-blue-600 rounded-lg shadow-md hover:bg-blue-700 hover:shadow-lg transition duration-200">
                                         Menu</a>
-                                    <a asp-controller="CurrentVehicle" asp-action="Index" class="block w-full max-w-xs px-4 py-2 text-lg text-white bg-blue-600 rounded-lg shadow-md hover:bg-blue-700 hover:shadow-lg transition duration-200">
+                                    <a asp-controller="TodaysTask" asp-action="Index" class="block w-full max-w-xs px-4 py-2 text-lg text-white bg-blue-600 rounded-lg shadow-md hover:bg-blue-700 hover:shadow-lg transition duration-200">
                                         Current Vehicle</a>
                                     <a asp-controller="DetailedVehicle" asp-action="Index" class="block w-full max-w-xs px-4 py-2 text-lg text-white bg-blue-600 rounded-lg shadow-md hover:bg-blue-700 hover:shadow-lg transition duration-200">
                                         Detailed Vehicle
@@ -81,7 +92,7 @@
                             <a asp-controller="Home" asp-action="Privacy" class="text-gray-800 hover:text-blue-600">Privacy</a>
                             <a asp-controller="Login" asp-action="Index" class="text-gray-800 hover:text-blue-600">Login</a>
                             <a asp-controller="Menu" asp-action="Index" class="text-gray-800 hover:text-blue-600">Menu</a>
-                            <a asp-controller="CurrentVehicle" asp-action="Index" class="text-gray-800 hover:text-blue-600">Current Vehicle</a>
+                            <a asp-controller="TodaysTask" asp-action="Index" class="text-gray-800 hover:text-blue-600">Todays Task</a>
                             <a asp-controller="DetailedVehicle" asp-action="Index" class="text-gray-800 hover:text-blue-600">Detailed Vehicle</a>
                         </div>
                     </div>

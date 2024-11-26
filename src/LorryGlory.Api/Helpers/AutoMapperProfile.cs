@@ -1,9 +1,13 @@
 ﻿using AutoMapper;
 using LorryGlory.Core.Models.DTOs;
+using LorryGlory.Core.Models.DTOs.VehicleDtos;
+using LorryGlory.Core.Models.DTOs.VehicleDtos.VehicleDetailsDtos;
 using LorryGlory.Data.Models;
+using LorryGlory.Data.Models.CompanyModels;
 using LorryGlory.Data.Models.JobModels;
 using LorryGlory.Data.Models.StaffModels;
 using LorryGlory.Data.Models.VehicleModels;
+using Microsoft.AspNetCore.Identity;
 
 namespace LorryGlory.Api.Helpers
 {
@@ -11,6 +15,23 @@ namespace LorryGlory.Api.Helpers
     {
         public MappingProfile()
         {
+
+            // Company mappings
+            CreateMap<Company, CompanyDto>().ReverseMap();
+            CreateMap<Company, CompanyCreateDto>().ReverseMap();
+            CreateMap<Company, CompanyUpdateDto>().ReverseMap();
+
+            // IdentityRoles mappings
+            CreateMap<IdentityRole, IdentityRoleDto>().ReverseMap();
+            CreateMap<IdentityRole, IdentityRoleCreateDto>().ReverseMap();
+            CreateMap<IdentityRole, IdentityRoleUpdateDto>().ReverseMap();
+
+            // StaffMember mappings
+            CreateMap<StaffMember, StaffMemberDto>().ReverseMap();
+            CreateMap<StaffMember, StaffMemberCreateDto>().ReverseMap();
+            CreateMap<StaffMember, StaffMemberUpdateDto>().ReverseMap();
+            CreateMap<StaffMember, StaffMemberRolesDto>().ReverseMap();
+
             // JobTask mappings
             CreateMap<JobTask, JobTaskDto>()
                                 .ForMember(dest => dest.ClientName,
@@ -31,11 +52,16 @@ namespace LorryGlory.Api.Helpers
             CreateMap<AddressCreateUpdateDto, Address>();
 
             // Related entities
-            CreateMap<StaffMember, StaffMemberDto>().ReverseMap();
             CreateMap<Job, JobDto>().ReverseMap();
-            CreateMap<Vehicle, VehicleDto>().ReverseMap();
+            CreateMap<Vehicle, GetAllVehiclesDto>().ReverseMap();
             CreateMap<FileLink, FileLinkDto>().ReverseMap();
             CreateMap<JobTaskReport, JobTaskReportDto>().ReverseMap();
+
+            // Vehicle mappings
+            CreateMap<VehicleStatus, VehicleStatusDto>().ReverseMap();
+            CreateMap<Inspection, InspectionDto>().ReverseMap();
+            CreateMap<TechnicalData, TechnicalDataDto>().ReverseMap();
+            CreateMap<EcoDetails, EcoDetailsDto>().ReverseMap();
         }
     }
 }

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.Data.Common;
+using LorryGlory.Data.Models.VehicleModels.Enums;
 
 namespace LorryGlory.Api.Controllers
 {
@@ -52,6 +53,9 @@ namespace LorryGlory.Api.Controllers
         {
             try
             {
+                var testTaskList = FakeAnswer();
+                return ResponseHelper.HandleSuccess(_logger, testTaskList, "");
+
                 var tasks = await _taskService.GetAllByDriverIdAndDayAsync(id, date);
 
                 return ResponseHelper.HandleSuccess(_logger, tasks,
@@ -172,6 +176,110 @@ namespace LorryGlory.Api.Controllers
             {
                 return ResponseHelper.HandleException<JobTaskDto>(_logger, ex);
             }
+        }
+
+        private IEnumerable<JobTaskDto> FakeAnswer()
+        {
+            var task = new JobTaskDto
+            {
+                Id = new Guid("9a2b0228-4d0d-4c23-8b49-01a698857709"),
+                Title = "Delivery Task",
+                Description = "Test delivery task",
+                Status = Data.Models.JobModels.Enums.JobTaskStatus.Success,
+                IsCompleted = false,
+                ContactPerson = new ContactPersonDto
+                {
+                    Name = "John Doe",
+                    Email = "john@example.com",
+                    PhoneNumber = null,
+                },
+                PickupAddress = new AddressDto
+                {
+                    AddressStreet = "Pickup Street 1",
+                    PostalCode = "12345",
+                    AddressCity = "Pickup City",
+                    AddressCountry = "Sweden",
+                },
+                DeliveryAddress = new AddressDto
+                {
+                    AddressStreet = "Delivery street 1",
+                    PostalCode = "12345",
+                    AddressCountry = "Sweden",
+                    AddressCity = "Delivery town",
+                },
+                StartTime = new DateTime(2024, 11, 24, 11, 42, 06),
+                EndTime = new DateTime(2024, 11, 24, 13, 42, 06),
+                CreatedAt = new DateTime(2024, 11, 24, 11, 42, 06),
+                UpdatedAt = new DateTime(2024, 11, 24, 11, 42, 06),
+                StaffMember = null,
+                FK_JobId = new Guid("1a2b0228-4d0d-4c23-8b49-01a698857709"),
+                Vehicle = new Core.Models.DTOs.VehicleDtos.GetAllVehiclesDto
+                {
+                    Id = new Guid("3d2b0228-4d0d-4c23-8b49-01a698857709"),
+                    RegNo = "ABC123",
+                    Vin = "YS2R4X20009176429",
+                    Make = "Scania",
+                    Model = "R450",
+                    Color = "RED",
+                    Type = "DRAGBIL",
+                    TypeClass = "LASTBIL",
+                    VehicleYear = 2020,
+                    ModelYear = 2020,
+                    StolenStatus = "NOT_STOLEN",
+                    Eco = new Core.Models.DTOs.VehicleDtos.VehicleDetailsDtos.EcoDetailsDto
+                    {
+                        EuroClass = "6",
+                    },
+                    Inspection = new Core.Models.DTOs.VehicleDtos.VehicleDetailsDtos.InspectionDto
+                    {
+                        LatestInspection = new DateOnly(2023, 01, 01),
+                        InspectionValidUntil = new DateOnly(2024, 01, 01),
+                        Meter = 150000,
+                    },
+                    Status = new Core.Models.DTOs.VehicleDtos.VehicleDetailsDtos.VehicleStatusDto
+                    {
+                        Status = "I Trafik",
+                        FirstRegistered = new DateOnly(2020, 01, 01)
+                    },
+                    TechnicalData = new Core.Models.DTOs.VehicleDtos.VehicleDetailsDtos.TechnicalDataDto
+                    {
+                        PowerHp = 450,
+                        PowerKw = 335,
+                        CylinderVolume = 13000,
+                        Fuel = "Diesel",
+                        Transmission = "Manuell",
+                        FourWheelDrive = true,
+                        Chassi = "Lastbil",
+                        Length = 16500,
+                        Width = 2550,
+                        Height = 4000,
+                        KerbWeight = 7500,
+                        TotalWeight = 40000,
+                        LoadWeight = 32500,
+                        AxleWidth1 = 3600,
+                        AxleWidth2 = 1350,
+                        AxleWidth3 = 0,
+                        CarriageWeight = 0,
+                        TireBack = "315",
+                        TireFront = "315",
+                        TrailerWeight = 0,
+                        TrailerWeightB = 0,
+                        TrailerWeightBe = 0,
+                        UnbrakedTrailerWeight = 0,
+                        Category = "M1",
+                        FK_Category_Id = 0,
+                    }
+                },
+                FileLink = new FileLinkDto
+                {
+                    Id = new Guid("5d2b0228-4d0d-4c23-8b49-01a698857709"),
+                    Name = "test-file.pdf",
+                    UriLink = "https://example.com/test-file.pdf"
+                },
+                JobTaskReport = null,
+                ClientName = null
+            };
+            return new List<JobTaskDto> { task };
         }
     }
 }

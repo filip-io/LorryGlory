@@ -1,33 +1,59 @@
-﻿using LorryGlory.Data.Models.VehicleModels;
+﻿using LorryGlory.Data.Data;
+using LorryGlory.Data.Models.VehicleModels;
 using LorryGlory.Data.Repositories.IRepositories;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace LorryGlory.Data.Repositories
 {
     public class VehicleRepository : IVehicleRepository
     {
-        public Task<Vehicle> AddAsync(Vehicle vehicle)
+        private readonly LorryGloryDbContext _context;
+
+        public VehicleRepository(LorryGloryDbContext context)
         {
-            throw new NotImplementedException();
+             _context = context;
         }
 
-        public Task<Vehicle?> DeleteAsync(Vehicle vehicle)
+        public async Task<Vehicle> AddAsync(Vehicle vehicle)
         {
-            throw new NotImplementedException();
+            await _context.Vehicles.AddAsync(vehicle);
+            await _context.SaveChangesAsync();
+            return vehicle;
         }
 
-        public Task<IEnumerable<Vehicle?>> GetAllVehiclesAsync()
+        public async Task<Vehicle?> DeleteAsync(Vehicle vehicle)
         {
-            throw new NotImplementedException();
+            _context.Vehicles.Remove(vehicle);
+            await _context.SaveChangesAsync();
+            return vehicle;
         }
 
-        public Task<Vehicle?> GetByIdAsync(Guid id)
+        public async Task<IEnumerable<Vehicle?>> GetAllVehiclesAsync()
         {
-            throw new NotImplementedException();
+            var vehicles = await _context.Vehicles.ToListAsync();
+            return vehicles;
+        }
+
+        public async Task<Vehicle?> GetByIdAsync(Guid id, bool ignoreQueryFilters = false)
+        {
+            Vehicle? vehicle = null;
+            switch (ignoreQueryFilters)
+            {
+                case true:
+                    vehicle = await _context.Vehicles.IgnoreQueryFilters()
+                        .Include(v => v.Company)
+                        .Include(v => v.VehicleProblems)
+                        .SingleOrDefaultAsync(v => v.Id == id);
+                    break;
+                case false:
+                    vehicle = await _context.Vehicles
+                        .Include(v => v.Company)
+                        .Include(v => v.VehicleProblems)
+                        .SingleOrDefaultAsync(v => v.Id == id);
+                    break;
+            }
+            
+            return vehicle;
         }
 
         public Task<Vehicle?> GetByRegNoAsync(string regNo)
@@ -35,9 +61,11 @@ namespace LorryGlory.Data.Repositories
             throw new NotImplementedException();
         }
 
-        public Task<Vehicle?> UpdateAsync(Vehicle vehicle)
+        public async Task<Vehicle?> UpdateAsync(Vehicle vehicle)
         {
-            throw new NotImplementedException();
+            _context.Vehicles.Update(vehicle);
+            await _context.SaveChangesAsync();
+            return vehicle;
         }
     }
 }
