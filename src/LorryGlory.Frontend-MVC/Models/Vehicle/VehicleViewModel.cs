@@ -69,6 +69,4 @@
         public int Id { get; set; }
         public string EuroClass { get; set; }
     }
-
-
 }

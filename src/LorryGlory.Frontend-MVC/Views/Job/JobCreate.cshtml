@@ -1,0 +1,150 @@
+﻿@*
+    1a. Add a dropdown menu onto Client when a get all Client endpoint is created. With that users dont have to write in a Guid.
+    2a. FK_TenantId should be added automaticly after logging in. 
+*@
+@using LorryGlory_Frontend_MVC.ViewModels.Job
+@model CreateJobViewModel
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "New Job";
+}
+
+
+<div x-data="{ openTab: 1, totalPages: 2 }" class="p-6 bg-gray-50 min-h-screen flex flex-col items-center">
+
+    <!-- Header -->
+    <div class="text-center mb-6">
+        <h1 class="text-2xl font-bold text-gray-800">Today's Mission</h1>
+    </div>
+
+    <!-- Line -->
+    <div class="flex justify-start w-full max-w-3xl mb-6">
+    </div>
+
+    <!-- Pagination -->
+    <div class="flex justify-between mb-6">
+        <!-- First Page Button -->
+        <button :disabled="openTab === 1" @@click="openTab = 1" class="px-4 py-2 text-sm text-gray-700 hover:text-gray-800" aria-label="Go to first page"><<</button>
+
+        <!-- Previous Page Button -->
+        <button :disabled="openTab === 1" @@click="openTab = openTab - 1" class="px-4 py-2 text-sm text-gray-700 hover:text-gray-800" aria-label="Go one step left"><</button>
+
+        <!-- Page Info -->
+        <div class="flex flex-col items-center text-sm text-gray-700">
+            <span class="block">Page</span>
+            <div class="flex items-center space-x-3">
+                <span class="" x-text="openTab"></span>
+                <span class="">of</span>
+                <span class="" x-text="totalPages"></span>
+            </div>
+        </div>
+
+        <!-- Next Page Button -->
+        <button :disabled="openTab === totalPages" @@click="openTab = openTab + 1" class="px-4 py-2 text-sm text-gray-700 hover:text-gray-800" aria-label="Go one step right">></button>
+
+        <!-- Last Page Button -->
+        <button :disabled="openTab === totalPages" @@click="openTab = totalPages" class="px-4 py-2 text-sm text-gray-700 hover:text-gray-800" aria-label="Go to last page">>></button>
+    </div>
+
+
+    <!-- Form -->
+    <form asp-controller="Job" asp-action="JobCreate" method="post" class="w-full max-w-3xl bg-white shadow-md rounded-lg p-6 space-y-6">
+
+        <!-- Hidden Id Field -->
+        <input type="hidden" asp-for="FK_TenantId" />
+
+        <!-- Mission Tab Content -->
+        <div x-show="openTab === 1" class="space-y-4">
+            <fieldset>
+                <legend class="text-lg font-semibold text-gray-900">Client</legend>
+                <!--  1a. Client field -->
+                <div class="space-y-2">
+                    <label asp-for="FK_ClientId" class="block text-sm font-medium text-gray-700 mb-2">ClientId Guid</label>
+                    <input asp-for="FK_ClientId" type="text" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" />
+                    <span asp-validation-for="FK_ClientId" class="text-red-500 text-sm mt-1"></span>
+                </div>
+                <!--  2a. TenantId field -->
+                <div class="space-y-2">
+                    <label asp-for="FK_TenantId" class="block text-sm font-medium text-gray-700 mb-2">TenantId Guid</label>
+                    <input asp-for="FK_TenantId" type="text" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" />
+                    <span asp-validation-for="FK_TenantId" class="text-red-500 text-sm mt-1"></span>
+                </div>
+                <div class="space-y-2">
+                    <label asp-for="ContactPerson.Name" class="block text-sm font-medium text-gray-700 mb-2">Contact Name</label>
+                    <input asp-for="ContactPerson.Name" type="text" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" />
+                    <span asp-validation-for="ContactPerson.Name" class="text-red-500 text-sm mt-1"></span>
+                </div>
+                <div class="space-y-2">
+                    <label asp-for="ContactPerson.PhoneNumber" class="block text-sm font-medium text-gray-700 mb-2">Contact Number</label>
+                    <input asp-for="ContactPerson.PhoneNumber" type="text" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" />
+                    <span asp-validation-for="ContactPerson.PhoneNumber" class="text-red-500 text-sm mt-1"></span>
+                </div>
+
+                <!-- Button Container (same row, opposite corners) -->
+                <div class="flex space-x-4 mt-8">
+                    <!-- Cancel Button -->
+                    <a asp-controller="Job" asp-action="index"
+                       class="flex-1 px-6 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 text-center block"
+                       aria-label="Cancel">
+                        Cancel
+                    </a>
+
+                    <!-- Next Button -->
+                    <button type="button"
+                            @@click="openTab = openTab + 1"
+                            class="flex-1 px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+                            aria-label="Next page">
+                        Next
+                    </button>
+                </div>
+            </fieldset>
+        </div>
+
+        <!-- Contact Person Tab Content -->
+        <div x-show="openTab === 2" class="space-y-4">
+            <fieldset>
+                <legend class="text-lg font-semibold text-gray-900">Job information</legend>
+                <div class="space-y-2">
+                    <label asp-for="Title" class="block text-sm font-medium text-gray-700 mb-2">Title</label>
+                    <input asp-for="Title" type="text" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" />
+                    <span asp-validation-for="Title" class="text-red-500 text-sm mt-1"></span>
+                </div>
+                <div class="space-y-2">
+                    <label asp-for="Description" class="block text-sm font-medium text-gray-700 mb-2">Description</label>
+                    <textarea asp-for="Description" rows="4" class="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"></textarea>
+                    <span asp-validation-for="Description" class="text-red-500 text-sm mt-1"></span>
+                </div>
+                <div class="space-y-2">
+                    <label asp-for="StartTime" class="block text-sm font-medium text-gray-700 mb-2">Start Time</label>
+                    <input asp-for="StartTime" type="datetime-local" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" />
+                    <span asp-validation-for="StartTime" class="text-red-500 text-sm mt-1"></span>
+                </div>
+                <div class="space-y-2">
+                    <label asp-for="EndTime" class="block text-sm font-medium text-gray-700 mb-2">End Time</label>
+                    <input asp-for="EndTime" type="datetime-local" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" />
+                    <span asp-validation-for="EndTime" class="text-red-500 text-sm mt-1"></span>
+                </div>
+                <!-- Button Container (same row, opposite corners) -->
+                <div class="flex space-x-4 mt-8">
+                    <!-- Cancel Button -->
+                    <a asp-controller="Job" asp-action="index"
+                       class="flex-1 px-6 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 text-center block"
+                       aria-label="Cancel">
+                        Cancel
+                    </a>
+
+                    <!-- Save button -->
+                    <button type="submit"
+                            class="flex-1 px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+                            aria-label="Save Changes">
+                        Save
+                    </button>
+                </div>
+            </fieldset>
+        </div>
+    </form>
+</div>
+
+
+
+
