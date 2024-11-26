@@ -7,6 +7,7 @@ using LorryGlory.Core.Models.DTOs.VehicleDtos;
 using LorryGlory.Core.Services.IServices;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace LorryGlory.Api.Controllers
 {
@@ -55,12 +56,20 @@ namespace LorryGlory.Api.Controllers
             }
         }
 
-        [HttpPost("GetTodaysVehiclesForDriver")]
-        public async Task<ActionResult<ApiResponse<IEnumerable<TodaysVehiclesForDriver>>>> GetTodaysVehicles(GetTodaysVehiclesDto dto)
+        [HttpGet("GetTodaysVehiclesForDriver")]
+        public async Task<ActionResult<ApiResponse<IEnumerable<TodaysVehiclesForDriver>>>> GetTodaysVehicles()
         {
             try
             {
-                var vehicles = await _vehicleService.GetAllByDriverIdAndDayAsync(dto.StaffId, dto.Day);
+                IEnumerable<TodaysVehiclesForDriver> testVehicle = new List<TodaysVehiclesForDriver>() 
+                {
+                    new TodaysVehiclesForDriver { RegNo = "NBP410", Id = "test123", Color = "Gray", Make = "Seat", Model = "Altea XL", Status = "Ok", 
+                    StartTime = new DateTime(2024, 11, 24), EndTime = new DateTime(2024, 11, 24), Type = "Personbil" }
+                };
+                return ResponseHelper.HandleSuccess(_logger, testVehicle, "");
+
+                var userId = User.Claims?.FirstOrDefault(uc => uc.Type == ClaimTypes.NameIdentifier)?.Value;
+                var vehicles = await _vehicleService.GetAllByDriverIdAndDayAsync(userId, DateOnly.FromDateTime(DateTime.Now));
                 if (vehicles == null)
                     return ResponseHelper.HandleNotFound<IEnumerable<TodaysVehiclesForDriver>>(_logger, "No vehicles found.");
 

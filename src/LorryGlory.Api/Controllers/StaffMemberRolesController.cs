@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 using System.Data;
+using System.Security.Claims;
 
 namespace LorryGlory.Api.Controllers
 {
@@ -73,7 +74,7 @@ namespace LorryGlory.Api.Controllers
                     // if Admin return only if same Tenant
                     if (staffMemberRoles.FK_TenantId == _tenantService.TenantId) result = staffMemberRoles;
                 }
-                else if (staffId == User.FindFirst("sub")?.Value)
+                else if (staffId == User.Claims.FirstOrDefault(uc => uc.Type == ClaimTypes.NameIdentifier)?.Value)
                 {
                     // if normal user return only if himself
                     result = staffMemberRoles;

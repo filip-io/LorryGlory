@@ -15,8 +15,7 @@
         </script>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <meta name="description" content="Lorry Glory - Simplifying the Road to Success for Truck Drivers.">
-        <title>@ViewData["Title"] - LorryGlory</title>
+        <title>LorryGlory - @ViewData["Title"]</title>
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
         <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
         <link rel="stylesheet" href="~/LorryGlory_Frontend_MVC.styles.css" asp-append-version="true" />
@@ -74,10 +73,13 @@
                                         Login</a>
                                     <a asp-controller="Menu" asp-action="Index" class="block w-full max-w-xs px-4 py-2 text-lg text-white bg-blue-600 rounded-lg shadow-md hover:bg-blue-700 hover:shadow-lg transition duration-200">
                                         Menu</a>
-                                    <a asp-controller="CurrentVehicle" asp-action="Index" class="block w-full max-w-xs px-4 py-2 text-lg text-white bg-blue-600 rounded-lg shadow-md hover:bg-blue-700 hover:shadow-lg transition duration-200">
+                                    <a asp-controller="TodaysTask" asp-action="Index" class="block w-full max-w-xs px-4 py-2 text-lg text-white bg-blue-600 rounded-lg shadow-md hover:bg-blue-700 hover:shadow-lg transition duration-200">
                                         Current Vehicle</a>
                                     <a asp-controller="DetailedVehicle" asp-action="Index" class="block w-full max-w-xs px-4 py-2 text-lg text-white bg-blue-600 rounded-lg shadow-md hover:bg-blue-700 hover:shadow-lg transition duration-200">
                                         Detailed Vehicle
+                                    </a>
+                                    <a asp-controller="Job" asp-action="Index" class="block w-full max-w-xs px-4 py-2 text-lg text-white bg-blue-600 rounded-lg shadow-md hover:bg-blue-700 hover:shadow-lg transition duration-200">
+                                        Job
                                     </a>
                                     <a href="#" class="block w-full max-w-xs px-4 py-2 text-lg text-white bg-gray-600 rounded-lg shadow-md hover:bg-blue-700 hover:shadow-lg transition duration-200">
                                         Settings</a>
@@ -93,8 +95,9 @@
                             <a asp-controller="Home" asp-action="Privacy" class="text-gray-800 hover:text-blue-600">Privacy</a>
                             <a asp-controller="Login" asp-action="Index" class="text-gray-800 hover:text-blue-600">Login</a>
                             <a asp-controller="Menu" asp-action="Index" class="text-gray-800 hover:text-blue-600">Menu</a>
-                            <a asp-controller="CurrentVehicle" asp-action="Index" class="text-gray-800 hover:text-blue-600">Current Vehicle</a>
+                            <a asp-controller="TodaysTask" asp-action="Index" class="text-gray-800 hover:text-blue-600">Todays Task</a>
                             <a asp-controller="DetailedVehicle" asp-action="Index" class="text-gray-800 hover:text-blue-600">Detailed Vehicle</a>
+                            <a asp-controller="Job" asp-action="Index" class="text-gray-800 hover:text-blue-600">Job</a>
                         </div>
                     </div>
                 </div>

@@ -1,4 +1,5 @@
-﻿using LorryGlory_Frontend_MVC.ViewModels;
+﻿
+using LorryGlory_Frontend_MVC.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
@@ -20,5 +21,6 @@ namespace LorryGlory_Frontend_MVC.Controllers
 
             return View(vehicleViewModel);
         }
+        
     }
 }
