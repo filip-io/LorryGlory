@@ -9,7 +9,7 @@ namespace LorryGlory_Frontend_MVC.ViewModels.Job
         public string Description { get; set; }
         public DateTime? StartTime { get; set; }
         public DateTime? EndTime { get; set; }
-        public Guid? FK_Clientid { get; set; }
+        public Guid? FK_ClientId { get; set; }
         public ContactPersonViewModel? ContactPerson { get; set; }
         public Guid FK_TenantId { get; set; }
     }

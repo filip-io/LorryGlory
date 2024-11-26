@@ -121,6 +121,71 @@ namespace LorryGlory_Frontend_MVC.Controllers
             return View(job);  // Single job
         }
 
+        public async Task<IActionResult> JobEdit(Guid id)
+        {
+            Console.WriteLine($"Received Id: {id}");
+
+            ViewData["Title"] = "Edit Job View";
+
+            EditJobViewModel job = null;
+
+            try
+            {
+                var response = await _client.GetAsync($"{baseUri}api/jobs/{id}");
+                if (response.IsSuccessStatusCode)
+                {
+                    var json = await response.Content.ReadAsStringAsync();
+                    var apiResponse = JsonConvert.DeserializeObject<EditJobApiResponse>(json);
+
+                    if (apiResponse != null && apiResponse.Success)
+                    {
+                        job = apiResponse.Data;
+                    }
+                    else
+                    {
+                        ViewData["ErrorMessage"] = "No data found for the job.";
+                    }
+                }
+                else
+                {
+                    ViewData["ErrorMessage"] = "Failed to fetch job data.";
+                }
+            }
+            catch (HttpRequestException ex)
+            {
+                ViewData["ErrorMessage"] = "Unable to connect to the data server. Please try again later.";
+            }
+
+            return View(job);
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> JobEdit(EditJobViewModel job)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(job);
+            }
+            var json = JsonConvert.SerializeObject(job);
+
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var response = await _client.PutAsync($"{baseUri}api/jobs/{job.Id}", content);
+
+            return RedirectToAction("index");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> JobDelete(Guid id)
+        {
+            var response = await _client.DeleteAsync($"{baseUri}api/jobs/{id}");
+
+            return RedirectToAction("index");
+        }
+
+
+        //Task -----------------------------------------------------
         public async Task<IActionResult> TaskRead(Guid Id)
         {
             Console.WriteLine($"Received Id: {Id}");
@@ -244,8 +309,6 @@ namespace LorryGlory_Frontend_MVC.Controllers
 
             return RedirectToAction("TaskRead", "Job", new { id = task.Id });
         }
-
-        //{task.Id}
 
         [HttpPost]
         public async Task<IActionResult> TaskDelete(Guid id, Guid jobId)

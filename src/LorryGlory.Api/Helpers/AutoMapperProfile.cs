@@ -45,6 +45,7 @@ namespace LorryGlory.Api.Helpers
             // Related entities
             CreateMap<Job, JobDto>().ReverseMap();
             CreateMap<JobCreateDto, Job>().ReverseMap();
+            CreateMap<JobUpdateDto, Job>().ReverseMap();
             CreateMap<Vehicle, VehicleDto>().ReverseMap();
             CreateMap<FileLink, FileLinkDto>().ReverseMap();
             CreateMap<JobTaskReport, JobTaskReportDto>().ReverseMap();
