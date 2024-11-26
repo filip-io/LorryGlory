@@ -20,7 +20,7 @@ namespace LorryGlory_Frontend_MVC
                 options.DefaultAuthenticateScheme = IdentityConstants.ApplicationScheme;
                 options.DefaultChallengeScheme = IdentityConstants.ApplicationScheme;
             })
-                .AddCookie("Identity.Application", options =>
+                .AddCookie(IdentityConstants.ApplicationScheme, options =>
                 {
                     options.Cookie.Name = "LorryGloryApp";
                     options.LoginPath = "/login";

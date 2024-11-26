@@ -1,5 +1,10 @@
 ﻿using LorryGlory_Frontend_MVC.Models;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
+using System.Text.Json;
 
 namespace LorryGlory_Frontend_MVC.Controllers
 {
@@ -29,8 +34,34 @@ namespace LorryGlory_Frontend_MVC.Controllers
                 _logger.LogInformation($"Sending a login request at time {DateTime.Now}.");
                 var response = await _httpClient.PostAsJsonAsync("auth/login?useCookies=true", login);
 
+                //var json = await response.Content.ReadAsStringAsync();
+                //Console.WriteLine("Response content: ", json);
+                //var jsonOptions = new JsonSerializerOptions
+                //{
+                //    PropertyNameCaseInsensitive = true,
+                //};
+                //var user = JsonSerializer.Deserialize<IdentityUser>(json, jsonOptions);
+
+                var cookies = response.Headers.GetValues("Set-Cookie");
+                foreach (var cookie in cookies)
+                {
+                    Response.Headers.Append("Set-Cookie", cookie);
+                }
+
+                var backendClaims = HttpContext.User.Claims.ToList();
+
+                var claims = new List<Claim>
+                {
+                    new Claim(ClaimTypes.Email, "test@email.com"),
+                    new Claim(ClaimTypes.NameIdentifier, "testId")
+                };
+                var claimsIdentity = new ClaimsIdentity(claims, "Identity.Application");
+                var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
+                await HttpContext.SignInAsync("Identity.Application", claimsPrincipal);
+
                 if (response.IsSuccessStatusCode)
                 {
+                    _logger.LogInformation($"Successfully logged in {User.Identity.Name}!");
                     return RedirectToAction("Index", "Menu");
                 }
                 else
