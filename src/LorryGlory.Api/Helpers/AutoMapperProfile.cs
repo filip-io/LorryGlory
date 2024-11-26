@@ -25,6 +25,7 @@ namespace LorryGlory.Api.Helpers
             CreateMap<IdentityRole, IdentityRoleDto>().ReverseMap();
             CreateMap<IdentityRole, IdentityRoleCreateDto>().ReverseMap();
             CreateMap<IdentityRole, IdentityRoleUpdateDto>().ReverseMap();
+            CreateMap<IdentityResult, IdentityRoleDto>().ReverseMap();
 
             // StaffMember mappings
             CreateMap<StaffMember, StaffMemberDto>().ReverseMap();
