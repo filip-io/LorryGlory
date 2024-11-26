@@ -1,3 +1,7 @@
+using Microsoft.AspNetCore.Identity;
+using System.Net;
+using System.Net.Http;
+
 namespace LorryGlory_Frontend_MVC
 {
     public class Program
@@ -9,6 +13,24 @@ namespace LorryGlory_Frontend_MVC
             // Add services to the container.
             builder.Services.AddControllersWithViews();
             builder.Services.AddHttpClient();
+
+
+            builder.Services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = IdentityConstants.ApplicationScheme;
+                options.DefaultChallengeScheme = IdentityConstants.ApplicationScheme;
+            })
+                .AddCookie("Identity.Application", options =>
+                {
+                    options.Cookie.Name = "LorryGloryApp";
+                    options.LoginPath = "/login";
+                    options.LogoutPath = "/logout";
+                    options.Cookie.HttpOnly = true;
+                    options.Cookie.SameSite = SameSiteMode.None;
+                    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+                });
+            builder.Services.AddAuthorization();
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -24,7 +46,9 @@ namespace LorryGlory_Frontend_MVC
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
+
 
             app.MapControllerRoute(
                 name: "default",

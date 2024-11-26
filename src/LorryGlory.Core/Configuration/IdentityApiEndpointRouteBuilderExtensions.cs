@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.ComponentModel.DataAnnotations;
+using System.Data;
 using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
@@ -212,13 +213,23 @@ public static class IdentityApiEndpointRouteBuilderExtensions
                 return TypedResults.Problem(result.ToString(), statusCode: StatusCodes.Status401Unauthorized);
             }
 
+
             // Add claim with TenantId
             var currentPrincipal = await signInManager.CreateUserPrincipalAsync(user);
 
             var identity = (ClaimsIdentity)currentPrincipal.Identity;
             if (!string.IsNullOrEmpty(user.FK_TenantId?.ToString()))
             {
+                identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()));
+                identity.AddClaim(new Claim(ClaimTypes.Email, user.Email));
                 identity.AddClaim(new Claim("TenantId", user.FK_TenantId.ToString()));
+            }
+            // Add claims with roles
+            var roles = await userManager.GetRolesAsync(user);
+            foreach (var role in roles)
+            {
+                Console.WriteLine("role: " + role);
+                identity.AddClaim(new Claim(ClaimTypes.Role, role));
             }
 
             await signInManager.Context.SignInAsync(signInManager.AuthenticationScheme, currentPrincipal, new AuthenticationProperties

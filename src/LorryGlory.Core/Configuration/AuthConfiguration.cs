@@ -56,10 +56,11 @@ namespace LorryGlory.Core.Configuration
         {
             serviceCollection.ConfigureApplicationCookie(options =>
             {
+                options.Cookie.Name = "LorryGloryApp"; 
                 options.LoginPath = "/auth/login";
-                options.Cookie.Name = "LorryGloryApp";
+                options.ExpireTimeSpan = TimeSpan.FromHours(12);
                 options.Cookie.HttpOnly = true;
-                options.Cookie.SameSite = SameSiteMode.Strict;
+                options.Cookie.SameSite = SameSiteMode.None;
                 options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
             });
         }
