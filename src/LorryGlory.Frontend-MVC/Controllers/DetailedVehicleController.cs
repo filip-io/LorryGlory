@@ -1,4 +1,5 @@
-﻿using LorryGlory_Frontend_MVC.Models.Vehicle;
+﻿
+using LorryGlory_Frontend_MVC.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 

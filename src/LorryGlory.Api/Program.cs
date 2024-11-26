@@ -43,11 +43,10 @@ namespace LorryGlory.Api
             app.MapGroup("auth/").MapCustomIdentityApi<StaffMember>();
 
             // Configure the HTTP request pipeline
-            if (app.Environment.IsDevelopment())
-            {
+
                 app.UseSwagger();
                 app.UseSwaggerUI();
-            }
+
             await RoleHelper.EnsureRoles(app.Services);
             await RoleHelper.EnsureSuperAdminAccount(app.Services);
 

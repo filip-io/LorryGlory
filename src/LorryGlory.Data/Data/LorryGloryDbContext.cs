@@ -185,7 +185,7 @@ namespace LorryGlory.Data.Data
             modelBuilder.Entity<JobTask>(entity =>
             {
                 // Query filter
-                entity.HasQueryFilter(e => _tenantService.IsSuperAdmin() || e.FK_TenantId == _tenantService.TenantId);
+                //entity.HasQueryFilter(e => _tenantService.IsSuperAdmin() || e.FK_TenantId == _tenantService.TenantId);
 
                 // Value objects (owned entities)
                 entity.OwnsOne(e => e.PickupAddress);
