@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.ComponentModel.DataAnnotations;
+using System.Data;
 using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
@@ -9,6 +10,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Text.Encodings.Web;
 using LorryGlory.Core.Models.DTOs;
+using LorryGlory.Core.Services;
 using LorryGlory.Data.Models;
 using LorryGlory.Data.Models.StaffModels;
 using LorryGlory.Data.Services.IServices;
@@ -24,6 +26,7 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using static LorryGlory.Core.Services.JwtService;
 
 namespace LorryGlory.Core.Configuration;
 
@@ -172,13 +175,14 @@ public static class IdentityApiEndpointRouteBuilderExtensions
         })
            .RequireAuthorization("StrictAdminPolicy");
 
-        routeGroup.MapPost("/login", async Task<Results<Ok<AccessTokenResponse>, EmptyHttpResult, ProblemHttpResult>>
+        routeGroup.MapPost("/login", async Task<Results<Ok<TokenDto>, EmptyHttpResult, ProblemHttpResult>>
             ([FromBody] LoginRequest login,
             [FromQuery] bool? useCookies,
             [FromQuery] bool? useSessionCookies,
             UserManager<TUser> userManager,
             SignInManager<TUser> signInManager,
-            ITenantService tenantService) =>
+            ITenantService tenantService,
+            JwtService jwtService) =>
         {
             //var userManager = sp.GetRequiredService<UserManager<TUser>>();
             //var signInManager = sp.GetRequiredService<SignInManager<TUser>>();
@@ -212,14 +216,27 @@ public static class IdentityApiEndpointRouteBuilderExtensions
                 return TypedResults.Problem(result.ToString(), statusCode: StatusCodes.Status401Unauthorized);
             }
 
+
             // Add claim with TenantId
             var currentPrincipal = await signInManager.CreateUserPrincipalAsync(user);
 
             var identity = (ClaimsIdentity)currentPrincipal.Identity;
             if (!string.IsNullOrEmpty(user.FK_TenantId?.ToString()))
             {
+                identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()));
+                identity.AddClaim(new Claim(ClaimTypes.Email, user.Email));
                 identity.AddClaim(new Claim("TenantId", user.FK_TenantId.ToString()));
             }
+            // Add claims with roles
+            var rolesResponse = await userManager.GetRolesAsync(user);
+            var roles = rolesResponse.ToList();
+            foreach (var role in roles)
+            {
+                Console.WriteLine("role: " + role);
+                identity.AddClaim(new Claim(ClaimTypes.Role, role));
+            }
+
+            var jwtToken = jwtService.GenerateJwtToken(user, roles);
 
             await signInManager.Context.SignInAsync(signInManager.AuthenticationScheme, currentPrincipal, new AuthenticationProperties
             {
@@ -227,7 +244,7 @@ public static class IdentityApiEndpointRouteBuilderExtensions
             });
 
             // The signInManager already produced the needed response in the form of a cookie or bearer token.
-            return TypedResults.Empty;
+            return TypedResults.Ok(new TokenDto() { Token = jwtToken });
         });
 
         // Lorry Glory logout
