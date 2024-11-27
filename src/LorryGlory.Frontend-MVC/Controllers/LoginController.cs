@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net;
+using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Text.Json;
 
@@ -100,15 +101,14 @@ namespace LorryGlory_Frontend_MVC.Controllers
                         SameSite = SameSiteMode.Strict,
                         Expires = jwtToken.ValidTo
                     });
-
-                    // get claims from user!
-                    var email = User.Identity?.Name;
+                    _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.Token);
+                    
+                    // send user further depending on the role
+                    var claimsAll = claimsIdentity.Claims.ToList();
+                    var email = claimsAll.Where(c => c.Type.ToUpper() == "EMAIL").Select(c => c.Value).FirstOrDefault().ToString();
                     ViewData["Email"] = email;
-                    var roles = User.Claims
-                        .Where(c => c.Type == ClaimTypes.Role)
-                        .Select(c => c.Value);
-                    foreach(var r in roles) Console.WriteLine("Role " + r);
-                    var isAdmin = User.IsInRole("Admin");
+                    var roles = claimsAll.Where(c => c.Type.ToUpper() == "ROLE").Select(c=>c.Value).ToList();
+                    foreach (var r in roles) Console.WriteLine("Role " + r);
                     if (roles.Contains("Admin"))
                     {
                         TempData["UserWelcome"] = $"Welcome {email}! You are the BOSS.";
