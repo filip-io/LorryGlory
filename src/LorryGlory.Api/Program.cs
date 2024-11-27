@@ -2,6 +2,7 @@
 using LorryGlory.Core.Configuration;
 using LorryGlory.Data.Models.StaffModels;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
@@ -28,24 +29,25 @@ namespace LorryGlory.Api
                     
             builder.Services.ConfigureIdentity();
             builder.Services.ConfigureCookies();
+           
             builder.Services.AddAuthentication(options =>
             {
-                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultAuthenticateScheme = IdentityConstants.ApplicationScheme;
+                options.DefaultChallengeScheme = IdentityConstants.ApplicationScheme;
             })
-         .AddJwtBearer(options =>
-         {
-             options.TokenValidationParameters = new TokenValidationParameters
+             .AddJwtBearer(options =>
              {
-                 ValidateIssuer = true,
-                 ValidateAudience = true,
-                 ValidateLifetime = true,
-                 ValidateIssuerSigningKey = true,
-                 ValidIssuer = builder.Configuration["Jwt:Issuer"],
-                 ValidAudience = builder.Configuration["Jwt:Audience"],
-                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
-             };
-         });
+                 options.TokenValidationParameters = new TokenValidationParameters
+                 {
+                     ValidateIssuer = true,
+                     ValidateAudience = true,
+                     ValidateLifetime = true,
+                     ValidateIssuerSigningKey = true,
+                     ValidIssuer = builder.Configuration["Jwt:Issuer"],
+                     ValidAudience = builder.Configuration["Jwt:Audience"],
+                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+                 };
+             });
             builder.Services.ConfigureAuthorization();
 
 
