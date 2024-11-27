@@ -12,7 +12,7 @@ namespace LorryGlory_Frontend_MVC.Controllers
     {
 
         private readonly HttpClient _client;
-        private string baseUri = "https://localhost:7036/";
+        private string baseUri = "https://lorrygloryapi.azurewebsites.net";
 
         public JobController(HttpClient client)
         {

@@ -17,7 +17,7 @@ namespace LorryGlory_Frontend_MVC.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var response = await _httpClient.GetStringAsync("https://localhost:7036/api/tasks/driver/1STAFFM/day/2024-11-24");
+            var response = await _httpClient.GetStringAsync("https://lorrygloryapi.azurewebsites.net/api/tasks/driver/1STAFFM/day/2024-11-24");
 
             var responseData = JsonConvert.DeserializeObject<ResponseModel<List<TodaysJobTaskViewModel>>>(response);
 

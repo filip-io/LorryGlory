@@ -34,7 +34,7 @@ namespace LorryGlory_Frontend_MVC.Controllers
 
             _httpClient = new HttpClient(handler)
             {
-                BaseAddress = new Uri("https://localhost:7036/")
+                BaseAddress = new Uri("https://lorrygloryapi.azurewebsites.net")
             };
         }
         public IActionResult Index()

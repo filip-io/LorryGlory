@@ -8,7 +8,7 @@ namespace LorryGlory_Frontend_MVC.Controllers
     public class DetailedVehicleController : Controller
     {
         private readonly HttpClient _client;
-        private string baseUri = "https://localhost:7055/";
+        private string baseUri = "https://lorrygloryapi.azurewebsites.net";
 
         public DetailedVehicleController(HttpClient client)
         {
