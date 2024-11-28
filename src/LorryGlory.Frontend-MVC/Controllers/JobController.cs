@@ -12,11 +12,12 @@ namespace LorryGlory_Frontend_MVC.Controllers
     {
 
         private readonly HttpClient _client;
-        private string baseUri = "https://localhost:7036/";
+        private readonly string? _baseUri;
 
-        public JobController(HttpClient client)
+        public JobController(HttpClient client, IConfiguration configuration)
         {
             _client = client;
+            _baseUri = configuration["ApiSettings:_baseUri"];
         }
 
         public async Task<IActionResult> Index()
@@ -27,7 +28,7 @@ namespace LorryGlory_Frontend_MVC.Controllers
 
             try
             {
-                var response = await _client.GetAsync($"{baseUri}api/jobs");
+                var response = await _client.GetAsync($"{_baseUri}api/jobs");
                 Console.WriteLine(response);
                 if (response.IsSuccessStatusCode)
                 {
@@ -77,7 +78,7 @@ namespace LorryGlory_Frontend_MVC.Controllers
 
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-            var response = await _client.PostAsync($"{baseUri}api/jobs", content);
+            var response = await _client.PostAsync($"{_baseUri}api/jobs", content);
 
             return RedirectToAction("Index");
         }
@@ -93,7 +94,7 @@ namespace LorryGlory_Frontend_MVC.Controllers
 
             try
             {
-                var response = await _client.GetAsync($"{baseUri}api/jobs/{Id}");
+                var response = await _client.GetAsync($"{_baseUri}api/jobs/{Id}");
                 if (response.IsSuccessStatusCode)
                 {
                     var json = await response.Content.ReadAsStringAsync();
@@ -131,7 +132,7 @@ namespace LorryGlory_Frontend_MVC.Controllers
 
             try
             {
-                var response = await _client.GetAsync($"{baseUri}api/jobs/{id}");
+                var response = await _client.GetAsync($"{_baseUri}api/jobs/{id}");
                 if (response.IsSuccessStatusCode)
                 {
                     var json = await response.Content.ReadAsStringAsync();
@@ -171,7 +172,7 @@ namespace LorryGlory_Frontend_MVC.Controllers
 
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-            var response = await _client.PutAsync($"{baseUri}api/jobs/{job.Id}", content);
+            var response = await _client.PutAsync($"{_baseUri}api/jobs/{job.Id}", content);
 
             return RedirectToAction("index");
         }
@@ -179,7 +180,7 @@ namespace LorryGlory_Frontend_MVC.Controllers
         [HttpPost]
         public async Task<IActionResult> JobDelete(Guid id)
         {
-            var response = await _client.DeleteAsync($"{baseUri}api/jobs/{id}");
+            var response = await _client.DeleteAsync($"{_baseUri}api/jobs/{id}");
 
             return RedirectToAction("index");
         }
@@ -196,7 +197,7 @@ namespace LorryGlory_Frontend_MVC.Controllers
 
             try
             {
-                var response = await _client.GetAsync($"{baseUri}api/tasks/{Id}");
+                var response = await _client.GetAsync($"{_baseUri}api/tasks/{Id}");
                 if (response.IsSuccessStatusCode)
                 {
                     var json = await response.Content.ReadAsStringAsync();
@@ -249,7 +250,7 @@ namespace LorryGlory_Frontend_MVC.Controllers
 
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-            var response = await _client.PostAsync($"{baseUri}api/tasks", content);
+            var response = await _client.PostAsync($"{_baseUri}api/tasks", content);
 
             // Redirect to the JobRead action, passing the jobId
             return RedirectToAction("JobRead", "Job", new { id = jobId });
@@ -265,7 +266,7 @@ namespace LorryGlory_Frontend_MVC.Controllers
 
             try
             {
-                var response = await _client.GetAsync($"{baseUri}api/tasks/{id}");
+                var response = await _client.GetAsync($"{_baseUri}api/tasks/{id}");
                 if (response.IsSuccessStatusCode)
                 {
                     var json = await response.Content.ReadAsStringAsync();
@@ -305,7 +306,7 @@ namespace LorryGlory_Frontend_MVC.Controllers
 
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-            var response = await _client.PutAsync($"{baseUri}api/tasks/{task.Id}", content);
+            var response = await _client.PutAsync($"{_baseUri}api/tasks/{task.Id}", content);
 
             return RedirectToAction("TaskRead", "Job", new { id = task.Id });
         }
@@ -313,7 +314,7 @@ namespace LorryGlory_Frontend_MVC.Controllers
         [HttpPost]
         public async Task<IActionResult> TaskDelete(Guid id, Guid jobId)
         {
-            var response = await _client.DeleteAsync($"{baseUri}api/tasks/{id}");
+            var response = await _client.DeleteAsync($"{_baseUri}api/tasks/{id}");
 
             return RedirectToAction("JobRead", "Job", new { id = jobId });
         }
