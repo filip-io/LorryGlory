@@ -1,4 +1,8 @@
-﻿namespace LorryGlory.Core.Models.DTOs
+﻿using LorryGlory.Core.Models.DTOs.VehicleDtos;
+
+using LorryGlory.Data.Models;
+
+namespace LorryGlory.Core.Models.DTOs
 {
     public class CompanyDto
     {
@@ -13,7 +17,7 @@
         public ICollection<ClientDto>? Clients { get; set; }
         public ICollection<JobDto>? Jobs { get; set; }
         public ICollection<StaffMemberDto>? StaffMembers { get; set; }
-        public ICollection<VehicleDto>? Vehicles { get; set; }
+        public ICollection<GetAllVehiclesDto>? Vehicles { get; set; }
     }
 
     public class CompanyCreateDto
@@ -23,7 +27,7 @@
         public string? PhoneNumber { get; set; }
 
         public AddressDto? Address { get; set; }
-        // public FileLink? FileLink { get; set; }
+        //public FileLink? FileLink { get; set; }
 
     }
 

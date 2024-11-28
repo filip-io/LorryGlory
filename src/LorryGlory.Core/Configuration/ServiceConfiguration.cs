@@ -7,6 +7,8 @@ using LorryGlory.Data.Repositories;
 using LorryGlory.Data.Repositories.IRepositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using LorryGlory.Data.Repositories.IRepositories;
+using LorryGlory.Data.Repositories;
 
 
 namespace LorryGlory.Core.Configuration;
@@ -27,8 +29,13 @@ public static class ServiceConfiguration
         //    });
         //});
 
+        
+    }
+
+    public static void ConfigureScopes(this IServiceCollection serviceCollection)
+    {
         // Tenant
-        serviceCollection.AddSingleton<ITenantService, TenantService>();
+        serviceCollection.AddScoped<ITenantService, TenantService>();
 
         // Job
         serviceCollection.AddScoped<IJobService, JobService>();
@@ -41,7 +48,7 @@ public static class ServiceConfiguration
         // Vehicle
         serviceCollection.AddScoped<IVehicleService, VehicleService>();
         serviceCollection.AddScoped<IVehicleRepository, VehicleRepository>();
-        
+
         // Staff
         serviceCollection.AddScoped<IStaffService, StaffService>();
         serviceCollection.AddScoped<IStaffRepository, StaffRepository>();
@@ -49,11 +56,12 @@ public static class ServiceConfiguration
         // Company 
         serviceCollection.AddScoped<ICompanyService, CompanyService>();
         serviceCollection.AddScoped<ICompanyRepository, CompanyRepository>();
-    }
-    
-    public static void ConfigureScopes(this IServiceCollection serviceCollection)
-    {
 
+        // Identity Roles
+        serviceCollection.AddScoped<IRoleService, RoleService>();
+        serviceCollection.AddScoped<IStaffRolesService, StaffRolesService>();
+
+        serviceCollection.AddScoped<JwtService>();
     }
 
 }

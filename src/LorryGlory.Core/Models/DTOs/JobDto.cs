@@ -8,8 +8,11 @@ namespace LorryGlory.Core.Models.DTOs
     {
         public Guid Id { get; set; }
         public JobStatus? Status { get; set; }
+        public string Title { get; set; }
         public string Description { get; set; }
         public bool IsCompleted { get; set; }
+        public DateTime? StartTime { get; set; }
+        public DateTime? EndTime { get; set; }
         public TimeSpan? EstimatedTotalTime { get; set; }
         public TimeSpan? ActualTotalTime { get; set; }
         public Guid? FK_ClientId { get; set; }
@@ -27,23 +30,28 @@ namespace LorryGlory.Core.Models.DTOs
     public class JobCreateDto
     {
         public JobStatus? Status { get; set; }
+        public string Title { get; set; }
         public string Description { get; set; }
-        public TimeSpan? EstimatedTotalTime { get; set; }
+        public DateTime? StartTime { get; set; }
+        public DateTime? EndTime { get; set; }
         public Guid? FK_ClientId { get; set; }
         public ContactPersonCreateUpdateDto? ContactPerson { get; set; }
         public Guid? FK_FileLink { get; set; }
+        public Guid FK_TenantId { get; set; }
     }
 
     public class JobUpdateDto
     {
         public Guid Id { get; set; }
         public JobStatus? Status { get; set; }
+        public string Title { get; set; }
         public string Description { get; set; }
         public bool IsCompleted { get; set; }
-        public TimeSpan? EstimatedTotalTime { get; set; }
-        public TimeSpan? ActualTotalTime { get; set; }
+        public DateTime? StartTime { get; set; }
+        public DateTime? EndTime { get; set; }
         public Guid? FK_ClientId { get; set; }
         public ContactPersonCreateUpdateDto? ContactPerson { get; set; }
         public Guid? FK_FileLink { get; set; }
+        public Guid FK_TenantId { get; set; }
     }
 }

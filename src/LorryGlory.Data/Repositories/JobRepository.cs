@@ -57,12 +57,14 @@ namespace LorryGlory.Data.Repositories
             }
 
             existingJob.Status = job.Status;
+            existingJob.Title = job.Title;
             existingJob.Description = job.Description;
             existingJob.IsCompleted = job.IsCompleted;
-            existingJob.EstimatedTotalTime = job.EstimatedTotalTime;
-            existingJob.ActualTotalTime = job.ActualTotalTime;
+            existingJob.StartTime = job.StartTime;
+            existingJob.EndTime = job.EndTime;
             existingJob.FK_ClientId = job.FK_ClientId;
             existingJob.FK_FileLink = job.FK_FileLink;
+
 
             if (job.ContactPerson != null)
                 existingJob.ContactPerson = job.ContactPerson;

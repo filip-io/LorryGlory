@@ -10,6 +10,12 @@ namespace LorryGlory.Core.Configuration
 
         public static void ConfigureAuthorization(this IServiceCollection serviceCollection)
         {
+            //serviceCollection.AddAuthentication(options =>
+            //{
+            //    options.DefaultAuthenticateScheme = IdentityConstants.ApplicationScheme;
+            //    options.DefaultChallengeScheme = IdentityConstants.ApplicationScheme;
+            //});
+
             serviceCollection.AddAuthorizationBuilder()
                 .AddPolicy("SuperAdminPolicy", policy =>
                 {
@@ -18,6 +24,10 @@ namespace LorryGlory.Core.Configuration
                 .AddPolicy("AdminPolicy", policy =>
                 {
                     policy.RequireRole("Admin", "SuperAdmin");
+                })
+                .AddPolicy("StrictAdminPolicy", policy =>
+                {
+                    policy.RequireRole("Admin");
                 })
                 .AddPolicy("UserPolicy", policy =>
                 {
@@ -52,8 +62,10 @@ namespace LorryGlory.Core.Configuration
         {
             serviceCollection.ConfigureApplicationCookie(options =>
             {
+                options.Cookie.Name = "LorryGloryApp"; 
                 options.LoginPath = "/auth/login";
-                options.Cookie.Name = "LorryGloryApp";
+                //options.Cookie.Domain = ".azurewebsites.net";
+                options.ExpireTimeSpan = TimeSpan.FromHours(12);
                 options.Cookie.HttpOnly = true;
                 options.Cookie.SameSite = SameSiteMode.Strict;
                 options.Cookie.SecurePolicy = CookieSecurePolicy.Always;

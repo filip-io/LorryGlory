@@ -1,4 +1,5 @@
 ﻿using LorryGlory.Core.Models.DTOs;
+using LorryGlory.Core.Models.DTOs.VehicleDtos;
 using LorryGlory.Data.Models.CompanyModels;
 using LorryGlory.Data.Models.JobModels.Enums;
 using System.ComponentModel.DataAnnotations;
@@ -34,7 +35,7 @@ namespace LorryGlory.Core.Models.DTOs
         public Guid FK_JobId { get; set; }
 
         // Vehicle Info (optional)
-        public VehicleDto? Vehicle { get; set; }
+        public GetAllVehiclesDto? Vehicle { get; set; }
 
         // File Link (optional)
         public FileLinkDto? FileLink { get; set; }
@@ -98,7 +99,7 @@ public class JobTaskCreateDto
 
     public string? FK_StaffMemberId { get; set; }
 
-    public Guid JobId { get; set; }
+    //public Guid JobId { get; set; }
 
     [Required]
     public Guid FK_JobId { get; set; }

@@ -83,7 +83,7 @@ namespace LorryGlory.Data.Repositories
                 .Include(jt => jt.FileLink)
                 .Include(jt => jt.JobTaskReport)
                 .Include(jt => jt.Company)
-                .SingleOrDefaultAsync();
+                .SingleOrDefaultAsync(jt => jt.Id == jobTask.Id);
 
             if (existingTask == null)
             {

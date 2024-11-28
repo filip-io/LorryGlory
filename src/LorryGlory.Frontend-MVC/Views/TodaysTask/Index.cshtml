@@ -1,0 +1,305 @@
+﻿@*
+    Current vehicle for fast overview for driver to complete the job safe and secure.
+
+    Number in TODO = placement in code, scroll down to see the corresponding.
+    TODO list:
+    1a = Needs to fetch from 'felanmälan?'
+    2a = Need to implement check if truck is older then 30 years then: display Totalweight instead of Taxweight.
+    + Need to implement tax weight in model, there is only total weight and dont give justice to what the driver can carry.
+    3a = Need to implement actual weight based on calculation, this is a calculation based on the weight of the truck and the load.
+    4a = Need to implement proper check for BK class calculated from distance of axels and show proper data.
+*@
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Todays Task";
+}
+@model LorryGlory_Frontend_MVC.Models.JobTasks.TodaysJobTaskViewModel;
+
+<div x-data="{ activeTab: 'vehicle' }" class="p-4 bg-gray-100">
+
+    <div class="flex justify-center mb-4">
+        <h1 class="text-lg font-bold">Scandic</h1>
+    </div>
+
+    <div class="flex items-center justify-between border-b border-gray-300 pb-2">
+        <button class="text-gray-600" aria-label="Back to menu">
+            <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 18a1 1 0 01-.707-.293l-7-7a1 1 0 010-1.414l7-7a1 1 0 011.414 1.414L4.414 10l6.293 6.293a1 1 0 01-.707 1.707z" clip-rule="evenodd" />
+            </svg>
+        </button>
+
+        <div class="flex space-x-4">
+            <button @@click="activeTab = 'vehicle'" :class="{'border-b-2 border-blue-500 text-gray-900': activeTab === 'vehicle', 'text-gray-500': activeTab !== 'vehicle'}" class="font-semibold px-4">
+                Vehicle
+            </button>
+            <button @@click="activeTab = 'task'" :class="{'border-b-2 border-blue-500 text-gray-900': activeTab === 'task', 'text-gray-500': activeTab !== 'task'}" class="font-semibold px-4">
+                Task
+            </button>
+        </div>
+
+        <div class="w-6"></div>
+    </div>
+
+    <div x-show="activeTab === 'vehicle'" class="space-y-4 mt-4">
+
+        <div class="flex flex-col items-center space-y-4 w-full">
+            <div class="flex items-center border-2 border-black rounded-lg bg-white shadow-md w-full max-w-md mx-auto">
+                <div class="w-14 h-full flex-shrink-0">
+                    <img src="/images/regnskylt.jpg" alt="Country Code" class="w-full h-full object-cover rounded-l-lg">
+                </div>
+
+                <div class="flex-1 flex items-center justify-center text-black font-bold text-2xl uppercase tracking-widest">
+                    @Model.Vehicle.RegNo
+                </div>
+            </div>
+
+            <div class="text-center">
+                <p class="text-red-600 font-semibold text-sm">warning</p>
+            </div>
+        </div>
+
+
+
+        <div class="p-4 bg-gray-100">
+
+            <div class="bg-white p-4 rounded-lg shadow-md mb-4">
+                <label class="block font-semibold text-gray-700 mb-1">Calculated Weight</label>
+                <div class="flex space-x-2">
+                    <input id="weightInput" type="number" placeholder="Enter load weight..." class="w-full p-2 border rounded">
+                    <select id="weightType" class="p-2 border rounded bg-gray-50">
+                        <option value="gross">Gross</option>
+                        <option value="load">Load</option>
+                    </select>
+                    <button onclick="calculateWeight()" class="p-2 bg-blue-500 text-white rounded">Calculate</button>
+                </div>
+            </div>
+
+            <div class="bg-white p-4 rounded-lg shadow-md mb-4">
+                <h2 class="font-semibold text-gray-800 mb-2">Basic Information</h2>
+                <div class="divide-y divide-gray-200 text-sm">
+                    <div class="py-2 flex justify-between">
+                        <span>Curb Weight</span>
+                        <span class="font-medium">@Model.Vehicle.TechnicalData.KerbWeight KG</span>
+                    </div>
+                    <div class="py-2 flex justify-between">
+                        <span>Max Load Weight</span>
+                        <span class="font-medium">@Model.Vehicle.TechnicalData.LoadWeight KG</span>
+                    </div>
+                    <div class="py-2 flex justify-between">
+                        <span class="text-red-600">Total Weight</span>
+                        <span class="font-medium">@Model.Vehicle.TechnicalData.TotalWeight KG</span>
+                    </div>
+                    <div class="py-2 flex justify-between">
+                        <span>Actual Weight</span>
+                        <span id="actualWeight" class="font-medium">---</span>
+                    </div>
+                    <div class="py-2 flex justify-between">
+                        <span>Height</span>
+                        <span class="font-medium">@Model.Vehicle.TechnicalData.Height MM</span>
+                    </div>
+                    <div class="py-2 flex justify-between">
+                        <span>Length</span>
+                        <span class="font-medium">@Model.Vehicle.TechnicalData.Length MM</span>
+                    </div>
+                    <div class="py-2 flex justify-between">
+                        <span class="text-red-600">Axle Pressure(IMP)</span>
+                        <span class="font-medium text-red-600">not found</span>
+                    </div>
+                    <div class="py-2 flex justify-between">
+                        <span>Emission Class</span>
+                        <span class="font-medium">@Model.Vehicle.Eco.EuroClass</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script> // in till js
+            function calculateWeight() {
+                const weightInput = parseFloat(document.getElementById('weightInput').value) || 0;
+                const weightType = document.getElementById('weightType').value;
+                const curbWeight = @Model.Vehicle.TechnicalData.KerbWeight;
+
+                let actualWeight;
+                if (weightType === 'load') {
+                    actualWeight = curbWeight + weightInput;
+                } else if (weightType === 'gross') {
+                    actualWeight = weightInput;
+                }
+
+                document.getElementById('actualWeight').textContent = `${actualWeight} KG`;
+            }
+        </script>
+
+        @if (Model.Vehicle.TechnicalData != null)
+            {
+                <div class="bg-white p-4 rounded-lg shadow-md mb-4">
+                    <h2 class="font-semibold text-gray-800 mb-2">Axle Information</h2>
+                    <div class="space-y-2 text-sm">
+                        <div class="flex justify-between">
+                            <span>Total Axle Distance:</span>
+                            <span>@ViewBag.TotalAxleDistance meters</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white p-4 rounded-lg shadow-md mb-4">
+                    <h2 class="font-semibold text-gray-800 mb-2">Allowed Weights by BK Table</h2>
+                    <div class="space-y-2 text-sm">
+                        <div class="flex justify-between">
+                            <span>Allowed Weight (BK1):</span>
+                            <span>@ViewBag.AllowedWeightBK1 tons</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span>Allowed Weight (BK2):</span>
+                            <span>@ViewBag.AllowedWeightBK2 tons</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span>Allowed Weight (BK3):</span>
+                            <span>@ViewBag.AllowedWeightBK3 tons</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span>Allowed Weight (BK4):</span>
+                            <span>@ViewBag.AllowedWeightBK4 tons</span>
+                        </div>
+                    </div>
+                </div>
+                
+            }
+            else
+            {
+                <p class="text-red-600">Axle information is not available for this vehicle.</p>
+            }
+
+            <div class="bg-white p-4 rounded-lg shadow-md mb-4">
+                <h2 class="font-semibold text-gray-800 mb-2">BK Class</h2>
+                <div class="space-y-2 text-sm">
+                    <div class="flex justify-between">
+                        <span>BK1 - 30 tons</span>
+                        <span>
+                            <svg class="animate-spin h-5 w-5 text-rose-600" viewBox="0 0 24 24">
+                                <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" class="opacity-25"></circle>
+                                <path fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 000 8H4z" class="opacity-75"></path>
+                            </svg>
+                        </span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>BK2 - 28 tons</span>
+                        <span>✔️</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>BK3 - 15 tons</span>
+                        <span>✔️</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>BK4 - 14 tons</span>
+                        <span>❌</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white p-4 rounded-lg shadow-md mb-4">
+                <h2 class="font-semibold text-gray-800 mb-2">Known Issues (if any)</h2>
+                <div class="space-y-2 text-sm">
+                    <div class="flex justify-between">
+                        <span class="text-red-600 font-medium">⚠ Critical</span>
+                        <span>Cracked Axle</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-orange-600 font-medium">⬆️ High</span>
+                        <span>Brake Wear</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-yellow-600 font-medium">⬆️ Medium</span>
+                        <span>Rearview Mirror</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-green-600 font-medium">⬆️ Low</span>
+                        <span>Rust Damage</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex space-x-4">
+                <button class="flex-1 bg-red-600 text-white py-2 px-4 rounded-lg shadow-md hover:bg-red-700">
+                    Report Problem
+                </button>
+                <button class="flex-1 bg-blue-600 text-white py-2 px-4 rounded-lg shadow-md hover:bg-blue-700">
+                    Change Vehicle
+                </button>
+                <button class="p-2 bg-gray-300 rounded-full">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-gray-800">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 11.25a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9zm0 0a6.75 6.75 0 0 0-6.75 6.75m13.5 0a6.75 6.75 0 0 0-6.75-6.75m0 0V21" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div x-show="activeTab === 'task'" class="space-y-4 mt-4">
+        <div class="bg-white p-4 rounded-lg shadow-md">
+            <h2 class="font-semibold text-gray-800 mb-2">@Model.Title</h2>
+            <div class="text-sm space-y-2">
+                <div><span class="font-medium">@DateOnly.FromDateTime(Model.StartTime)</span></div>
+                <div>Start: <span class="font-medium">@Model.StartTime.TimeOfDay</span></div>
+                <div>End: <span class="font-medium">@Model.EndTime.TimeOfDay</span></div>
+                <div>Contact: <span class="font-medium">@Model.ContactPerson.Name, @Model.ContactPerson.PhoneNumber</span></div>
+                <div><span class="font-medium">@Model.Description</span></div>
+            </div>
+        </div>
+        <div class="bg-white p-4 rounded-lg shadow-md">
+            <h3 class="font-semibold text-gray-800 mb-2">Pickup Address</h3>
+            <div class="text-sm space-y-2">
+                <div><span class="font-medium">@Model.PickupAddress.AddressStreet</span></div>
+                <div><span class="font-medium">@Model.PickupAddress.PostalCode</span></div>
+                <div><span class="font-medium">@Model.PickupAddress.AddressCity</span></div>
+                <div><span class="font-medium">@Model.PickupAddress.AddressCountry</span></div>
+            </div>
+        </div>
+        <div class="bg-white p-4 rounded-lg shadow-md">
+            <h3 class="font-semibold text-gray-800 mb-2">Delivery Address</h3>
+            <div class="text-sm space-y-2">
+                <div><span class="font-medium">@Model.DeliveryAddress.AddressStreet</span></div>
+                <div><span class="font-medium">@Model.DeliveryAddress.PostalCode</span></div>
+                <div><span class="font-medium">@Model.DeliveryAddress.AddressCity</span></div>
+                <div><span class="font-medium">@Model.DeliveryAddress.AddressCountry</span></div>
+            </div>
+        </div>
+        <div class="bg-white p-4 rounded-lg shadow-md">
+            <h3 class="font-semibold text-gray-800 mb-2">Client</h3>
+            <div class="text-sm space-y-2">
+                <div><span class="font-medium">@Model.ContactPerson.Name</span></div>
+                <div><span class="font-medium">@Model.ContactPerson.PhoneNumber</span></div>
+            </div>
+        </div>
+        <div class="bg-white p-4 rounded-lg shadow-md">
+            <h2 class="font-semibold text-gray-800 mb-2">To Be Filled When Task is Complete</h2>
+            <div class="grid grid-cols-2 gap-2">
+                <div>
+                    <label class="text-sm">Actual Time</label>
+                    <input type="time" class="w-full p-2 border rounded" placeholder="Start">
+                </div>
+                <div>
+                    <label class="text-sm invisible">.</label>
+                    <input type="time" class="w-full p-2 border rounded" placeholder="End">
+                </div>
+            </div>
+            <div class="mt-2">
+                <label class="text-sm">Notes</label>
+                <textarea class="w-full p-2 border rounded" placeholder="Message to office..."></textarea>
+            </div>
+            <div class="mt-2">
+                <label class="text-sm">Attach Image (delivery, receipt)</label>
+                <button class="w-full p-2 border rounded flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-5 h-5 mr-1">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16s1.5-2 4-2 4 2 4 2M2 12a10 10 0 0020 0M2 8a10 10 0 0120 0M9 2a4 4 0 108 0m-1 18l2-2-2 2zM7 20l2-2-2 2z" />
+                    </svg>
+                    Attach Image
+                </button>
+            </div>
+            <button class="mt-4 w-full bg-blue-600 text-white py-2 px-4 rounded-lg shadow-md hover:bg-blue-700">
+                Complete Task
+            </button>
+        </div>
+    </div>
+
+
