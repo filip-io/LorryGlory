@@ -1,6 +1,7 @@
 ﻿using LorryGlory_Frontend_MVC.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
+using static System.Net.WebRequestMethods;
 
 namespace LorryGlory_Frontend_MVC.Controllers
 {
@@ -8,13 +9,13 @@ namespace LorryGlory_Frontend_MVC.Controllers
     {
         private readonly HttpClient _httpClient;
         private readonly ILogger<MenuController> _logger;
-        private readonly string _baseUrl;
+        private readonly string _baseUrl = "https://lorrygloryapi.azurewebsites.net";
 
         public MenuController(HttpClient httpClient, ILogger<MenuController> logger, IConfiguration configuration)
         {
             _httpClient = httpClient;
             _logger = logger;
-            _baseUrl = configuration["ApiConnections:MockApi"]; // ändra till 
+            //_baseUrl = configuration["ApiConnections:MockApi"]; // ändra till 
         }
 
         public async Task<IActionResult> Index()

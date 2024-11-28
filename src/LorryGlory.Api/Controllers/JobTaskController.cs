@@ -254,7 +254,7 @@ namespace LorryGlory.Api.Controllers
                         Width = 2550,
                         Height = 4000,
                         KerbWeight = 7500,
-                        TotalWeight = 40000,
+                        TotalWeight = 25000,
                         LoadWeight = 32500,
                         AxleWidth1 = 3600,
                         AxleWidth2 = 1350,
