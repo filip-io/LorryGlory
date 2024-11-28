@@ -1,6 +1,7 @@
 ﻿using LorryGlory_Frontend_MVC.Models;
 using LorryGlory_Frontend_MVC.Models.JobTasks;
 using LorryGlory_Frontend_MVC.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
@@ -10,11 +11,12 @@ namespace LorryGlory_Frontend_MVC.Controllers
     {
         private readonly HttpClient _httpClient;
 
-        public TodaysTaskController(HttpClient httpClient)
+        public TodaysTaskController(IHttpClientFactory clientFactory)
         {
-            _httpClient = httpClient;
+            _httpClient = clientFactory.CreateClient("BackendClient");
         }
 
+        [Authorize]
         public async Task<IActionResult> Index()
         {
             var response = await _httpClient.GetStringAsync("https://localhost:7036/api/tasks/driver/1STAFFM/day/2024-11-24");

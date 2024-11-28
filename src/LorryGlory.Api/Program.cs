@@ -30,24 +30,24 @@ namespace LorryGlory.Api
             builder.Services.ConfigureIdentity();
             builder.Services.ConfigureCookies();
            
-            builder.Services.AddAuthentication(options =>
-            {
-                options.DefaultAuthenticateScheme = IdentityConstants.ApplicationScheme;
-                options.DefaultChallengeScheme = IdentityConstants.ApplicationScheme;
-            })
-             .AddJwtBearer(options =>
-             {
-                 options.TokenValidationParameters = new TokenValidationParameters
-                 {
-                     ValidateIssuer = true,
-                     ValidateAudience = true,
-                     ValidateLifetime = true,
-                     ValidateIssuerSigningKey = true,
-                     ValidIssuer = builder.Configuration["Jwt:Issuer"],
-                     ValidAudience = builder.Configuration["Jwt:Audience"],
-                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
-                 };
-             });
+            //builder.Services.AddAuthentication(options =>
+            //{
+            //    options.DefaultAuthenticateScheme = IdentityConstants.ApplicationScheme;
+            //    options.DefaultChallengeScheme = IdentityConstants.ApplicationScheme;
+            //})
+             //.AddJwtBearer(options =>
+             //{
+             //    options.TokenValidationParameters = new TokenValidationParameters
+             //    {
+             //        ValidateIssuer = true,
+             //        ValidateAudience = true,
+             //        ValidateLifetime = true,
+             //        ValidateIssuerSigningKey = true,
+             //        ValidIssuer = builder.Configuration["Jwt:Issuer"],
+             //        ValidAudience = builder.Configuration["Jwt:Audience"],
+             //        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+             //    };
+             //});
             builder.Services.ConfigureAuthorization();
 
 
@@ -66,15 +66,12 @@ namespace LorryGlory.Api
             {
                 options.AddPolicy("FrontendMVC", builder =>
                 {
-                    builder.WithOrigins("https://localhost:7172", "https://localhost:7036")
-                           .AllowAnyMethod()
-                           .AllowAnyHeader()
-                           .AllowCredentials();
-
-                    builder.WithOrigins("https://lorrygloryfrontend-mvc.azurewebsites.net")
-                           .AllowAnyMethod()
-                           .AllowAnyHeader()
-                           .AllowCredentials();
+                    builder.WithOrigins(
+                        "https://localhost:7172",
+                        "https://lorrygloryfrontend-mvc.azurewebsites.net")
+                        .AllowAnyMethod()
+                        .AllowAnyHeader()
+                        .AllowCredentials();
                 });
             });
 
