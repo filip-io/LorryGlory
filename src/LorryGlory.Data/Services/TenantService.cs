@@ -26,7 +26,8 @@ namespace LorryGlory.Data.Services
         public bool IsSuperAdmin()
         {
             var user = _httpContextAccessor.HttpContext?.User;
-            return user?.IsInRole("SuperAdmin") ?? false;
+             var isOrNot=user?.IsInRole("SuperAdmin") ?? false;
+            return isOrNot;
         }
     }
 }

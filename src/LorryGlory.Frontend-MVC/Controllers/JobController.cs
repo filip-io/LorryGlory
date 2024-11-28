@@ -4,6 +4,7 @@ using LorryGlory_Frontend_MVC.ViewModels.Job;
 using LorryGlory_Frontend_MVC.ViewModels.Task;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System.Net;
 using System.Text;
 
 namespace LorryGlory_Frontend_MVC.Controllers
@@ -14,9 +15,10 @@ namespace LorryGlory_Frontend_MVC.Controllers
         private readonly HttpClient _client;
         private string baseUri = "https://localhost:7036/";
 
-        public JobController(HttpClient client)
+        public JobController()
         {
-            _client = client;
+            
+           
         }
 
         public async Task<IActionResult> Index()
@@ -27,7 +29,22 @@ namespace LorryGlory_Frontend_MVC.Controllers
 
             try
             {
-                var response = await _client.GetAsync($"{baseUri}api/jobs");
+                var handler = new HttpClientHandler
+                {
+                    UseCookies = true,
+                    CookieContainer = new CookieContainer()
+                };
+
+                // Add cookies from the current HTTP context
+                foreach (var cookie in Request.Cookies)
+                {
+                    handler.CookieContainer.Add(new Uri(baseUri), new Cookie(cookie.Key, cookie.Value));
+                    Console.WriteLine($"Key: {cookie.Key}, Value: {cookie.Value}");
+                }
+
+                // Create a new HttpClient using the handler
+                var client = new HttpClient(handler);
+                var response = await client.GetAsync($"{baseUri}api/jobs");
                 Console.WriteLine(response);
                 if (response.IsSuccessStatusCode)
                 {
