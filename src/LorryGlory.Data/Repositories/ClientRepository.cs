@@ -1,5 +1,6 @@
 ﻿using LorryGlory.Data.Data;
 using LorryGlory.Data.Models.ClientModels;
+using LorryGlory.Data.Models.JobModels;
 using LorryGlory.Data.Repositories.IRepositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -21,6 +22,14 @@ namespace LorryGlory.Data.Repositories
             _context = context;
             _logger = logger;
         }
+
+        public async Task<Client> CreateAsync(Client client)
+        {
+            var result = await _context.Clients.AddAsync(client);
+            await _context.SaveChangesAsync();
+            return result.Entity;
+        }
+
         public async Task<IEnumerable<Client?>> GetAllAsync()
         {
             return await _context.Clients

@@ -360,13 +360,6 @@ namespace LorryGlory_Frontend_MVC.Controllers
 
         public async Task<IActionResult> TaskCreate(Guid jobId)
         {
-            // Log the received jobId
-            Console.WriteLine($"Received Id: {jobId}");
-
-            // Pass the jobId to the view using ViewData
-            ViewData["JobId"] = jobId;
-
-            // Set the title for the view
             ViewData["Title"] = "New Task";
 
             // Fetch all vehicles
@@ -413,7 +406,7 @@ namespace LorryGlory_Frontend_MVC.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> TaskCreate(CreateTaskViewModel task, Guid jobId)
+        public async Task<IActionResult> TaskCreate(CreateTaskViewModel task)
         {
             if (!ModelState.IsValid)
             {
@@ -442,7 +435,7 @@ namespace LorryGlory_Frontend_MVC.Controllers
             var response = await client.PostAsync($"{_baseUri}api/tasks", content);
 
             // Redirect to the JobRead action, passing the jobId
-            return RedirectToAction("JobRead", "Job", new { id = jobId });
+            return RedirectToAction("JobRead", "Job");
         }
 
         public async Task<IActionResult> TaskEdit(Guid id)

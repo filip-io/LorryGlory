@@ -1,9 +1,12 @@
 ﻿using LorryGlory.Api.Helpers;
 using LorryGlory.Api.Models;
 using LorryGlory.Core.Models.DTOs;
+using LorryGlory.Core.Services;
 using LorryGlory.Core.Services.IServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
 using System.Data.Common;
 
 namespace LorryGlory.Api.Controllers
@@ -41,6 +44,33 @@ namespace LorryGlory.Api.Controllers
             catch (Exception ex)
             {
                 return ResponseHelper.HandleException<IEnumerable<ClientDto>>(_logger, ex);
+            }
+        }
+
+        //[Authorize]
+        [HttpPost]
+        public async Task<ActionResult<ApiResponse<ClientDto>>> CreateAsync(ClientCreateDto clientCreateDto)
+        {
+            try
+            {
+                // Extract TenantId from the authenticated user's claims
+                var tenantIdClaim = User.Claims.FirstOrDefault(c => c.Type == "TenantId")?.Value;
+
+                if (string.IsNullOrEmpty(tenantIdClaim) || !Guid.TryParse(tenantIdClaim, out var tenantId))
+                {
+                    return ResponseHelper.HandleException<ClientDto>(_logger, new Exception("TenantId is missing or invalid"));
+                }
+
+                var newClient = await _clientService.CreateAsync(clientCreateDto, tenantId);
+                return ResponseHelper.HandleSuccess(_logger, newClient, "Client created successfully");
+            }
+            catch (ValidationException ex)
+            {
+                return ResponseHelper.HandleValidationException<ClientDto>(_logger, ex);
+            }
+            catch (Exception ex)
+            {
+                return ResponseHelper.HandleException<ClientDto>(_logger, ex);
             }
         }
     }

@@ -10,5 +10,6 @@ namespace LorryGlory.Core.Services.IServices
     public interface IClientService
     {
         Task<IEnumerable<ClientDto>> GetAllAsync();
+        Task<ClientDto> CreateAsync(ClientCreateDto clientCreateDto, Guid tenantId);
     }
 }

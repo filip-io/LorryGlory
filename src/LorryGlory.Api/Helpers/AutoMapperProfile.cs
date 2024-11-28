@@ -70,6 +70,7 @@ namespace LorryGlory.Api.Helpers
 
             //Client mapping
             CreateMap<Client, ClientDto>().ReverseMap();
+            CreateMap<ClientCreateDto, Client>().ReverseMap();
         }
     }
 }

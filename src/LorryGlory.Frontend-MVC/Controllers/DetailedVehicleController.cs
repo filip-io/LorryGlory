@@ -5,6 +5,7 @@ using LorryGlory_Frontend_MVC.ViewModels.Job;
 using LorryGlory_Frontend_MVC.ViewModels.Vehicle;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System.Net;
 
 namespace LorryGlory_Frontend_MVC.Controllers
 {
@@ -26,10 +27,28 @@ namespace LorryGlory_Frontend_MVC.Controllers
 
             try
             {
-                var response = await _client.GetAsync($"{baseUri}api/Vehicle/GetTodaysVehiclesForDriver");
+                // Configure HttpClientHandler with cookies
+                var handler = new HttpClientHandler
+                {
+                    UseCookies = true,
+                    CookieContainer = new CookieContainer()
+                };
+
+                // Add cookies from the current HTTP context
+                foreach (var cookie in Request.Cookies)
+                {
+                    handler.CookieContainer.Add(new Uri(baseUri), new Cookie(cookie.Key, cookie.Value));
+                }
+
+                // Create a new HttpClient using the handler
+                var client = new HttpClient(handler);
+
+                var response = await client.GetAsync($"{baseUri}api/Vehicle/GetTodaysVehiclesForDriver");
                 Console.WriteLine(response);
                 if (response.IsSuccessStatusCode)
                 {
+
+
                     var json = await response.Content.ReadAsStringAsync();
                     Console.WriteLine(json);
                     var apiResponse = JsonConvert.DeserializeObject<VehicleApiResponse>(json);
@@ -64,7 +83,23 @@ namespace LorryGlory_Frontend_MVC.Controllers
 
             try
             {
-                var response = await _client.GetAsync($"{baseUri}api/Vehicle/GetById/{id}");
+                // Configure HttpClientHandler with cookies
+                var handler = new HttpClientHandler
+                {
+                    UseCookies = true,
+                    CookieContainer = new CookieContainer()
+                };
+
+                // Add cookies from the current HTTP context
+                foreach (var cookie in Request.Cookies)
+                {
+                    handler.CookieContainer.Add(new Uri(baseUri), new Cookie(cookie.Key, cookie.Value));
+                }
+
+                // Create a new HttpClient using the handler
+                var client = new HttpClient(handler);
+
+                var response = await client.GetAsync($"{baseUri}api/Vehicle/GetById/{id}");
 
                 if (response.IsSuccessStatusCode)
                 {

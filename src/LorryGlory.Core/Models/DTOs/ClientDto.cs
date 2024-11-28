@@ -12,7 +12,7 @@ namespace LorryGlory.Core.Models.DTOs
         public string? PersonalNumber { get; set; }
         public string PhoneNumber { get; set; }
         public AddressDto Address { get; set; }
-        public ICollection<JobDto>? Jobs { get; set; }
+        //public ICollection<JobDto>? Jobs { get; set; }
         public Guid FK_TenantId { get; set; }
         public string CompanyName { get; set; }
     }
