@@ -22,7 +22,7 @@ namespace LorryGlory_Frontend_MVC.Controllers
         {
             _client = client;
         }
-
+        //Comment
         [Authorize]
         public async Task<IActionResult> Index()
         {
