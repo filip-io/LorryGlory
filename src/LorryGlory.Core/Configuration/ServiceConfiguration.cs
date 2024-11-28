@@ -61,6 +61,9 @@ public static class ServiceConfiguration
         serviceCollection.AddScoped<IRoleService, RoleService>();
         serviceCollection.AddScoped<IStaffRolesService, StaffRolesService>();
 
+        serviceCollection.AddScoped<IClientService, ClientService>();
+        serviceCollection.AddScoped<IClientRepository, ClientRepository>();
+
         serviceCollection.AddScoped<JwtService>();
     }
 

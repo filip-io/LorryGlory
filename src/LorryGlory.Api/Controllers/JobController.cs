@@ -5,9 +5,11 @@ using LorryGlory.Core.Services.IServices;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Authorization;
 
 namespace LorryGlory.Api.Controllers
 {
+    [Authorize(Policy = "AdminPolicy")]
     [ApiController]
     [Route("api/jobs")]
     public class JobController : ControllerBase
@@ -67,7 +69,17 @@ namespace LorryGlory.Api.Controllers
         {
             try
             {
-                var newJob = await _jobService.CreateAsync(jobCreateDto);
+                // Extract TenantId from the authenticated user's claims
+                var tenantIdClaim = User.Claims.FirstOrDefault(c => c.Type == "TenantId")?.Value;
+
+                if (string.IsNullOrEmpty(tenantIdClaim) || !Guid.TryParse(tenantIdClaim, out var tenantId))
+                {
+                    return ResponseHelper.HandleException<JobDto>(_logger, new Exception("TenantId is missing or invalid"));
+                }
+
+                // Pass the TenantId to the service
+                var newJob = await _jobService.CreateAsync(jobCreateDto, tenantId);
+
                 return ResponseHelper.HandleSuccess(_logger, newJob, "Job created successfully");
             }
             catch (ValidationException ex)

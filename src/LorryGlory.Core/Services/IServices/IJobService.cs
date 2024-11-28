@@ -11,7 +11,7 @@ namespace LorryGlory.Core.Services.IServices
     {
         Task<IEnumerable<JobDto>> GetAllAsync();
         Task<JobDto> GetByIdAsync(Guid id);
-        Task<JobDto> CreateAsync(JobCreateDto jobDto);
+        Task<JobDto> CreateAsync(JobCreateDto jobDto, Guid tenantId);
         Task<JobDto> UpdateAsync(JobUpdateDto jobDto);
         Task<JobDto> DeleteAsync(Guid id);
     }

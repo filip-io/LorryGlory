@@ -1,0 +1,38 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@using LorryGlory_Frontend_MVC.ViewModels.Vehicle
+@model List<TodaysVehiclesForDriverViewModel>
+@{
+}
+
+
+<!-- Mission List -->
+<div class="mt-6">
+    @if (Model == null || !Model.Any())
+    {
+        <p class="text-center text-gray-600">No vehicles available.</p>
+    }
+    else
+    {
+        @foreach (var vehicle in Model)
+        {
+            <div class="flex items-center justify-between border-b border-gray-300 py-3">
+                <div>
+                    <p class="font-semibold text-lg">HSB Rosen @vehicle.RegNo</p>
+                    <p class="font-semibold">Start tid</p>
+                    <p class="">@vehicle.StartTime</p>
+                    <p class="font-semibold">End tid</p>
+                    <p class="">@vehicle.EndTime</p>
+                </div>
+                <!-- Button with Arrow -->
+                <a asp-controller="DetailedVehicle" asp-action="Index" asp-route-id="@vehicle.Id" class="text-blue-500 hover:text-blue-700 me-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+                    </svg>
+                </a>
+
+            </div>
+        }
+    }
+</div>

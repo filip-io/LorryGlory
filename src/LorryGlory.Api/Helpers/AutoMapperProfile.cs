@@ -3,6 +3,7 @@ using LorryGlory.Core.Models.DTOs;
 using LorryGlory.Core.Models.DTOs.VehicleDtos;
 using LorryGlory.Core.Models.DTOs.VehicleDtos.VehicleDetailsDtos;
 using LorryGlory.Data.Models;
+using LorryGlory.Data.Models.ClientModels;
 using LorryGlory.Data.Models.CompanyModels;
 using LorryGlory.Data.Models.JobModels;
 using LorryGlory.Data.Models.StaffModels;
@@ -66,6 +67,9 @@ namespace LorryGlory.Api.Helpers
             CreateMap<Inspection, InspectionDto>().ReverseMap();
             CreateMap<TechnicalData, TechnicalDataDto>().ReverseMap();
             CreateMap<EcoDetails, EcoDetailsDto>().ReverseMap();
+
+            //Client mapping
+            CreateMap<Client, ClientDto>().ReverseMap();
         }
     }
 }
