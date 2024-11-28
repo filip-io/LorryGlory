@@ -30,10 +30,11 @@ namespace LorryGlory.Core.Services
             return _mapper.Map<JobDto>(job);
         }
 
-        public async Task<JobDto> CreateAsync(JobCreateDto jobCreateDto)
+        public async Task<JobDto> CreateAsync(JobCreateDto jobCreateDto, Guid tenantId)
         {
             var newJob = _mapper.Map<Job>(jobCreateDto);
 
+            newJob.FK_TenantId = tenantId;
             newJob.CreatedAt = DateTime.UtcNow;
 
             var createdJob = await _jobRepository.CreateAsync(newJob);

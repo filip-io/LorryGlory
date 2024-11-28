@@ -1,9 +1,13 @@
 ﻿
 using LorryGlory_Frontend_MVC.ViewModels.ApiResponses;
 using LorryGlory_Frontend_MVC.ViewModels.Job;
+using LorryGlory_Frontend_MVC.ViewModels.Staff;
 using LorryGlory_Frontend_MVC.ViewModels.Task;
+using LorryGlory_Frontend_MVC.ViewModels.Vehicle;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System.Net;
 using System.Text;
 
 namespace LorryGlory_Frontend_MVC.Controllers
@@ -19,6 +23,7 @@ namespace LorryGlory_Frontend_MVC.Controllers
             _client = client;
         }
 
+        [Authorize]
         public async Task<IActionResult> Index()
         {
             ViewData["Title"] = "Admin Job view";
@@ -27,7 +32,25 @@ namespace LorryGlory_Frontend_MVC.Controllers
 
             try
             {
-                var response = await _client.GetAsync($"{baseUri}api/jobs");
+                // Configure HttpClientHandler with cookies
+                var handler = new HttpClientHandler
+                {
+                    UseCookies = true,
+                    CookieContainer = new CookieContainer()
+                };
+
+                // Add cookies from the current HTTP context
+                foreach (var cookie in Request.Cookies)
+                {
+                    handler.CookieContainer.Add(new Uri(baseUri), new Cookie(cookie.Key, cookie.Value));
+                    Console.WriteLine($"Key: {cookie.Key}, Value: {cookie.Value}");
+                }
+
+                // Create a new HttpClient using the handler
+                var client = new HttpClient(handler);
+
+                // Make the request to the backend API
+                var response = await client.GetAsync($"{baseUri}api/jobs");
                 Console.WriteLine(response);
                 if (response.IsSuccessStatusCode)
                 {
@@ -73,14 +96,42 @@ namespace LorryGlory_Frontend_MVC.Controllers
             {
                 return View(job);
             }
-            var json = JsonConvert.SerializeObject(job);
 
+            var json = JsonConvert.SerializeObject(job);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-            var response = await _client.PostAsync($"{baseUri}api/jobs", content);
+            // Configure HttpClientHandler with cookies
+            var handler = new HttpClientHandler
+            {
+                UseCookies = true,
+                CookieContainer = new CookieContainer()
+            };
 
-            return RedirectToAction("Index");
+            // Add cookies from the current HTTP context
+            foreach (var cookie in Request.Cookies)
+            {
+                handler.CookieContainer.Add(new Uri(baseUri), new Cookie(cookie.Key, cookie.Value));
+            }
+
+            // Create a new HttpClient using the handler
+            var client = new HttpClient(handler);
+
+            // Make the request to the backend API
+            var response = await client.PostAsync($"{baseUri}api/jobs", content);
+
+            if (response.IsSuccessStatusCode)
+            {
+                // Handle success if needed
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                // Handle failure if needed
+                ViewData["ErrorMessage"] = "Failed to create job.";
+                return View(job);
+            }
         }
+
 
         // TODO Change from Id to id
         public async Task<IActionResult> JobRead(Guid Id)
@@ -93,7 +144,24 @@ namespace LorryGlory_Frontend_MVC.Controllers
 
             try
             {
-                var response = await _client.GetAsync($"{baseUri}api/jobs/{Id}");
+                // Configure HttpClientHandler with cookies
+                var handler = new HttpClientHandler
+                {
+                    UseCookies = true,
+                    CookieContainer = new CookieContainer()
+                };
+
+                // Add cookies from the current HTTP context
+                foreach (var cookie in Request.Cookies)
+                {
+                    handler.CookieContainer.Add(new Uri(baseUri), new Cookie(cookie.Key, cookie.Value));
+                }
+
+                // Create a new HttpClient using the handler
+                var client = new HttpClient(handler);
+
+                // Make the request to the backend API
+                var response = await client.GetAsync($"{baseUri}api/jobs/{Id}");
                 if (response.IsSuccessStatusCode)
                 {
                     var json = await response.Content.ReadAsStringAsync();
@@ -131,7 +199,24 @@ namespace LorryGlory_Frontend_MVC.Controllers
 
             try
             {
-                var response = await _client.GetAsync($"{baseUri}api/jobs/{id}");
+                // Configure HttpClientHandler with cookies
+                var handler = new HttpClientHandler
+                {
+                    UseCookies = true,
+                    CookieContainer = new CookieContainer()
+                };
+
+                // Add cookies from the current HTTP context
+                foreach (var cookie in Request.Cookies)
+                {
+                    handler.CookieContainer.Add(new Uri(baseUri), new Cookie(cookie.Key, cookie.Value));
+                }
+
+                // Create a new HttpClient using the handler
+                var client = new HttpClient(handler);
+
+                // Make the request to the backend API
+                var response = await client.GetAsync($"{baseUri}api/jobs/{id}");
                 if (response.IsSuccessStatusCode)
                 {
                     var json = await response.Content.ReadAsStringAsync();
@@ -171,7 +256,23 @@ namespace LorryGlory_Frontend_MVC.Controllers
 
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-            var response = await _client.PutAsync($"{baseUri}api/jobs/{job.Id}", content);
+            // Configure HttpClientHandler with cookies
+            var handler = new HttpClientHandler
+            {
+                UseCookies = true,
+                CookieContainer = new CookieContainer()
+            };
+
+            // Add cookies from the current HTTP context
+            foreach (var cookie in Request.Cookies)
+            {
+                handler.CookieContainer.Add(new Uri(baseUri), new Cookie(cookie.Key, cookie.Value));
+            }
+
+            // Create a new HttpClient using the handler
+            var client = new HttpClient(handler);
+
+            var response = await client.PutAsync($"{baseUri}api/jobs/{job.Id}", content);
 
             return RedirectToAction("index");
         }
@@ -179,7 +280,23 @@ namespace LorryGlory_Frontend_MVC.Controllers
         [HttpPost]
         public async Task<IActionResult> JobDelete(Guid id)
         {
-            var response = await _client.DeleteAsync($"{baseUri}api/jobs/{id}");
+            // Configure HttpClientHandler with cookies
+            var handler = new HttpClientHandler
+            {
+                UseCookies = true,
+                CookieContainer = new CookieContainer()
+            };
+
+            // Add cookies from the current HTTP context
+            foreach (var cookie in Request.Cookies)
+            {
+                handler.CookieContainer.Add(new Uri(baseUri), new Cookie(cookie.Key, cookie.Value));
+            }
+
+            // Create a new HttpClient using the handler
+            var client = new HttpClient(handler);
+
+            var response = await client.DeleteAsync($"{baseUri}api/jobs/{id}");
 
             return RedirectToAction("index");
         }
@@ -196,7 +313,23 @@ namespace LorryGlory_Frontend_MVC.Controllers
 
             try
             {
-                var response = await _client.GetAsync($"{baseUri}api/tasks/{Id}");
+                // Configure HttpClientHandler with cookies
+                var handler = new HttpClientHandler
+                {
+                    UseCookies = true,
+                    CookieContainer = new CookieContainer()
+                };
+
+                // Add cookies from the current HTTP context
+                foreach (var cookie in Request.Cookies)
+                {
+                    handler.CookieContainer.Add(new Uri(baseUri), new Cookie(cookie.Key, cookie.Value));
+                }
+
+                // Create a new HttpClient using the handler
+                var client = new HttpClient(handler);
+
+                var response = await client.GetAsync($"{baseUri}api/tasks/{Id}");
                 if (response.IsSuccessStatusCode)
                 {
                     var json = await response.Content.ReadAsStringAsync();
@@ -224,16 +357,56 @@ namespace LorryGlory_Frontend_MVC.Controllers
             return View(task);
         }
 
-        public IActionResult TaskCreate(Guid jobId)
+        public async Task<IActionResult> TaskCreate(Guid jobId)
         {
             // Log the received jobId
             Console.WriteLine($"Received Id: {jobId}");
 
-            // You can pass the jobId to the view using ViewData
+            // Pass the jobId to the view using ViewData
             ViewData["JobId"] = jobId;
 
             // Set the title for the view
             ViewData["Title"] = "New Task";
+
+            // Fetch all vehicles
+            List<AllVehiclesViewModel> vehicles = new List<AllVehiclesViewModel>();
+            try
+            {
+                // Configure HttpClientHandler with cookies
+                var handler = new HttpClientHandler
+                {
+                    UseCookies = true,
+                    CookieContainer = new CookieContainer()
+                };
+
+                // Add cookies from the current HTTP context
+                foreach (var cookie in Request.Cookies)
+                {
+                    handler.CookieContainer.Add(new Uri(baseUri), new Cookie(cookie.Key, cookie.Value));
+                }
+
+                // Create a new HttpClient using the handler
+                var client = new HttpClient(handler);
+
+                // Fetch the vehicle data
+                var response = await client.GetAsync($"{baseUri}api/Vehicle/GetAll");
+                if (response.IsSuccessStatusCode)
+                {
+                    var json = await response.Content.ReadAsStringAsync();
+                    var apiResponse = JsonConvert.DeserializeObject<AllVehiclesApiResponse>(json);
+                    if (apiResponse != null && apiResponse.Success)
+                    {
+                        vehicles = apiResponse.Data;
+                    }
+                }
+            }
+            catch (HttpRequestException ex)
+            {
+                Console.WriteLine($"Error fetching vehicle data: {ex.Message}");
+            }
+
+            // Pass the vehicles to the view
+            ViewData["Vehicles"] = vehicles;
 
             return View();
         }
@@ -249,7 +422,23 @@ namespace LorryGlory_Frontend_MVC.Controllers
 
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-            var response = await _client.PostAsync($"{baseUri}api/tasks", content);
+            // Configure HttpClientHandler with cookies
+            var handler = new HttpClientHandler
+            {
+                UseCookies = true,
+                CookieContainer = new CookieContainer()
+            };
+
+            // Add cookies from the current HTTP context
+            foreach (var cookie in Request.Cookies)
+            {
+                handler.CookieContainer.Add(new Uri(baseUri), new Cookie(cookie.Key, cookie.Value));
+            }
+
+            // Create a new HttpClient using the handler
+            var client = new HttpClient(handler);
+
+            var response = await client.PostAsync($"{baseUri}api/tasks", content);
 
             // Redirect to the JobRead action, passing the jobId
             return RedirectToAction("JobRead", "Job", new { id = jobId });
@@ -265,7 +454,23 @@ namespace LorryGlory_Frontend_MVC.Controllers
 
             try
             {
-                var response = await _client.GetAsync($"{baseUri}api/tasks/{id}");
+                // Configure HttpClientHandler with cookies
+                var handler = new HttpClientHandler
+                {
+                    UseCookies = true,
+                    CookieContainer = new CookieContainer()
+                };
+
+                // Add cookies from the current HTTP context
+                foreach (var cookie in Request.Cookies)
+                {
+                    handler.CookieContainer.Add(new Uri(baseUri), new Cookie(cookie.Key, cookie.Value));
+                }
+
+                // Create a new HttpClient using the handler
+                var client = new HttpClient(handler);
+
+                var response = await client.GetAsync($"{baseUri}api/tasks/{id}");
                 if (response.IsSuccessStatusCode)
                 {
                     var json = await response.Content.ReadAsStringAsync();
@@ -305,7 +510,23 @@ namespace LorryGlory_Frontend_MVC.Controllers
 
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-            var response = await _client.PutAsync($"{baseUri}api/tasks/{task.Id}", content);
+            // Configure HttpClientHandler with cookies
+            var handler = new HttpClientHandler
+            {
+                UseCookies = true,
+                CookieContainer = new CookieContainer()
+            };
+
+            // Add cookies from the current HTTP context
+            foreach (var cookie in Request.Cookies)
+            {
+                handler.CookieContainer.Add(new Uri(baseUri), new Cookie(cookie.Key, cookie.Value));
+            }
+
+            // Create a new HttpClient using the handler
+            var client = new HttpClient(handler);
+
+            var response = await client.PutAsync($"{baseUri}api/tasks/{task.Id}", content);
 
             return RedirectToAction("TaskRead", "Job", new { id = task.Id });
         }
@@ -313,9 +534,135 @@ namespace LorryGlory_Frontend_MVC.Controllers
         [HttpPost]
         public async Task<IActionResult> TaskDelete(Guid id, Guid jobId)
         {
-            var response = await _client.DeleteAsync($"{baseUri}api/tasks/{id}");
+            // Configure HttpClientHandler with cookies
+            var handler = new HttpClientHandler
+            {
+                UseCookies = true,
+                CookieContainer = new CookieContainer()
+            };
+
+            // Add cookies from the current HTTP context
+            foreach (var cookie in Request.Cookies)
+            {
+                handler.CookieContainer.Add(new Uri(baseUri), new Cookie(cookie.Key, cookie.Value));
+            }
+
+            // Create a new HttpClient using the handler
+            var client = new HttpClient(handler);
+
+            var response = await client.DeleteAsync($"{baseUri}api/tasks/{id}");
 
             return RedirectToAction("JobRead", "Job", new { id = jobId });
+        }
+
+        // Get all Vehicles, Clients, Users/Drivers
+
+        public async Task<IActionResult> GetAllVehicles()
+        {
+            ViewData["Title"] = "Detailed vehicle";
+
+            List<AllVehiclesViewModel> vehicle = new List<AllVehiclesViewModel>();
+
+            try
+            {
+                // Configure HttpClientHandler with cookies
+                var handler = new HttpClientHandler
+                {
+                    UseCookies = true,
+                    CookieContainer = new CookieContainer()
+                };
+
+                // Add cookies from the current HTTP context
+                foreach (var cookie in Request.Cookies)
+                {
+                    handler.CookieContainer.Add(new Uri(baseUri), new Cookie(cookie.Key, cookie.Value));
+                }
+
+                // Create a new HttpClient using the handler
+                var client = new HttpClient(handler);
+
+                var response = await client.GetAsync($"{baseUri}api/Vehicle/GetAll");
+                Console.WriteLine(response);
+                if (response.IsSuccessStatusCode)
+                {
+                    var json = await response.Content.ReadAsStringAsync();
+                    Console.WriteLine(json);
+                    var apiResponse = JsonConvert.DeserializeObject<AllVehiclesApiResponse>(json);
+                    if (apiResponse != null && apiResponse.Success)
+                    {
+                        vehicle = apiResponse.Data;
+                    }
+                    else
+                    {
+                        ViewData["ErrorMessage"] = "No data found for the vehicle.";
+                    }
+                }
+                else
+                {
+                    ViewData["ErrorMessage"] = "No data found for the vehicle.";
+                }
+            }
+            catch (HttpRequestException ex)
+            {
+                Console.WriteLine($"Error fetching vehicle data: {ex.Message}");
+                ViewData["ErrorMessage"] = "Unable to connect to the data server. Please try again later.";
+            }
+
+            return View(vehicle);
+        }
+
+        public async Task<IActionResult> GetAllUsers()
+        {
+            ViewData["Title"] = "Detailed vehicle";
+
+            List<AllStaffUsersViewModel> vehicle = new List<AllStaffUsersViewModel>();
+
+            try
+            {
+                // Configure HttpClientHandler with cookies
+                var handler = new HttpClientHandler
+                {
+                    UseCookies = true,
+                    CookieContainer = new CookieContainer()
+                };
+
+                // Add cookies from the current HTTP context
+                foreach (var cookie in Request.Cookies)
+                {
+                    handler.CookieContainer.Add(new Uri(baseUri), new Cookie(cookie.Key, cookie.Value));
+                }
+
+                // Create a new HttpClient using the handler
+                var client = new HttpClient(handler);
+
+                var response = await client.GetAsync($"{baseUri}api/staff/staff-roles");
+                Console.WriteLine(response);
+                if (response.IsSuccessStatusCode)
+                {
+                    var json = await response.Content.ReadAsStringAsync();
+                    Console.WriteLine(json);
+                    var apiResponse = JsonConvert.DeserializeObject<StaffApiResponse>(json);
+                    if (apiResponse != null && apiResponse.Success)
+                    {
+                        vehicle = apiResponse.Data;
+                    }
+                    else
+                    {
+                        ViewData["ErrorMessage"] = "No data found for the vehicle.";
+                    }
+                }
+                else
+                {
+                    ViewData["ErrorMessage"] = "No data found for the vehicle.";
+                }
+            }
+            catch (HttpRequestException ex)
+            {
+                Console.WriteLine($"Error fetching vehicle data: {ex.Message}");
+                ViewData["ErrorMessage"] = "Unable to connect to the data server. Please try again later.";
+            }
+
+            return View(vehicle);
         }
     }
 }

@@ -2,7 +2,8 @@
     Detailed vehicle for the driver that wants to know more and repporting problems on the vehicle.
 *@
 
-@using LorryGlory_Frontend_MVC.ViewModels;
+@using LorryGlory_Frontend_MVC.ViewModels.Vehicle
+@model DetailedVehicleViewModel
 
 @{
     Layout = "_Layout";
@@ -37,11 +38,22 @@
     <div x-show="activeTab === 'vehicle'" class="space-y-4 mt-4">
 
             <div x-data="{ openSections: {}, showAll: false }">
-                <h2 class="font-semibold text-gray-800 mb-2">
+            <p class="text-sm text-gray-700 pb-2">
+                <strong>Vehicle information for</strong><br>
+                @if (Model != null && !string.IsNullOrEmpty(Model.RegNo))
+                {
+                    <span class="text-muted" style="font-size: 0.9em;">@Model.RegNo</span>
+                }
+                else
+                {
+                    <span class="text-muted" style="font-size: 0.9em;">Not found</span>
+                }
+            </p>
+@*                 <h2 class="font-semibold text-gray-800 mb-2">
                     Vehicle information for REG123
-                </h2>
+                </h2> *@
 
-                <!-- Driving ban  -->
+@*                 <!-- Driving ban  -->
                 <div class="bg-white p-4 rounded shadow-md mb-4">
                     <div class="flex items-center justify-between">
                         <label class="block font-semibold text-gray-700">⚠ Driving ban</label>
@@ -52,7 +64,7 @@
                             This vehicle has a driving ban due to specific safety or regulatory issues.
                         </p>
                     </div>
-                </div>
+                </div> *@
 
                 <!-- Vehicle -->
                 <div class="bg-white p-4 rounded-top" x-bind:class="{'mb-4 border': !openSections.vehicle, 'border-end border-start border-top': openSections.vehicle}">
@@ -264,7 +276,7 @@
                     </p>
                 </div>
 
-                <!-- Vehicle Category (EU) -->
+@*                 <!-- Vehicle Category (EU) -->
                 <div class="bg-white p-4 rounded-top" x-bind:class="{'mb-4 border': !openSections.eu, 'border-end border-start border-top': openSections.eu}">
                     <div class="flex items-center justify-between">
                         <label class="block font-semibold text-gray-700">Vehicle Category (EU)</label>
@@ -303,7 +315,7 @@
                             <span class="text-muted" style="font-size: 0.9em;">Not found</span>
                         }
                     </p>
-                </div>
+                </div> *@
 
                 <!-- Inspection -->
                 <div class="bg-white p-4 rounded-top" x-bind:class="{'mb-4 border': !openSections.inspection, 'border-end border-start border-top': openSections.inspection}">

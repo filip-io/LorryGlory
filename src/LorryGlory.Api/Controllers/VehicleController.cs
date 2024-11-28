@@ -61,12 +61,12 @@ namespace LorryGlory.Api.Controllers
         {
             try
             {
-                IEnumerable<TodaysVehiclesForDriver> testVehicle = new List<TodaysVehiclesForDriver>() 
-                {
-                    new TodaysVehiclesForDriver { RegNo = "NBP410", Id = "test123", Color = "Gray", Make = "Seat", Model = "Altea XL", Status = "Ok", 
-                    StartTime = new DateTime(2024, 11, 24), EndTime = new DateTime(2024, 11, 24), Type = "Personbil" }
-                };
-                return ResponseHelper.HandleSuccess(_logger, testVehicle, "");
+                //IEnumerable<TodaysVehiclesForDriver> testVehicle = new List<TodaysVehiclesForDriver>() 
+                //{
+                //    new TodaysVehiclesForDriver { RegNo = "NBP410", Id = "test123", Color = "Gray", Make = "Seat", Model = "Altea XL", Status = "Ok", 
+                //    StartTime = new DateTime(2024, 11, 24), EndTime = new DateTime(2024, 11, 24), Type = "Personbil" }
+                //};
+                //return ResponseHelper.HandleSuccess(_logger, testVehicle, "");
 
                 var userId = User.Claims?.FirstOrDefault(uc => uc.Type == ClaimTypes.NameIdentifier)?.Value;
                 var vehicles = await _vehicleService.GetAllByDriverIdAndDayAsync(userId, DateOnly.FromDateTime(DateTime.Now));
