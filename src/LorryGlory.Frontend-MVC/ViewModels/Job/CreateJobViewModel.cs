@@ -11,13 +11,14 @@ namespace LorryGlory_Frontend_MVC.ViewModels.Job
         public DateTime? EndTime { get; set; }
         public Guid? FK_ClientId { get; set; }
         public ContactPersonViewModel? ContactPerson { get; set; }
-        //public Guid FK_TenantId { get; set; }
     }
 
     public class ContactPersonViewModel
     {
         public string Name { get; set; }
         public string? Email { get; set; }
+        [Phone]
+        [StringLength(20)]
         public string? PhoneNumber { get; set; }
     }
 

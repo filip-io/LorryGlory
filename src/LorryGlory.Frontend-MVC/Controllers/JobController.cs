@@ -359,60 +359,13 @@ namespace LorryGlory_Frontend_MVC.Controllers
 
         public async Task<IActionResult> TaskCreate(Guid jobId)
         {
-            // Log the received jobId
-            Console.WriteLine($"Received Id: {jobId}");
-
-            // Pass the jobId to the view using ViewData
-            ViewData["JobId"] = jobId;
-
-            // Set the title for the view
             ViewData["Title"] = "New Task";
-
-            // Fetch all vehicles
-            List<AllVehiclesViewModel> vehicles = new List<AllVehiclesViewModel>();
-            try
-            {
-                // Configure HttpClientHandler with cookies
-                var handler = new HttpClientHandler
-                {
-                    UseCookies = true,
-                    CookieContainer = new CookieContainer()
-                };
-
-                // Add cookies from the current HTTP context
-                foreach (var cookie in Request.Cookies)
-                {
-                    handler.CookieContainer.Add(new Uri(baseUri), new Cookie(cookie.Key, cookie.Value));
-                }
-
-                // Create a new HttpClient using the handler
-                var client = new HttpClient(handler);
-
-                // Fetch the vehicle data
-                var response = await client.GetAsync($"{baseUri}api/Vehicle/GetAll");
-                if (response.IsSuccessStatusCode)
-                {
-                    var json = await response.Content.ReadAsStringAsync();
-                    var apiResponse = JsonConvert.DeserializeObject<AllVehiclesApiResponse>(json);
-                    if (apiResponse != null && apiResponse.Success)
-                    {
-                        vehicles = apiResponse.Data;
-                    }
-                }
-            }
-            catch (HttpRequestException ex)
-            {
-                Console.WriteLine($"Error fetching vehicle data: {ex.Message}");
-            }
-
-            // Pass the vehicles to the view
-            ViewData["Vehicles"] = vehicles;
 
             return View();
         }
 
         [HttpPost]
-        public async Task<IActionResult> TaskCreate(CreateTaskViewModel task, Guid jobId)
+        public async Task<IActionResult> TaskCreate(CreateTaskViewModel task)
         {
             if (!ModelState.IsValid)
             {
@@ -441,7 +394,7 @@ namespace LorryGlory_Frontend_MVC.Controllers
             var response = await client.PostAsync($"{baseUri}api/tasks", content);
 
             // Redirect to the JobRead action, passing the jobId
-            return RedirectToAction("JobRead", "Job", new { id = jobId });
+            return RedirectToAction("JobRead", "Job");
         }
 
         public async Task<IActionResult> TaskEdit(Guid id)
@@ -553,116 +506,6 @@ namespace LorryGlory_Frontend_MVC.Controllers
             var response = await client.DeleteAsync($"{baseUri}api/tasks/{id}");
 
             return RedirectToAction("JobRead", "Job", new { id = jobId });
-        }
-
-        // Get all Vehicles, Clients, Users/Drivers
-
-        public async Task<IActionResult> GetAllVehicles()
-        {
-            ViewData["Title"] = "Detailed vehicle";
-
-            List<AllVehiclesViewModel> vehicle = new List<AllVehiclesViewModel>();
-
-            try
-            {
-                // Configure HttpClientHandler with cookies
-                var handler = new HttpClientHandler
-                {
-                    UseCookies = true,
-                    CookieContainer = new CookieContainer()
-                };
-
-                // Add cookies from the current HTTP context
-                foreach (var cookie in Request.Cookies)
-                {
-                    handler.CookieContainer.Add(new Uri(baseUri), new Cookie(cookie.Key, cookie.Value));
-                }
-
-                // Create a new HttpClient using the handler
-                var client = new HttpClient(handler);
-
-                var response = await client.GetAsync($"{baseUri}api/Vehicle/GetAll");
-                Console.WriteLine(response);
-                if (response.IsSuccessStatusCode)
-                {
-                    var json = await response.Content.ReadAsStringAsync();
-                    Console.WriteLine(json);
-                    var apiResponse = JsonConvert.DeserializeObject<AllVehiclesApiResponse>(json);
-                    if (apiResponse != null && apiResponse.Success)
-                    {
-                        vehicle = apiResponse.Data;
-                    }
-                    else
-                    {
-                        ViewData["ErrorMessage"] = "No data found for the vehicle.";
-                    }
-                }
-                else
-                {
-                    ViewData["ErrorMessage"] = "No data found for the vehicle.";
-                }
-            }
-            catch (HttpRequestException ex)
-            {
-                Console.WriteLine($"Error fetching vehicle data: {ex.Message}");
-                ViewData["ErrorMessage"] = "Unable to connect to the data server. Please try again later.";
-            }
-
-            return View(vehicle);
-        }
-
-        public async Task<IActionResult> GetAllUsers()
-        {
-            ViewData["Title"] = "Detailed vehicle";
-
-            List<AllStaffUsersViewModel> vehicle = new List<AllStaffUsersViewModel>();
-
-            try
-            {
-                // Configure HttpClientHandler with cookies
-                var handler = new HttpClientHandler
-                {
-                    UseCookies = true,
-                    CookieContainer = new CookieContainer()
-                };
-
-                // Add cookies from the current HTTP context
-                foreach (var cookie in Request.Cookies)
-                {
-                    handler.CookieContainer.Add(new Uri(baseUri), new Cookie(cookie.Key, cookie.Value));
-                }
-
-                // Create a new HttpClient using the handler
-                var client = new HttpClient(handler);
-
-                var response = await client.GetAsync($"{baseUri}api/staff/staff-roles");
-                Console.WriteLine(response);
-                if (response.IsSuccessStatusCode)
-                {
-                    var json = await response.Content.ReadAsStringAsync();
-                    Console.WriteLine(json);
-                    var apiResponse = JsonConvert.DeserializeObject<StaffApiResponse>(json);
-                    if (apiResponse != null && apiResponse.Success)
-                    {
-                        vehicle = apiResponse.Data;
-                    }
-                    else
-                    {
-                        ViewData["ErrorMessage"] = "No data found for the vehicle.";
-                    }
-                }
-                else
-                {
-                    ViewData["ErrorMessage"] = "No data found for the vehicle.";
-                }
-            }
-            catch (HttpRequestException ex)
-            {
-                Console.WriteLine($"Error fetching vehicle data: {ex.Message}");
-                ViewData["ErrorMessage"] = "Unable to connect to the data server. Please try again later.";
-            }
-
-            return View(vehicle);
         }
     }
 }

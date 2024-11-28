@@ -59,6 +59,21 @@
             </form>
         </div>
     </div>
+    <div class="flex flex-col justify-center items-center mb-4">
+        <h1 class="text-lg font-bold text-center">
+            @if (Model != null && Model.Id != Guid.Empty)
+            {
+                <span class="text-sm text-gray-600 block mb-2">
+                    For demo purposes, copy the Job ID when creating a new task.
+                </span>
+                <span class="text-lg" style="font-size: 0.9em;">@Model.Id</span>
+            }
+            else
+            {
+                <span class="text-lg" style="font-size: 0.9em;">Not found</span>
+            }
+        </h1>
+    </div>
 
     <div x-show="activeTab === 'Job'" class="space-y-4 mt-4">
 
@@ -235,7 +250,7 @@
         {
             <a asp-controller="Job" asp-action="TaskCreate" asp-route-JobId="@Model.Id"
                class="mt-4 w-full bg-blue-600 text-white py-2 px-4 rounded-lg shadow-md block text-center hover:bg-blue-700">
-                New job
+                New Task
             </a>
         }
         else
