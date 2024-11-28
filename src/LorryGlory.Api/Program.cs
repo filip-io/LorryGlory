@@ -71,7 +71,7 @@ namespace LorryGlory.Api
                            .AllowAnyHeader()
                            .AllowCredentials();
 
-                    builder.WithOrigins("https://lorrygloryfrontend-mvc.azurewebsites.net", "https://lorrygloryapi.azurewebsites.net/")
+                    builder.WithOrigins("https://lorrygloryfrontend-mvc.azurewebsites.net", "https://lorrygloryapi.azurewebsites.net")
                            .AllowAnyMethod()
                            .AllowAnyHeader()
                            .AllowCredentials();
