@@ -16,11 +16,24 @@ namespace LorryGlory_Frontend_MVC
             builder.Services.AddControllersWithViews();
             builder.Services.AddHttpClient();
 
+            //builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+            //.AddCookie(options =>
+            //{
+            //    options.LoginPath = "/Login";
+            //});
+
             builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
             .AddCookie(options =>
             {
-                options.LoginPath = "/Login";
+                // Path to redirect to after successful login
+                options.LoginPath = "/Login/Index";
+                // Path to redirect to after logout
+                options.LogoutPath = "/Account/Logout";
+                // Set expiration time for the cookie
+                options.ExpireTimeSpan = TimeSpan.FromHours(1);
+                options.SlidingExpiration = true;  // Cookie refreshes periodically
             });
+
             //builder.Services.AddAuthentication(options =>
             //{
             //    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
