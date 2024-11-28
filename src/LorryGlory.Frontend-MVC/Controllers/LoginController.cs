@@ -34,7 +34,7 @@ namespace LorryGlory_Frontend_MVC.Controllers
 
             _httpClient = new HttpClient(handler)
             {
-                BaseAddress = new Uri("https://lorrygloryapi.azurewebsites.net/")
+                BaseAddress = new Uri("https://localhost:7036/")
             };
         }
         public IActionResult Index()
@@ -115,7 +115,7 @@ namespace LorryGlory_Frontend_MVC.Controllers
                         return RedirectToAction("Privacy", "Home");
                     }
                     TempData["UserWelcome"] = $"Welcome {email}! You are small and unimportant as most of us.";
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Index", "Menu");
 
                 }
                 else
@@ -137,6 +137,20 @@ namespace LorryGlory_Frontend_MVC.Controllers
                 ViewData["ErrorMessage"] = "An unexpected error occurred. Please try again later.";
                 return View(login);
             }
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> SignOut()
+        {
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+
+            foreach (var cookie in Request.Cookies.Keys)
+            {
+                Response.Cookies.Delete(cookie);
+            }
+
+            return RedirectToAction("Index", "Login");
         }
     }
 }

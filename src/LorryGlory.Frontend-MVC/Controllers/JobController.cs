@@ -43,7 +43,7 @@ namespace LorryGlory_Frontend_MVC.Controllers
                 // Add cookies from the current HTTP context
                 foreach (var cookie in Request.Cookies)
                 {
-                    handler.CookieContainer.Add(new Uri(baseUri), new Cookie(cookie.Key, cookie.Value));
+                    handler.CookieContainer.Add(new Uri(_baseUri), new Cookie(cookie.Key, cookie.Value));
                     Console.WriteLine($"Key: {cookie.Key}, Value: {cookie.Value}");
                 }
 
@@ -51,7 +51,7 @@ namespace LorryGlory_Frontend_MVC.Controllers
                 var client = new HttpClient(handler);
 
                 // Make the request to the backend API
-                var response = await client.GetAsync($"{baseUri}api/jobs");
+                var response = await client.GetAsync($"{_baseUri}api/jobs");
                 Console.WriteLine(response);
                 if (response.IsSuccessStatusCode)
                 {
@@ -111,14 +111,14 @@ namespace LorryGlory_Frontend_MVC.Controllers
             // Add cookies from the current HTTP context
             foreach (var cookie in Request.Cookies)
             {
-                handler.CookieContainer.Add(new Uri(baseUri), new Cookie(cookie.Key, cookie.Value));
+                handler.CookieContainer.Add(new Uri(_baseUri), new Cookie(cookie.Key, cookie.Value));
             }
 
             // Create a new HttpClient using the handler
             var client = new HttpClient(handler);
 
             // Make the request to the backend API
-            var response = await client.PostAsync($"{baseUri}api/jobs", content);
+            var response = await client.PostAsync($"{_baseUri}api/jobs", content);
 
             if (response.IsSuccessStatusCode)
             {
@@ -155,14 +155,14 @@ namespace LorryGlory_Frontend_MVC.Controllers
                 // Add cookies from the current HTTP context
                 foreach (var cookie in Request.Cookies)
                 {
-                    handler.CookieContainer.Add(new Uri(baseUri), new Cookie(cookie.Key, cookie.Value));
+                    handler.CookieContainer.Add(new Uri(_baseUri), new Cookie(cookie.Key, cookie.Value));
                 }
 
                 // Create a new HttpClient using the handler
                 var client = new HttpClient(handler);
 
                 // Make the request to the backend API
-                var response = await client.GetAsync($"{baseUri}api/jobs/{Id}");
+                var response = await client.GetAsync($"{_baseUri}api/jobs/{Id}");
                 if (response.IsSuccessStatusCode)
                 {
                     var json = await response.Content.ReadAsStringAsync();
@@ -210,14 +210,14 @@ namespace LorryGlory_Frontend_MVC.Controllers
                 // Add cookies from the current HTTP context
                 foreach (var cookie in Request.Cookies)
                 {
-                    handler.CookieContainer.Add(new Uri(baseUri), new Cookie(cookie.Key, cookie.Value));
+                    handler.CookieContainer.Add(new Uri(_baseUri), new Cookie(cookie.Key, cookie.Value));
                 }
 
                 // Create a new HttpClient using the handler
                 var client = new HttpClient(handler);
 
                 // Make the request to the backend API
-                var response = await client.GetAsync($"{baseUri}api/jobs/{id}");
+                var response = await client.GetAsync($"{_baseUri}api/jobs/{id}");
                 if (response.IsSuccessStatusCode)
                 {
                     var json = await response.Content.ReadAsStringAsync();
@@ -267,13 +267,13 @@ namespace LorryGlory_Frontend_MVC.Controllers
             // Add cookies from the current HTTP context
             foreach (var cookie in Request.Cookies)
             {
-                handler.CookieContainer.Add(new Uri(baseUri), new Cookie(cookie.Key, cookie.Value));
+                handler.CookieContainer.Add(new Uri(_baseUri), new Cookie(cookie.Key, cookie.Value));
             }
 
             // Create a new HttpClient using the handler
             var client = new HttpClient(handler);
 
-            var response = await client.PutAsync($"{baseUri}api/jobs/{job.Id}", content);
+            var response = await client.PutAsync($"{_baseUri}api/jobs/{job.Id}", content);
 
             return RedirectToAction("index");
         }
@@ -291,13 +291,13 @@ namespace LorryGlory_Frontend_MVC.Controllers
             // Add cookies from the current HTTP context
             foreach (var cookie in Request.Cookies)
             {
-                handler.CookieContainer.Add(new Uri(baseUri), new Cookie(cookie.Key, cookie.Value));
+                handler.CookieContainer.Add(new Uri(_baseUri), new Cookie(cookie.Key, cookie.Value));
             }
 
             // Create a new HttpClient using the handler
             var client = new HttpClient(handler);
 
-            var response = await client.DeleteAsync($"{baseUri}api/jobs/{id}");
+            var response = await client.DeleteAsync($"{_baseUri}api/jobs/{id}");
 
             return RedirectToAction("index");
         }
@@ -324,13 +324,13 @@ namespace LorryGlory_Frontend_MVC.Controllers
                 // Add cookies from the current HTTP context
                 foreach (var cookie in Request.Cookies)
                 {
-                    handler.CookieContainer.Add(new Uri(baseUri), new Cookie(cookie.Key, cookie.Value));
+                    handler.CookieContainer.Add(new Uri(_baseUri), new Cookie(cookie.Key, cookie.Value));
                 }
 
                 // Create a new HttpClient using the handler
                 var client = new HttpClient(handler);
 
-                var response = await client.GetAsync($"{baseUri}api/tasks/{Id}");
+                var response = await client.GetAsync($"{_baseUri}api/tasks/{Id}");
                 if (response.IsSuccessStatusCode)
                 {
                     var json = await response.Content.ReadAsStringAsync();
@@ -383,14 +383,14 @@ namespace LorryGlory_Frontend_MVC.Controllers
                 // Add cookies from the current HTTP context
                 foreach (var cookie in Request.Cookies)
                 {
-                    handler.CookieContainer.Add(new Uri(baseUri), new Cookie(cookie.Key, cookie.Value));
+                    handler.CookieContainer.Add(new Uri(_baseUri), new Cookie(cookie.Key, cookie.Value));
                 }
 
                 // Create a new HttpClient using the handler
                 var client = new HttpClient(handler);
 
                 // Fetch the vehicle data
-                var response = await client.GetAsync($"{baseUri}api/Vehicle/GetAll");
+                var response = await client.GetAsync($"{_baseUri}api/Vehicle/GetAll");
                 if (response.IsSuccessStatusCode)
                 {
                     var json = await response.Content.ReadAsStringAsync();
@@ -433,13 +433,13 @@ namespace LorryGlory_Frontend_MVC.Controllers
             // Add cookies from the current HTTP context
             foreach (var cookie in Request.Cookies)
             {
-                handler.CookieContainer.Add(new Uri(baseUri), new Cookie(cookie.Key, cookie.Value));
+                handler.CookieContainer.Add(new Uri(_baseUri), new Cookie(cookie.Key, cookie.Value));
             }
 
             // Create a new HttpClient using the handler
             var client = new HttpClient(handler);
 
-            var response = await client.PostAsync($"{baseUri}api/tasks", content);
+            var response = await client.PostAsync($"{_baseUri}api/tasks", content);
 
             // Redirect to the JobRead action, passing the jobId
             return RedirectToAction("JobRead", "Job", new { id = jobId });
@@ -465,13 +465,13 @@ namespace LorryGlory_Frontend_MVC.Controllers
                 // Add cookies from the current HTTP context
                 foreach (var cookie in Request.Cookies)
                 {
-                    handler.CookieContainer.Add(new Uri(baseUri), new Cookie(cookie.Key, cookie.Value));
+                    handler.CookieContainer.Add(new Uri(_baseUri), new Cookie(cookie.Key, cookie.Value));
                 }
 
                 // Create a new HttpClient using the handler
                 var client = new HttpClient(handler);
 
-                var response = await client.GetAsync($"{baseUri}api/tasks/{id}");
+                var response = await client.GetAsync($"{_baseUri}api/tasks/{id}");
                 if (response.IsSuccessStatusCode)
                 {
                     var json = await response.Content.ReadAsStringAsync();
@@ -521,13 +521,13 @@ namespace LorryGlory_Frontend_MVC.Controllers
             // Add cookies from the current HTTP context
             foreach (var cookie in Request.Cookies)
             {
-                handler.CookieContainer.Add(new Uri(baseUri), new Cookie(cookie.Key, cookie.Value));
+                handler.CookieContainer.Add(new Uri(_baseUri), new Cookie(cookie.Key, cookie.Value));
             }
 
             // Create a new HttpClient using the handler
             var client = new HttpClient(handler);
 
-            var response = await client.PutAsync($"{baseUri}api/tasks/{task.Id}", content);
+            var response = await client.PutAsync($"{_baseUri}api/tasks/{task.Id}", content);
 
             return RedirectToAction("TaskRead", "Job", new { id = task.Id });
         }
@@ -545,13 +545,13 @@ namespace LorryGlory_Frontend_MVC.Controllers
             // Add cookies from the current HTTP context
             foreach (var cookie in Request.Cookies)
             {
-                handler.CookieContainer.Add(new Uri(baseUri), new Cookie(cookie.Key, cookie.Value));
+                handler.CookieContainer.Add(new Uri(_baseUri), new Cookie(cookie.Key, cookie.Value));
             }
 
             // Create a new HttpClient using the handler
             var client = new HttpClient(handler);
 
-            var response = await client.DeleteAsync($"{baseUri}api/tasks/{id}");
+            var response = await client.DeleteAsync($"{_baseUri}api/tasks/{id}");
 
             return RedirectToAction("JobRead", "Job", new { id = jobId });
         }
@@ -576,13 +576,13 @@ namespace LorryGlory_Frontend_MVC.Controllers
                 // Add cookies from the current HTTP context
                 foreach (var cookie in Request.Cookies)
                 {
-                    handler.CookieContainer.Add(new Uri(baseUri), new Cookie(cookie.Key, cookie.Value));
+                    handler.CookieContainer.Add(new Uri(_baseUri), new Cookie(cookie.Key, cookie.Value));
                 }
 
                 // Create a new HttpClient using the handler
                 var client = new HttpClient(handler);
 
-                var response = await client.GetAsync($"{baseUri}api/Vehicle/GetAll");
+                var response = await client.GetAsync($"{_baseUri}api/Vehicle/GetAll");
                 Console.WriteLine(response);
                 if (response.IsSuccessStatusCode)
                 {
@@ -630,13 +630,13 @@ namespace LorryGlory_Frontend_MVC.Controllers
                 // Add cookies from the current HTTP context
                 foreach (var cookie in Request.Cookies)
                 {
-                    handler.CookieContainer.Add(new Uri(baseUri), new Cookie(cookie.Key, cookie.Value));
+                    handler.CookieContainer.Add(new Uri(_baseUri), new Cookie(cookie.Key, cookie.Value));
                 }
 
                 // Create a new HttpClient using the handler
                 var client = new HttpClient(handler);
 
-                var response = await client.GetAsync($"{baseUri}api/staff/staff-roles");
+                var response = await client.GetAsync($"{_baseUri}api/staff/staff-roles");
                 Console.WriteLine(response);
                 if (response.IsSuccessStatusCode)
                 {

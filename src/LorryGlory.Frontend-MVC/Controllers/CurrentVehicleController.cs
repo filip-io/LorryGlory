@@ -16,8 +16,8 @@ namespace LorryGlory_Frontend_MVC.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var response = await _httpClient.GetStringAsync("https://localhost:7055/api/VehicleAndStaff/vehicle");
-            var vehicleViewModel = JsonConvert.DeserializeObject<VehicleViewModel>(response);
+            var response = await _httpClient.GetStringAsync("https://localhost:7036/api/Vehicle/GetTodaysVehiclesForDriver");
+            var vehicleViewModel = JsonConvert.DeserializeObject<VehicleViewModel?>(response);
 
             return View(vehicleViewModel);
         }

@@ -1,30 +1,30 @@
-﻿@model NavLinkModel
+﻿@using LorryGlory_Frontend_MVC.Models.Shared
 
 <!DOCTYPE html>
 <html lang="en">
 
-    <head>
-        <!-- Start cookieyes banner -->
-        <script id="cookieyes" type="text/javascript" src="https://cdn-cookieyes.com/client_data/742e83ded28a1d9089b546d3/script.js"></script> <!-- End cookieyes banner -->
-        <!-- Google tag (gtag.js) -->
-        <script async src="https://www.googletagmanager.com/gtag/js?id=G-E671H88ZNZ"></script>
-        <script>
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
+<head>
+    <!-- Start cookieyes banner -->
+    <script id="cookieyes" type="text/javascript" src="https://cdn-cookieyes.com/client_data/742e83ded28a1d9089b546d3/script.js"></script> <!-- End cookieyes banner -->
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-E671H88ZNZ"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
 
-            gtag('config', 'G-E671H88ZNZ');
-        </script>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        gtag('config', 'G-E671H88ZNZ');
+    </script>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="LorryGlory - Empowering Truckers, One Job at a Time.">
-        <title>LorryGlory - @ViewData["Title"]</title>
-        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-        <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-        <link rel="stylesheet" href="~/LorryGlory_Frontend_MVC.styles.css" asp-append-version="true" />
-        <link rel="stylesheet" href="~/css/output.css" asp-append-version="true" />
-        <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
-    </head>
+    <title>LorryGlory - @ViewData["Title"]</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    @*         <link rel="stylesheet" href="~/LorryGlory_Frontend_MVC.styles.css" asp-append-version="true" /> *@
+    <link rel="stylesheet" href="~/css/output.css" asp-append-version="true" />
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+</head>
 
 
 <body x-data="{ mobileMenuOpen: false }"
@@ -38,16 +38,30 @@
 
                         <!-- Logo and Title -->
                         <div class="flex items-center">
-                            <a href="/" class="hidden sm:flex items-center space-x-3 mr-[30px]">
-                                <img src="~/images/LorryGlory.jpg" alt="Lorry Glory" class="h-10 w-10 rounded-full" />
-                                <span class="text-lg font-bold bg-gradient-to-r from-blue-100 to-white bg-clip-text text-transparent">
-                                    Lorry Glory
-                                </span>
-                            </a>
-
-                            <a href="/" class="flex sm:hidden">
-                                <img src="~/images/LorryGlory.jpg" alt="Lorry Glory" class="h-10 w-10 rounded-full" />
-                            </a>
+                            @if (User.Identity.IsAuthenticated)
+                            {
+                                <a href="@Url.Action("Index", "Menu")" class="hidden sm:flex items-center space-x-3 mr-[30px]">
+                                    <img src="~/images/LorryGlory.jpg" alt="Lorry Glory" class="h-10 w-10 rounded-full" />
+                                    <span class="text-lg font-bold bg-gradient-to-r from-blue-100 to-white bg-clip-text text-transparent">
+                                        Lorry Glory
+                                    </span>
+                                </a>
+                                <a href="@Url.Action("Index", "Menu")" class="flex sm:hidden">
+                                    <img src="~/images/LorryGlory.jpg" alt="Lorry Glory" class="h-10 w-10 rounded-full" />
+                                </a>
+                            }
+                            else
+                            {
+                                <a href="/" class="hidden sm:flex items-center space-x-3 mr-[30px]">
+                                    <img src="~/images/LorryGlory.jpg" alt="Lorry Glory" class="h-10 w-10 rounded-full" />
+                                    <span class="text-lg font-bold bg-gradient-to-r from-blue-100 to-white bg-clip-text text-transparent">
+                                        Lorry Glory
+                                    </span>
+                                </a>
+                                <a href="/" class="flex sm:hidden">
+                                    <img src="~/images/LorryGlory.jpg" alt="Lorry Glory" class="h-10 w-10 rounded-full" />
+                                </a>
+                            }
                         </div>
 
                         @if (User?.Identity?.IsAuthenticated == true)
@@ -74,10 +88,26 @@
                                     </svg>
                                 </button>
                             </div>
-                        }
 
-                        @if (User?.Identity?.IsAuthenticated == true)
-                        {
+                            <!-- Navigation Items Definition -->
+                            var navItems = new[]
+                            {
+
+                        new {
+                        Controller = "Menu",
+                        Action = "Index",
+                        Text = "Driver Menu",
+                        IconClass = "M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"
+                        },
+                        new {
+                        Controller = "DetailedVehicle",
+                        Action = "Index",
+                        Text = "Current Vehicle",
+                        IconClass = "M8.25 18.75a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 0 1-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.124a17.902 17.902 0 0 0-3.213-9.193 2.056 2.056 0 0 0-1.58-.86H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 0 0-10.026 0 1.106 1.106 0 0 0-.987 1.106v7.635m12-6.677v6.677m0 4.5v-4.5m0 0h-12"
+                        }
+                        };
+
+
                             <!-- Mobile menu dropdown -->
                             <div x-show="mobileMenuOpen"
                                  @@click.away="mobileMenuOpen = false"
@@ -88,75 +118,48 @@
                                  x-transition:leave-start="opacity-100 translate-y-0"
                                  x-transition:leave-end="opacity-0 -translate-y-2"
                                  class="fixed top-16 inset-x-0 bottom-0 bg-gray-900 bg-opacity-98 backdrop-blur-sm z-40 shadow-xl border-t border-blue-500/20 overflow-y-auto">
-
                                 <div class="container mx-auto px-4 py-4 space-y-3 sm:px-6 lg:px-8">
                                     <h2 class="text-xl font-semibold text-blue-400 mb-4">Lorry Glory</h2>
 
-                                    @{
-                                        var navItems = new[]
-                                        {
-                                new NavLinkModel
-                                {
-                                Controller = "Home",
-                                Action = "Index",
-                                Text = "Home",
-                                IconClass = "M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25"
-                                },
-                                new NavLinkModel
-                                {
-                                Controller = "Menu",
-                                Action = "Index",
-                                Text = "Driver Menu",
-                                IconClass = "M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"
-                                },
-                                new NavLinkModel
-                                {
-                                Controller = "CurrentVehicle",
-                                Action = "Index",
-                                Text = "Current Vehicle",
-                                IconClass = "M8.25 18.75a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 0 1-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.124a17.902 17.902 0 0 0-3.213-9.193 2.056 2.056 0 0 0-1.58-.86H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 0 0-10.026 0 1.106 1.106 0 0 0-.987 1.106v7.635m12-6.677v6.677m0 4.5v-4.5m0 0h-12"
-                                },
-                                new NavLinkModel
-                                {
-                                Controller = "DetailedVehicle",
-                                Action = "Index",
-                                Text = "Vehicle Details",
-                                IconClass = "M11.42 15.17L17.25 21A2.652 2.652 0 0021 17.25l-5.877-5.877M11.42 15.17l2.496-3.03c.317-.384.74-.626 1.208-.766M11.42 15.17l-4.655 5.653a2.548 2.548 0 11-3.586-3.586l6.837-5.63m5.108-.233c.55-.164 1.163-.188 1.743-.14a4.5 4.5 0 004.486-6.336l-3.276 3.277a3.004 3.004 0 01-2.25-2.25l3.276-3.276a4.5 4.5 0 00-6.336 4.486c.091 1.076-.071 2.264-.904 2.95l-.102.085m-1.745 1.437L5.909 7.5H4.5L2.25 3.75l1.5-1.5L7.5 4.5v1.409l4.26 4.26m-1.745 1.437l1.745-1.437m6.615 8.206L15.75 15.75M4.867 19.125h.008v.008h-.008v-.008z"
-                                }
-                                };
-                                    }
-
                                     @foreach (var item in navItems)
                                     {
-                                        <partial name="_NavLink" model="@item" />
+                                        <a asp-controller="@item.Controller" asp-action="@item.Action"
+                                           class="flex items-center space-x-3 text-gray-300 hover:text-blue-400 p-2 rounded-lg transition-colors duration-200">
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                                 stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="@item.IconClass" />
+                                            </svg>
+                                            <span>@item.Text</span>
+                                        </a>
                                     }
 
-                                    <partial name="_NavLink" model='@new NavLinkModel
-                                    {
-                                        Controller = "Login",
-                                        Action = "Index",
-                                        Text = "Sign out",
-                                        IsButton = true,
-                                        IconClass = "M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75"
-                                    }' />
+                                    <!-- Sign out button -->
+                                    <button onclick="signOut()"
+                                            class="flex items-center space-x-3 text-gray-300 hover:text-blue-400 p-2 rounded-lg transition-colors duration-200 w-full">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                             stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                  d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" />
+                                        </svg>
+                                        <span>Sign Out</span>
+                                    </button>
                                 </div>
                             </div>
+
                             <!-- Desktop menu -->
                             <div class="hidden sm:flex sm:items-center sm:space-x-2">
                                 @foreach (var item in navItems)
                                 {
-                                    <a asp-controller="@item.Controller"
-                                       asp-action="@item.Action"
+                                    <a asp-controller="@item.Controller" asp-action="@item.Action"
                                        class="text-gray-300 hover:text-blue-400 px-3 py-2 text-sm font-medium transition-colors duration-200">
                                         @item.Text
                                     </a>
                                 }
 
-                                <a asp-controller="Login"
-                                   asp-action="Index"
-                                   class="text-blue-400 hover:text-blue-300 px-4 py-2 text-sm font-medium border border-blue-500/50 rounded-lg transition-all duration-200 hover:bg-blue-500/10">
-                                    Sign In
-                                </a>
+                                <button onclick="signOut()"
+                                        class="text-blue-400 hover:text-blue-300 px-4 py-2 text-sm font-medium border border-blue-500/50 rounded-lg transition-all duration-200 hover:bg-blue-500/10">
+                                    Sign Out
+                                </button>
                             </div>
                         }
                     </div>
