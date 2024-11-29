@@ -15,9 +15,10 @@ namespace LorryGlory_Frontend_MVC.Controllers
             _httpClient = httpClient;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index() // Fixa endpoint så den hämtar jobtask, se till att inget hårdkodat hämtas
+                                                 // gamla hårdkodade enpointen https://localhost:7036/api/tasks/driver/1STAFFM/day/2024-11-24
         {
-            var response = await _httpClient.GetStringAsync("https://localhost:7036/api/tasks/driver/1STAFFM/day/2024-11-24");
+            var response = await _httpClient.GetStringAsync("https://localhost:7036/api/tasks/driver/1/day/2024-10-10");
 
             var responseData = JsonConvert.DeserializeObject<ResponseModel<List<TodaysJobTaskViewModel>>>(response);
 

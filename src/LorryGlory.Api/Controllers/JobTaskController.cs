@@ -53,6 +53,7 @@ namespace LorryGlory.Api.Controllers
         {
             try
             {
+                // FAKE ANSWERS, KOMMENTERA UT FÖR ATT HÄMTA RIKTIG DATA
                 var testTaskList = FakeAnswer(); // TODO: Remove!
                 return ResponseHelper.HandleSuccess(_logger, testTaskList, "");
 
