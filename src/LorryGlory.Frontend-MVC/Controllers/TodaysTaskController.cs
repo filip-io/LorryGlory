@@ -23,7 +23,7 @@ namespace LorryGlory_Frontend_MVC.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var response = await _httpClient.GetStringAsync("https://localhost:7036/api/tasks/driver/1STAFFM/day/2024-11-28");
+            var response = await _httpClient.GetStringAsync("https://localhost:7036/api/tasks/driver/bb8b6276-9169-4f55-9daf-4861d9dc9de1/day/2024-11-28");
 
             var responseData = JsonConvert.DeserializeObject<ResponseModel<List<TodaysJobTaskViewModel>>>(response);
 
@@ -52,7 +52,9 @@ namespace LorryGlory_Frontend_MVC.Controllers
                 }
 
                 // Attempt to get the user ID from claims
-                var userId = User?.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+                var token = HttpContext.Request.Cookies["jwtToken"];
+                var userId = User.Claims.Where(c => c.Type.ToUpper() == "NAMEID").FirstOrDefault().Value;
+                Console.WriteLine("------------------------------------" + userId);
 
                 // Debugging step: Log all claims if userId is null
                 if (string.IsNullOrEmpty(userId))
