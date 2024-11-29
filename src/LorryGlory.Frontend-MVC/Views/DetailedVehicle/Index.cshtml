@@ -49,23 +49,6 @@
                     <span class="text-muted" style="font-size: 0.9em;">Not found</span>
                 }
             </p>
-@*                 <h2 class="font-semibold text-gray-800 mb-2">
-                    Vehicle information for REG123
-                </h2> *@
-
-@*                 <!-- Driving ban  -->
-                <div class="bg-white p-4 rounded shadow-md mb-4">
-                    <div class="flex items-center justify-between">
-                        <label class="block font-semibold text-gray-700">⚠ Driving ban</label>
-
-                    </div>
-                    <div x-transition class="mt-2 p-3 bg-gray-100 rounded border">
-                        <p class="text-sm text-gray-700">
-                            This vehicle has a driving ban due to specific safety or regulatory issues.
-                        </p>
-                    </div>
-                </div> *@
-
                 <!-- Vehicle -->
                 <div class="bg-white p-4 rounded-top" x-bind:class="{'mb-4 border': !openSections.vehicle, 'border-end border-start border-top': openSections.vehicle}">
                         <div class="flex items-center justify-between">
@@ -275,47 +258,6 @@
                         }
                     </p>
                 </div>
-
-@*                 <!-- Vehicle Category (EU) -->
-                <div class="bg-white p-4 rounded-top" x-bind:class="{'mb-4 border': !openSections.eu, 'border-end border-start border-top': openSections.eu}">
-                    <div class="flex items-center justify-between">
-                        <label class="block font-semibold text-gray-700">Vehicle Category (EU)</label>
-                        <div class="cursor-pointer w-6 h-6" x-on:click="openSections.eu = !openSections.eu">
-                            <svg x-show="!openSections.eu" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
-                            </svg>
-                            <svg x-show="openSections.eu" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 15.75l7.5-7.5 7.5 7.5" />
-                            </svg>
-                        </div>
-                    </div>
-                </div>
-
-                <div x-show="openSections.eu" class="p-3 bg-gray-100 rounded-b-lg border shadow-md mb-4">
-                    <p class="text-sm text-gray-700 pb-2">
-                        <strong>Code</strong><br>
-                        @if (Model != null && !string.IsNullOrEmpty(Model.Code))
-                        {
-                        <span class="text-muted" style="font-size: 0.9em;">@Model.Code </span>
-                        }
-                        else
-                        {
-                        <span class="text-muted" style="font-size: 0.9em;">Not found</span>
-                        }
-                    </p>
-
-                    <p class="text-sm text-gray-700">
-                        <strong>Type</strong><br>
-                        @if (Model != null && !string.IsNullOrEmpty(Model.Type))
-                        {
-                            <span class="text-muted" style="font-size: 0.9em;">@Model.Type  </span>
-                        }
-                        else
-                        {
-                            <span class="text-muted" style="font-size: 0.9em;">Not found</span>
-                        }
-                    </p>
-                </div> *@
 
                 <!-- Inspection -->
                 <div class="bg-white p-4 rounded-top" x-bind:class="{'mb-4 border': !openSections.inspection, 'border-end border-start border-top': openSections.inspection}">
@@ -754,46 +696,27 @@
 
     <div x-show="activeTab === 'failure'" class="space-y-4 mt-4">
         <div>
-            <h2 class="font-semibold text-gray-800 mb-2">
-                Known Issuse for REG123
-           </h2>
+            <p class="text-sm text-gray-700 pb-2">
+                <strong>Vehicle information for</strong><br>
+                @if (Model?.RegNo != null)
+                {
+                    <span class="text-muted" style="font-size: 0.9em;">@Model.RegNo</span>
+                }
+                else
+                {
+                    <span class="text-muted" style="font-size: 0.9em;">Not found</span>
+                }
+            </p>
 
-            <!-- Driving ban  -->
-            <div class="bg-white p-4 rounded shadow-md mb-4">
-                <div class="flex items-center justify-between">
-                    <label class="block font-semibold text-gray-700">⚠ Driving ban</label>
-
-                </div>
-                <div x-transition class="mt-2 p-3 bg-gray-100 rounded border">
-                    <p class="text-sm text-gray-700">
-                        This vehicle has a driving ban due to specific safety or regulatory issues.
-                    </p>
-                </div>
-            </div>
-
-
-            <!-- Hardcode known issues for testing untill endpoint -->
-            @{
-                // Mock data for testing
-                var vehicleProblems = new List<dynamic>
-            {
-            new { Title = "Cracked Axle", Description = "Axle is cracked", SeverityLevel = 3 },
-            new { Title = "Brake Wear", Description = "Brakes need replacement", SeverityLevel = 2 },
-            new { Title = "Brake Wear", Description = "Brakes need replacement", SeverityLevel = 2 },
-            new { Title = "Rust Damage", Description = "Rust spots visible", SeverityLevel = 1 },
-            new { Title = "Rust Damage", Description = "Rust spots visible", SeverityLevel = 1 },
-            new { Title = "Rust Damage", Description = "Rust spots visible", SeverityLevel = 1 },
-            new { Title = "Broken window", Description = "Front window got smashed in by drunk man", SeverityLevel = 0 }
-            };
-            }
-
-            <!-- Known issues  -->
+            <!-- Known issues -->
             <div class="bg-white p-4 rounded-lg shadow-md mb-4">
-                <h2 class="font-semibold text-gray-800 mb-2">Known Issues (if any)</h2>
+                <h2 class="font-semibold text-gray-800 mb-2">Known Issues</h2>
                 <div class="space-y-2 text-sm">
-                    @if (vehicleProblems != null && vehicleProblems.Any())
+
+                    
+                    @if (Model?.VehicleProblems != null && Model.VehicleProblems.Any())
                     {
-                        foreach (var problem in vehicleProblems)
+                        foreach (var problem in Model.VehicleProblems)
                         {
                             string severityText = problem.SeverityLevel switch
                             {
@@ -801,7 +724,7 @@
                                 3 => "🟠 High",
                                 2 => "🟡 Medium",
                                 1 => "🟢 Low",
-                                0 => "⚪ Undeclared"
+                                _ => "⚪ Undeclared"
                             };
 
                             string severityColor = problem.SeverityLevel switch
@@ -810,7 +733,7 @@
                                 3 => "text-orange-600",
                                 2 => "text-yellow-600",
                                 1 => "text-green-600",
-                                0 => "text-gray-600"
+                                _ => "text-gray-600"
                             };
 
                             <div class="flex justify-between">
@@ -828,7 +751,7 @@
 
             <!-- Report a Problem  -->
             <form id="reportProblemForm" class="bg-white p-4 rounded-lg shadow-md">
-                <h2 class="font-semibold text-gray-800 mb-2">Report Problems Here</h2>
+                <h2 class="font-semibold text-gray-800 mb-2">Report Problems Here (Report problem under construction and not working)</h2>
                 <div class="mt-2">
                     <label for="title" class="text-sm">Title</label>
                     <input id="title" name="title" class="w-full p-2 border rounded" placeholder="Add a title" required>

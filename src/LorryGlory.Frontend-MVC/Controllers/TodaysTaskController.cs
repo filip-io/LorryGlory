@@ -1,23 +1,30 @@
 ﻿using LorryGlory_Frontend_MVC.Models;
 using LorryGlory_Frontend_MVC.Models.JobTasks;
 using LorryGlory_Frontend_MVC.ViewModels;
+using LorryGlory_Frontend_MVC.ViewModels.ApiResponses;
+using LorryGlory_Frontend_MVC.ViewModels.Task;
+using LorryGlory_Frontend_MVC.ViewModels.Vehicle;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System.Net;
+using System.Security.Claims;
 
 namespace LorryGlory_Frontend_MVC.Controllers
 {
     public class TodaysTaskController : Controller
     {
         private readonly HttpClient _httpClient;
+        private string baseUri = "https://localhost:7036/";
 
         public TodaysTaskController(HttpClient httpClient)
         {
             _httpClient = httpClient;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index() // Fixa endpoint så den hämtar jobtask, se till att inget hårdkodat hämtas
+                                                 // gamla hårdkodade enpointen https://localhost:7036/api/tasks/driver/1STAFFM/day/2024-11-24
         {
-            var response = await _httpClient.GetStringAsync("https://localhost:7036/api/tasks/driver/1STAFFM/day/2024-11-24");
+            var response = await _httpClient.GetStringAsync("https://localhost:7036/api/tasks/driver/bb8b6276-9169-4f55-9daf-4861d9dc9de1/day/2024-11-28");
 
             var responseData = JsonConvert.DeserializeObject<ResponseModel<List<TodaysJobTaskViewModel>>>(response);
 
@@ -29,6 +36,67 @@ namespace LorryGlory_Frontend_MVC.Controllers
             CalculateBkTable(responseData.Data[0].Vehicle.TechnicalData);
 
             return View(responseData.Data[0]);
+        }
+
+        public async Task<IActionResult> TaskList()
+        {
+            ViewData["Title"] = "Today's User Task";
+
+            List<DriverTaskViewModel> task = new List<DriverTaskViewModel>();
+
+            try
+            {
+                // Attempt to get the user ID from claims
+                var token = HttpContext.Request.Cookies["jwtToken"];
+                var userId = User.Claims.Where(c => c.Type.ToUpper() == "NAMEID").FirstOrDefault().Value;
+                Console.WriteLine("------------------------------------" + userId);
+
+                // Use today's date
+                var date = DateTime.UtcNow.ToString("yyyy-MM-dd");
+
+                // Configure HttpClientHandler with cookies
+                var handler = new HttpClientHandler
+                {
+                    UseCookies = true,
+                    CookieContainer = new CookieContainer()
+                };
+
+                // Add cookies from the current HTTP context
+                foreach (var cookie in Request.Cookies)
+                {
+                    handler.CookieContainer.Add(new Uri(baseUri), new Cookie(cookie.Key, cookie.Value));
+                }
+
+                // Create a new HttpClient using the handler
+                var client = new HttpClient(handler);
+
+                // Make the API call
+                var response = await client.GetAsync($"{baseUri}api/tasks/driver/{userId}/day/{date}");
+                if (response.IsSuccessStatusCode)
+                {
+                    var json = await response.Content.ReadAsStringAsync();
+                    var apiResponse = JsonConvert.DeserializeObject<DriverTaskApiResponse>(json);
+                    if (apiResponse != null && apiResponse.Success)
+                    {
+                        task = apiResponse.Data;
+                    }
+                    else
+                    {
+                        ViewData["ErrorMessage"] = "No tasks found for today.";
+                    }
+                }
+                else
+                {
+                    ViewData["ErrorMessage"] = $"Failed to fetch tasks: {response.StatusCode}";
+                }
+            }
+            catch (HttpRequestException ex)
+            {
+                Console.WriteLine($"Error fetching task data: {ex.Message}");
+                ViewData["ErrorMessage"] = "Unable to connect to the data server. Please try again later.";
+            }
+
+            return View(task);
         }
 
         private void CalculateBkTable(TechnicalDataViewModel techData)

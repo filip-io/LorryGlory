@@ -20,3 +20,24 @@ function togglePasswordVisibility() {
         `;
     }
 }
+
+
+function signOut() {
+    // Create a form to submit POST request
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = '/Login/SignOut';
+
+    // Add anti-forgery token if you're using it
+    const antiForgeryToken = document.querySelector('input[name="__RequestVerificationToken"]');
+    if (antiForgeryToken) {
+        const tokenInput = document.createElement('input');
+        tokenInput.type = 'hidden';
+        tokenInput.name = '__RequestVerificationToken';
+        tokenInput.value = antiForgeryToken.value;
+        form.appendChild(tokenInput);
+    }
+
+    document.body.appendChild(form);
+    form.submit();
+}
