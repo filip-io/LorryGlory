@@ -13,4 +13,11 @@ namespace LorryGlory_Frontend_MVC.ViewModels.ApiResponses
         public bool Success { get; set; }
         public EditTaskViewModel Data { get; set; }
     }
+
+    public class DriverTaskApiResponse
+    {
+        public bool Success { get; set; }
+        public List<DriverTaskViewModel> Data { get; set; }
+    }
+
 }

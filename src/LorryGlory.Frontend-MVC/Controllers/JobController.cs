@@ -16,12 +16,11 @@ namespace LorryGlory_Frontend_MVC.Controllers
     {
 
         private readonly HttpClient _client;
-        private readonly string? _baseUri;
+        private string _baseUri = "https://localhost:7036/";
 
         public JobController(HttpClient client, IConfiguration configuration)
         {
             _client = client;
-            _baseUri = configuration["ApiSettings:_baseUri"];
         }
         //Comment
         [Authorize]
@@ -435,7 +434,7 @@ namespace LorryGlory_Frontend_MVC.Controllers
             var response = await client.PostAsync($"{_baseUri}api/tasks", content);
 
             // Redirect to the JobRead action, passing the jobId
-            return RedirectToAction("JobRead", "Job");
+            return RedirectToAction("Index", "Job");
         }
 
         public async Task<IActionResult> TaskEdit(Guid id)

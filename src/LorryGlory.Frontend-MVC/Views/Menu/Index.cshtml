@@ -6,10 +6,11 @@
     ViewData["Title"] = "Menu";
 }
 
-<div class="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100">
+
+<div class="bg-gradient-to-b from-gray-50 to-gray-100 flex-1 sm: justify-center items-center">
     <!-- Header Section -->
     <div class="max-w-lg mx-auto px-4 pt-8 pb-6">
-        <div class="bg-white rounded-2xl shadow-md p-6 mb-6">
+        <div class="bg-white rounded-2xl shadow-md p-6 mb-6 sm: mt-6">
             <div class="flex items-center space-x-4">
                 <div class="bg-blue-50 rounded-full p-3">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
@@ -33,7 +34,7 @@
     <div class="max-w-lg mx-auto px-4 pb-8">
         <div class="grid gap-3">
             <!-- Current Vehicle -->
-            <a href="@Url.Action("Index", "DetailedVehicle")"
+            <a href="@Url.Action("TodaysVehicles", "DetailedVehicle")"
                class="group relative bg-white p-4 rounded-xl shadow-sm border border-gray-100
                          hover:shadow-md hover:border-blue-100 transition-all duration-200">
                 <div class="flex items-center">
@@ -56,7 +57,7 @@
             </a>
 
             <!-- Today's Tasks -->
-            <a href="@Url.Action("Index", "TodaysTask")"
+            <a href="@Url.Action("TaskList", "TodaysTask")"
                class="group relative bg-white p-4 rounded-xl shadow-sm border border-gray-100
                          hover:shadow-md hover:border-blue-100 transition-all duration-200">
                 <div class="flex items-center">
@@ -123,7 +124,8 @@
             </button>
 
             <!-- Information -->
-            <button class="group relative bg-white p-4 rounded-xl shadow-sm border border-gray-100
+             <a href="@Url.Action("Index", "Job")"
+             class="group relative bg-white p-4 rounded-xl shadow-sm border border-gray-100
                          hover:shadow-md hover:border-blue-100 transition-all duration-200">
                 <div class="flex items-center">
                     <div class="bg-blue-50 rounded-lg p-3 mr-4">
@@ -134,7 +136,7 @@
                         </svg>
                     </div>
                     <div class="flex-1 text-left">
-                        <h3 class="text-lg font-semibold text-gray-900">Information</h3>
+                        <h3 class="text-lg font-semibold text-gray-900">Admin</h3>
                         <p class="text-sm text-gray-500">View company updates and guides</p>
                     </div>
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
@@ -142,7 +144,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
                     </svg>
                 </div>
-            </button>
+            </a>
         </div>
     </div>
 </div>

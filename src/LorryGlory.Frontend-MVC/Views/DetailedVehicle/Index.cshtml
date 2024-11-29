@@ -698,7 +698,7 @@
         <div>
             <p class="text-sm text-gray-700 pb-2">
                 <strong>Vehicle information for</strong><br>
-                @if (Model != null && !string.IsNullOrEmpty(Model.RegNo))
+                @if (Model?.RegNo != null)
                 {
                     <span class="text-muted" style="font-size: 0.9em;">@Model.RegNo</span>
                 }
@@ -714,7 +714,7 @@
                 <div class="space-y-2 text-sm">
 
                     
-                    @if (Model.VehicleProblems != null && Model.VehicleProblems.Any())
+                    @if (Model?.VehicleProblems != null && Model.VehicleProblems.Any())
                     {
                         foreach (var problem in Model.VehicleProblems)
                         {
@@ -724,7 +724,7 @@
                                 3 => "🟠 High",
                                 2 => "🟡 Medium",
                                 1 => "🟢 Low",
-                                0 => "⚪ Undeclared"
+                                _ => "⚪ Undeclared"
                             };
 
                             string severityColor = problem.SeverityLevel switch
@@ -733,7 +733,7 @@
                                 3 => "text-orange-600",
                                 2 => "text-yellow-600",
                                 1 => "text-green-600",
-                                0 => "text-gray-600"
+                                _ => "text-gray-600"
                             };
 
                             <div class="flex justify-between">
