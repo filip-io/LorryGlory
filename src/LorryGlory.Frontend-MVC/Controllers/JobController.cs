@@ -16,12 +16,11 @@ namespace LorryGlory_Frontend_MVC.Controllers
     {
 
         private readonly HttpClient _client;
-        private readonly string? _baseUri;
+        private string _baseUri = "https://localhost:7036/";
 
         public JobController(HttpClient client, IConfiguration configuration)
         {
             _client = client;
-            _baseUri = configuration["ApiSettings:_baseUri"];
         }
         //Comment
         [Authorize]
