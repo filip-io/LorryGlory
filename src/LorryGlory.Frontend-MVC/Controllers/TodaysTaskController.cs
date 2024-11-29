@@ -1,14 +1,20 @@
 ﻿using LorryGlory_Frontend_MVC.Models;
 using LorryGlory_Frontend_MVC.Models.JobTasks;
 using LorryGlory_Frontend_MVC.ViewModels;
+using LorryGlory_Frontend_MVC.ViewModels.ApiResponses;
+using LorryGlory_Frontend_MVC.ViewModels.Task;
+using LorryGlory_Frontend_MVC.ViewModels.Vehicle;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System.Net;
+using System.Security.Claims;
 
 namespace LorryGlory_Frontend_MVC.Controllers
 {
     public class TodaysTaskController : Controller
     {
         private readonly HttpClient _httpClient;
+        private string baseUri = "https://localhost:7036/";
 
         public TodaysTaskController(HttpClient httpClient)
         {
@@ -17,7 +23,7 @@ namespace LorryGlory_Frontend_MVC.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var response = await _httpClient.GetStringAsync("https://localhost:7036/api/tasks/driver/1STAFFM/day/2024-11-24");
+            var response = await _httpClient.GetStringAsync("https://localhost:7036/api/tasks/driver/1STAFFM/day/2024-11-28");
 
             var responseData = JsonConvert.DeserializeObject<ResponseModel<List<TodaysJobTaskViewModel>>>(response);
 
@@ -30,6 +36,90 @@ namespace LorryGlory_Frontend_MVC.Controllers
 
             return View(responseData.Data[0]);
         }
+
+        public async Task<IActionResult> TaskList()
+        {
+            ViewData["Title"] = "Today's User Task";
+            List<DriverTaskViewModel> task = new List<DriverTaskViewModel>();
+
+            try
+            {
+                // Ensure the user is authenticated
+                if (!User.Identity.IsAuthenticated)
+                {
+                    ViewData["ErrorMessage"] = "User is not authenticated. Please log in.";
+                    return View(task);
+                }
+
+                // Attempt to get the user ID from claims
+                var userId = User?.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+
+                // Debugging step: Log all claims if userId is null
+                if (string.IsNullOrEmpty(userId))
+                {
+                    var claims = User.Claims.Select(c => $"{c.Type}: {c.Value}").ToList();
+                    Console.WriteLine("User claims for debugging:");
+                    claims.ForEach(Console.WriteLine);
+
+                    ViewData["ErrorMessage"] = "Unable to identify the logged-in driver. Please contact support.";
+                    return View(task);
+                }
+
+                // Use today's date in UTC format
+                var date = DateTime.UtcNow.ToString("yyyy-MM-dd");
+
+                // Configure HttpClientHandler with cookies
+                var handler = new HttpClientHandler
+                {
+                    UseCookies = true,
+                    CookieContainer = new CookieContainer()
+                };
+
+                // Add cookies from the current HTTP context
+                var baseUri = "https://example.com/"; // Replace with your API base URI
+                foreach (var cookie in Request.Cookies)
+                {
+                    handler.CookieContainer.Add(new Uri(baseUri), new Cookie(cookie.Key, cookie.Value));
+                }
+
+                // Create a new HttpClient using the handler
+                using (var client = new HttpClient(handler))
+                {
+                    // Make the API call
+                    var response = await client.GetAsync($"{baseUri}api/tasks/driver/{userId}/day/{date}");
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var json = await response.Content.ReadAsStringAsync();
+                        var apiResponse = JsonConvert.DeserializeObject<DriverTaskApiResponse>(json);
+                        if (apiResponse != null && apiResponse.Success)
+                        {
+                            task = apiResponse.Data;
+                        }
+                        else
+                        {
+                            ViewData["ErrorMessage"] = "No tasks found for today.";
+                        }
+                    }
+                    else
+                    {
+                        ViewData["ErrorMessage"] = $"Failed to fetch tasks. Status Code: {response.StatusCode}";
+                    }
+                }
+            }
+            catch (HttpRequestException ex)
+            {
+                Console.WriteLine($"Error fetching task data: {ex.Message}");
+                ViewData["ErrorMessage"] = "Unable to connect to the data server. Please try again later.";
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Unexpected error: {ex.Message}");
+                ViewData["ErrorMessage"] = "An unexpected error occurred. Please try again.";
+            }
+
+            return View(task);
+        }
+
 
         private void CalculateBkTable(TechnicalDataViewModel techData)
         {

@@ -435,7 +435,7 @@ namespace LorryGlory_Frontend_MVC.Controllers
             var response = await client.PostAsync($"{_baseUri}api/tasks", content);
 
             // Redirect to the JobRead action, passing the jobId
-            return RedirectToAction("JobRead", "Job");
+            return RedirectToAction("Index", "Job");
         }
 
         public async Task<IActionResult> TaskEdit(Guid id)
